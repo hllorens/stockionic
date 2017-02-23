@@ -1,0 +1,129 @@
+<ion-header>
+  <ion-navbar>
+    <button menuToggle *ngIf="!stock">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ stock.name }}:{{stock.market}} </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+  <ion-row>
+      <ion-col width-50><h2>FACTS</h2></ion-col>
+      <ion-col width-50><h2><ion-icon name="notifications"></ion-icon> ALERT  </h2></ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col width-15>
+      <h4>Value</h4>
+      <p><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar></p>
+    </ion-col>
+    <ion-col width-15>
+      <h4 style="color:blue;">{{ stock.value }}</h4>
+      <p><span style="text-align=right;font-size:0.8em;">{{ stock.range_52week_low }}-{{ stock.range_52week_high }}</span></p>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>low</ion-label>
+                <ion-input type="text" [value]="alert.low" [(ngModel)]="alert.low" (blur)="update_alert('low','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>high</ion-label>
+                <ion-input type="text" [value]="alert.high" [(ngModel)]="alert.high" (blur)="update_alert('high','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col width-15>
+      <h4>Change</h4>
+    </ion-col>
+    <ion-col width-15>
+      <h5 style="color:black;">{{ stock.session_change_percentage }}%</h5>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>low change %</ion-label>
+                <ion-input type="text" [value]="alert.low_change_percentage" [(ngModel)]="alert.low_change_percentage" (blur)="update_alert('low_change_percentage','-num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>high change %</ion-label>
+                <ion-input type="text" [value]="alert.high_change_percentage" [(ngModel)]="alert.high_change_percentage" (blur)="update_alert('high_change_percentage','+num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col width-15>
+      <h4>Yield</h4>
+    </ion-col>
+    <ion-col width-15>
+      <h4 style="color:black;"><ion-badge color="secondary">{{ stock.yield }}% <span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge></h4>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>low yield %</ion-label>
+                <ion-input type="text" [value]="alert.low_yield" [(ngModel)]="alert.low_yield" (blur)="update_alert('low_yield','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>high yield %</ion-label>
+                <ion-input type="text" [value]="alert.high_yield" [(ngModel)]="alert.high_yield" (blur)="update_alert('high_yield','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>  
+  <ion-row>
+    <ion-col width-15>
+      <h4>PE Ratio</h4>
+    </ion-col>
+    <ion-col width-15>
+      <h5 style="color:orange;">{{ stock.per }}</h5>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>low per </ion-label>
+                <ion-input type="text" [value]="alert.low_per" [(ngModel)]="alert.low_per" (blur)="update_alert('low_per','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>high per</ion-label>
+                <ion-input type="text" [value]="alert.high_per" [(ngModel)]="alert.high_per" (blur)="update_alert('high_per','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col width-15>
+      <h4>EPS</h4>
+      <p>price-indep</p>
+    </ion-col>
+    <ion-col width-15>
+      <h5>{{stock.eps}}</h5>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>low <span style="font-size:0.7em;">(=eps detects changes)</span></ion-label>
+                <ion-input type="text" [value]="alert.low_eps" [(ngModel)]="alert.low_eps" (blur)="update_alert('low_eps','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating>high <span style="font-size:0.7em;">(=eps detects changes)</span></ion-label>
+                <ion-input type="text" [value]="alert.high_eps" [(ngModel)]="alert.high_eps" (blur)="update_alert('high_eps','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>
+        
+  <ion-row>
+    <ion-col>
+    <span style="color:purple;">YPR: {{stock.yield_per_ratio}}</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+    </ion-col>
+  </ion-row>
+  </ion-grid>
+  
+
+
+</ion-content>

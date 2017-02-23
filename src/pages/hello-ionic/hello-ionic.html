@@ -1,0 +1,6 @@
+
+<ion-content padding>
+<div [hidden]="af.auth | async" class="bottom"><button ion-button outline (click)="myfireauth.login()">Login</button></div>
+<div [hidden]="!(af.auth | async)" class="bottom">Hi {{ myfireauth.user?.email }} <button ion-button outline (click)="myfireauth.logout()">Logout</button> </div>
+<button [hidden]="!(af.auth | async)" (click)="open_page()">stocks</button>
+</ion-content>
