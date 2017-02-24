@@ -42,7 +42,7 @@ export class MyApp {
       Splashscreen.hide();
       
       // non angular way: document.addEventListener('backbutton', () => {})
-      // then with  this.unregisterCustomBackActionFunction(); you can restore the default
+      // with  this.unregisterCustomBackActionFunction(); you can restore the default
       // parameters: callback (a function), priority (a number higher priority will execute first)
       this.unregisterCustomBackActionFunction = this.platform.registerBackButtonAction(() => {
         // simplest but bad UX user is trapped (seems you cannot exit)
@@ -52,20 +52,22 @@ export class MyApp {
               this.nav.pop()
               return;
             }
-            if(!this.backPressed) {
+            /*if(!this.backPressed) {
               this.backPressed = true
               //window.plugins.toast.show cordova native with plugin
-              /*Toast.show('click back again to exit', '2000', 'top').subscribe(
+              Toast.show('click back again to exit', '2000', 'top').subscribe(
                   toast => {
                     console.log(toast);
                   }
-                );*/
+                );
               //alert('');
               this.confirmExitApp();
               setTimeout(() => this.backPressed = false, 2000)
               return;
             }
             this.platform.exitApp() // navigator.app.exitApp() angular native
+            */
+            this.confirmExitApp();
         }, 0); //101
             
       
@@ -86,16 +88,23 @@ export class MyApp {
         message: 'Really exit app?',
         buttons: [
         {
-        text: 'Cancel',
-        handler: () => {
-        console.log('Disagree clicked');
-        }
+            text: 'Cancel',
+            handler: () => {
+            console.log('Cancelled');
+            }
         },
         {
-        text: 'Exit',
-        handler: () => {
-        this.platform.exitApp()
-        }
+            text: 'Minimize',
+            handler: () => {
+            console.log('Minimize');
+            window['plugins'].appMinimize.minimize();
+            }
+        },
+        {
+            text: 'Exit',
+            handler: () => {
+            this.platform.exitApp()
+            }
         }
         ]
         });
