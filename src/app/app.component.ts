@@ -53,7 +53,7 @@ export class MyApp {
               return;
             }
             /*if(!this.backPressed) {
-              this.backPressed = true
+              //this.backPressed = true
               //window.plugins.toast.show cordova native with plugin
               Toast.show('click back again to exit', '2000', 'top').subscribe(
                   toast => {
@@ -62,11 +62,12 @@ export class MyApp {
                 );
               //alert('');
               this.confirmExitApp();
-              setTimeout(() => this.backPressed = false, 2000)
-              return;
+              //setTimeout(() => this.backPressed = false, 2000)
+              //return;
             }
             this.platform.exitApp() // navigator.app.exitApp() angular native
             */
+            this.backPressed = true
             this.confirmExitApp();
         }, 0); //101
             
@@ -83,6 +84,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
   confirmExitApp() {
+        if(this.backPressed) return; // avoid opening multiple
         let confirm = this.alertCtrl.create({
         title: 'Confirm Exit',
         message: 'Really exit app?',
@@ -90,12 +92,14 @@ export class MyApp {
         {
             text: 'Cancel',
             handler: () => {
+            this.backPressed=false;
             console.log('Cancelled');
             }
         },
         {
             text: 'Minimize',
             handler: () => {
+            this.backPressed=false;
             console.log('Minimize');
             window['plugins'].appMinimize.minimize();
             }
@@ -103,6 +107,7 @@ export class MyApp {
         {
             text: 'Exit',
             handler: () => {
+            this.backPressed=false;
             this.platform.exitApp()
             }
         }

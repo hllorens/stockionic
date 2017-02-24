@@ -31,6 +31,7 @@ export class StocksPage {
     cognitionisStocks.load().subscribe(result => {
       this.all_stocks=result;
       this.initializeItems();
+      this.check_alerts();
     });
   }
   
@@ -77,7 +78,12 @@ export class StocksPage {
     }
     return;
   }
-  
+  check_alerts(){
+    if(!this.alerts) return;
+    for(var i=0;i<this.alerts.length;i++){
+        this.check_alert(this.alerts[i]);
+    }
+  }
   check_alert(al){
     let stock=this.getStock(al.symbol);
     if(!stock) return;
