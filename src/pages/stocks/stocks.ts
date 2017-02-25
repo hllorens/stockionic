@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+//import { PlatformLocation } from '@angular/common'
 
 import { MyFireAuth } from '../../providers/myfireauth';
 import {cognitionis} from '../../lib/cognitionis.ts';
@@ -26,13 +27,16 @@ export class StocksPage {
   alerts: any = {};  //=[]   does not help
   alertsref: any;
   test_var: string = null;
+  alert_filter_on: boolean=false;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation
     cognitionisStocks.load().subscribe(result => {
+      console.log('pulling stocks');
       this.all_stocks=result;
       this.initializeItems();
       this.check_alerts();
     });
+    // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
   }
   
   ngOnInit(){
@@ -50,11 +54,12 @@ export class StocksPage {
               console.log('key '+al.symbol);
               this.alerts[al.symbol]=al;
               this.check_alert(al);
+              //if(this.alerts[al.symbol].active==true) this.all_stocks[this.getStockIndex(al.symbol)].alerted=true;
               //BKIA:BME 0.65 1.50  -5 5 0 10 2017-02-04 
           }
         });
       console.log('data received2'+cognitionis.get_timestamp_str());
-      console.log('active page:'+this.navCtrl.getActive().component);
+      console.log('active page:'+this.navCtrl.getActive().name); // only log, .name does not work in prod
       let activeView = this.navCtrl.getActive();
       if (activeView.component == StocksPage) {
       //if(this.navCtrl.getActive().name === 'StocksPage'){
@@ -68,15 +73,20 @@ export class StocksPage {
   public first_char(value) {
     return value[0];
   }
-
-  getStock(symbol){
-    if(!this.all_stocks){return;} // seems that sometimes it is empty (refresh)
+  
+  getStockIndex(symbol){
+    if(!this.all_stocks){return -1;} // seems that sometimes it is empty (refresh)
     for(let i=0;i<this.all_stocks.length;i++){
         if(symbol==this.all_stocks[i].name+':'+this.all_stocks[i].market){
-            return this.all_stocks[i];
+            return i;
         }
     }
-    return;
+    return -1;
+  }
+  getStock(symbol){
+    let index=this.getStockIndex(symbol);
+    if(index==-1) return;
+    else return this.all_stocks[index];
   }
   check_alerts(){
     if(!this.alerts) return;
@@ -179,8 +189,33 @@ export class StocksPage {
     if (val && val.trim() != '') {
       this.stocks = this.stocks.filter((item) => {
         return ((item.name+item.market).toLowerCase().indexOf(val.toLowerCase()) > -1);
-      })
+      });
     }
+  }
+  
+  showAlerted(){
+    // Reset items back to all of the items
+    this.initializeItems();
+    if(this.alert_filter_on){
+        this.orderByField = '-yield_per_ratio +range_52week_heat';
+        this.reverseSort = '-';
+        this.alert_filter_on=false;return;
+    }
+    this.orderByField='none';this.reverseSort='';
+    this.alert_filter_on=true;
+    if(!this.alerts){this.stocks=[];return;}
+    let alerted = this.stocks.filter((item) => {
+        if(this.alerts.hasOwnProperty(item.name+":"+item.market))
+            return (this.alerts[item.name+":"+item.market].active);
+        return false;
+    });
+    let not_alerted=this.stocks.filter((item) => {
+        if(this.alerts.hasOwnProperty(item.name+":"+item.market))
+            return (!this.alerts[item.name+":"+item.market].active);
+        return false;
+    });
+    
+    this.stocks=alerted.concat(not_alerted);
   }
 
   

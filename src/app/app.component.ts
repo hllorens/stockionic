@@ -67,7 +67,6 @@ export class MyApp {
             }
             this.platform.exitApp() // navigator.app.exitApp() angular native
             */
-            this.backPressed = true
             this.confirmExitApp();
         }, 0); //101
             
@@ -84,7 +83,9 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
   confirmExitApp() {
-        if(this.backPressed) return; // avoid opening multiple
+        // avoid opening multiple
+        if(this.backPressed) return;
+        else this.backPressed = true;
         let confirm = this.alertCtrl.create({
         title: 'Confirm Exit',
         message: 'Really exit app?',

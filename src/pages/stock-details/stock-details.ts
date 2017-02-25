@@ -14,6 +14,7 @@ import { NavController, NavParams } from 'ionic-angular';
 export class StockDetailsPage {
   stock: any;
   alert: any;
+  alert_status: any= {};
   encuser: string = null;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
@@ -22,6 +23,7 @@ export class StockDetailsPage {
     this.stock = navParams.get('stock');
     this.alert = navParams.get('alert');
     if(typeof(this.alert)=='undefined') this.alert={};
+    this.check_alert_detailed();
   }
   ngOnInit(){
     if(this.myfireauth.user){
@@ -47,6 +49,7 @@ export class StockDetailsPage {
             console.log('delete alert completely');
             this.af.database.object('alerts/'+this.encuser+'/'+this.stock.name+':'+this.stock.market).remove();
         }else{
+            delete this.alert.active;
             this.af.database.object('alerts/'+this.encuser+'/'+this.stock.name+':'+this.stock.market).set(this.alert);
         }
       }else{
@@ -68,9 +71,69 @@ export class StockDetailsPage {
         if(!this.alert.hasOwnProperty('symbol')){
             this.alert.symbol=this.stock.name+':'+this.stock.market;
             this.af.database.object('alerts/'+this.encuser+'/'+this.stock.name+':'+this.stock.market+'/symbol').set(this.alert.symbol);
+            console.log('new alert created');
         }
         this.af.database.object('alerts/'+this.encuser+'/'+this.stock.name+':'+this.stock.market+'/'+field).set(this.alert[field]);
       }
+      this.check_alert_detailed();
+  }
+  
+  check_alert_detailed(){
+    this.alert_status={};
+    if(this.alert.low && this.alert.low>=this.stock.value){
+        console.log('low');
+        this.alert_status.low=true;
+    }else{
+        delete this.alert_status.low;
+    }
+    if(this.alert.high && parseFloat(this.alert.high)<=parseFloat(this.stock.value)){
+        console.log('high');
+        this.alert_status.high=true;
+    }else{
+        delete this.alert_status.high;    
+    }
+    if(this.alert.low_change_percentage && parseFloat(this.alert.low_change_percentage)>=parseFloat(this.stock.session_change_percentage)){
+        console.log('lowc');
+        this.alert_status.low_change_percentage=true;
+    }else{
+        delete this.alert_status.low_change_percentage;
+    }
+    if(this.alert.high_change_percentage && parseFloat(this.alert.high_change_percentage)<=parseFloat(this.stock.session_change_percentage)){
+        console.log('highc');
+        this.alert_status.high_change_percentage=true;
+    }else{
+        delete this.alert_status.high_change_percentage;
+    }
+    if(this.alert.low_yield && parseFloat(this.alert.low_yield)>=parseFloat(this.stock.yield)){
+        this.alert_status.low_yield=true;
+    }else{
+        delete this.alert_status.low_yield;
+    }
+    if(this.alert.high_yield && parseFloat(this.alert.high_yield)<=parseFloat(this.stock.yield)){
+        this.alert_status.high_yield=true;
+    }else{
+        delete this.alert_status.high_yield;
+    }
+    if(this.alert.low_per && parseFloat(this.alert.low_per)>=parseFloat(this.stock.per)){
+        this.alert_status.low_per=true;
+    }else{
+        delete this.alert_status.low_per;
+    }
+    if(this.alert.high_per && parseFloat(this.alert.high_per)<=parseFloat(this.stock.per)){
+        this.alert_status.high_per=true;
+    }else{
+        delete this.alert_status.high_per;
+    }
+    if(this.alert.low_eps && parseFloat(this.alert.low_eps)>=parseFloat(this.stock.eps)){
+        this.alert_status.low_eps=true;
+    }else{
+        delete this.alert_status.low_eps;
+    }
+    if(this.alert.high_eps && parseFloat(this.alert.high_eps)<=parseFloat(this.stock.eps)){
+        this.alert_status.high_eps=true;
+    }else{
+        delete this.alert_status.high_eps;
+    }
   }
   
 }
