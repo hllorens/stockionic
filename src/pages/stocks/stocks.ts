@@ -98,7 +98,7 @@ export class StocksPage {
     let stock=this.getStock(al.symbol);
     if(!stock) return;
     this.alerts[al.symbol].active=false;
-    if(al.low && al.low>=stock.value){
+    if(al.low && parseFloat(al.low)>=parseFloat(stock.value)){
         this.alerts[al.symbol].active=true;
         console.log('low');
         return;

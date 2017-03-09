@@ -80,7 +80,7 @@ export class StockDetailsPage {
   
   check_alert_detailed(){
     this.alert_status={};
-    if(this.alert.low && this.alert.low>=this.stock.value){
+    if(this.alert.low && parseFloat(this.alert.low)>=parseFloat(this.stock.value)){
         console.log('low');
         this.alert_status.low=true;
     }else{

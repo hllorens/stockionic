@@ -18,7 +18,7 @@
           <span style="color:green;font-size:0.8em;" class="{{orderByField.substring(1) != 'yield' ? '': 'ordbsel'}}">yld</span>
           </button>
           <button ion-button small clear (click)="reorder($event,'range_52week_heat +yield')">
-          <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52h</span> <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
+          <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52w</span> <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
           </button>
           <button ion-button small clear (click)="showAlerted()">
           <span style="color:black;font-size:0.8em;" class="{{alert_filter_on ? 'alerted': ''}}"><ion-icon name="notifications"></ion-icon></span>

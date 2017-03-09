@@ -24,7 +24,7 @@
     </ion-col>
     <ion-col width-25>
             <ion-item>
-                <ion-label floating>low <span style="color:red;" *ngIf="alert_status.low">(a)</span></ion-label> 
+                <ion-label floating><span *ngIf="!alert_status.low">low</span><span style="color:red;" *ngIf="alert_status.low">low</span></ion-label> 
                 <ion-input type="text" [value]="alert.low" [(ngModel)]="alert.low" (blur)="update_alert('low','num')"></ion-input>
             </ion-item>
     </ion-col>
@@ -44,7 +44,7 @@
     </ion-col>
     <ion-col width-25>
             <ion-item>
-                <ion-label floating>low change % <span style="color:red;" *ngIf="alert_status.low_change_percentage">(a)</span></ion-label>
+                <ion-label floating><span *ngIf="!alert_status.low_change_percentage">low</span><span style="color:red;" *ngIf="alert_status.low_change_percentage">low</span></ion-label>
                 <ion-input type="text" [value]="alert.low_change_percentage" [(ngModel)]="alert.low_change_percentage" (blur)="update_alert('low_change_percentage','-num')"></ion-input>
             </ion-item>
     </ion-col>
@@ -64,7 +64,7 @@
     </ion-col>
     <ion-col width-25>
             <ion-item>
-                <ion-label floating>low yield % <span style="color:red;" *ngIf="alert_status.low_yield">(a)</span></ion-label>
+                <ion-label floating><span *ngIf="!alert_status.low_yield">low</span><span style="color:red;" *ngIf="alert_status.low_yield">low</span></ion-label>
                 <ion-input type="text" [value]="alert.low_yield" [(ngModel)]="alert.low_yield" (blur)="update_alert('low_yield','num')"></ion-input>
             </ion-item>
     </ion-col>
@@ -84,7 +84,7 @@
     </ion-col>
     <ion-col width-25>
             <ion-item>
-                <ion-label floating>low per <span style="color:red;" *ngIf="alert_status.low_per">(a)</span></ion-label>
+                <ion-label floating><span *ngIf="!alert_status.low_per">low</span><span style="color:red;" *ngIf="alert_status.low_per">low</span></ion-label>
                 <ion-input type="text" [value]="alert.low_per" [(ngModel)]="alert.low_per" (blur)="update_alert('low_per','num')"></ion-input>
             </ion-item>
     </ion-col>
@@ -105,7 +105,7 @@
     </ion-col>
     <ion-col width-25>
             <ion-item>
-                <ion-label floating>low <span style="font-size:0.7em;">(=eps detects changes)</span><span style="color:red;" *ngIf="alert_status.low_eps">(a)</span></ion-label>
+                <ion-label floating><span *ngIf="!alert_status.low_eps">low</span><span style="color:red;" *ngIf="alert_status.low_eps">low</span></ion-label>
                 <ion-input type="text" [value]="alert.low_eps" [(ngModel)]="alert.low_eps" (blur)="update_alert('low_eps','num')"></ion-input>
             </ion-item>
     </ion-col>
