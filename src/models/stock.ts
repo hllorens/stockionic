@@ -1,6 +1,7 @@
 export interface Stock {
 	name: string;
 	market: string;
+	title: string;
 	value: string;
 	session_change: string;
 	session_change_percentage: string;
