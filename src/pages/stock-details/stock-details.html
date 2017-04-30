@@ -58,6 +58,9 @@
             </ion-item>
     </ion-col>
   </ion-row>
+  
+
+  
   <ion-row>
     <ion-col width-15>
       <h4>Yield</h4>
@@ -98,10 +101,17 @@
             </ion-item>
     </ion-col>
   </ion-row>
+  
+  <ion-row>
+    <ion-col>
+    <span style="color:purple;">YPR: {{stock.yield_per_ratio}}</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+    </ion-col>
+  </ion-row>
+  
   <ion-row>
     <ion-col width-15>
-      <h4>EPS</h4>
-      <p>price-indep</p>
+      <h4>EPS (annual avg)</h4>
+      <p>price-indep, avg of last 4 Qtrs</p>
     </ion-col>
     <ion-col width-15>
       <h5>{{stock.eps}}</h5>
@@ -120,9 +130,15 @@
     </ion-col>
   </ion-row>
         
+
   <ion-row>
     <ion-col>
-    <span style="color:purple;">YPR: {{stock.yield_per_ratio}}</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+       <b>EPS historical (annual avg last 4 Qtrs)</b>
+       <ul class="list">
+            <li class="item" *ngFor="let eps_item of stock.eps_hist" >
+             {{eps_item[0]}}: <b>{{eps_item[1]}}</b>
+            </li>
+        </ul>
     </ion-col>
   </ion-row>
   </ion-grid>
