@@ -17,7 +17,8 @@ export interface Stock {
 	dividend_total_year: string;
 	beta: string;
 	eps: string;
-	eps_history: any[];
+	eps_hist: any[];
+	eps_hist_last_down: string;
 	per: string;
 	roe: string;
 }

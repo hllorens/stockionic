@@ -133,12 +133,13 @@
 
   <ion-row>
     <ion-col>
-       <b>EPS historical (annual avg last 4 Qtrs)</b>
+       <b>EPS hist (annual avg 4Q):</b> 
        <ul class="list">
             <li class="item" *ngFor="let eps_item of stock.eps_hist" >
              {{eps_item[0]}}: <b>{{eps_item[1]}}</b>
             </li>
         </ul>
+        <div *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_down">Last eps down:<br />{{stock.eps_hist[stock.eps_hist.length-1][1]}}-{{stock.eps_hist[stock.eps_hist.length-2][1]}}=<span style="color:red;">{{stock.eps_hist_last_down}}%</span></div>
     </ion-col>
   </ion-row>
   </ion-grid>

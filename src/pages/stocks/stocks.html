@@ -46,7 +46,9 @@
             </ion-col>
             <ion-col width-25>
                 <ion-badge color="secondary">{{ stock.yield }}% <span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge> 
-                <p style="color:orange;">{{ stock.per }}</p>
+                <p style="color:orange;">{{ stock.per }}
+                <span style="font-size:0.7em;color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_down">{{stock.eps_hist_last_down}}%</span>
+                </p>
             </ion-col>
             <ion-col width-10>
                     <ion-icon name="notifications" *ngIf="alerts[stock.name+':'+stock.market]"></ion-icon>
