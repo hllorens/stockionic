@@ -142,6 +142,11 @@
         <div *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_down">Last eps down:<br />{{stock.eps_hist[stock.eps_hist.length-1][1]}}-{{stock.eps_hist[stock.eps_hist.length-2][1]}}=<span style="color:red;">{{stock.eps_hist_last_down}}%</span></div>
     </ion-col>
   </ion-row>
+  <ion-row>
+    <ion-col>
+       <b>Yield hist:</b> dividend.com, DivY/Price History graph, disable Price in legend
+    </ion-col>
+  </ion-row>
   </ion-grid>
   
 
