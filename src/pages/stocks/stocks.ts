@@ -98,6 +98,7 @@ export class StocksPage {
     let stock=this.getStock(al.symbol);
     if(!stock) return;
     this.alerts[al.symbol].active=false;
+    
     if(al.low && parseFloat(al.low)>=parseFloat(stock.value)){
         this.alerts[al.symbol].active=true;
         console.log('low');
@@ -108,6 +109,7 @@ export class StocksPage {
         console.log('high');
         return;
     }
+    
     if(al.low_change_percentage && parseFloat(al.low_change_percentage)>=parseFloat(stock.session_change_percentage)){
         this.alerts[al.symbol].active=true;
         console.log('lowc'+al.low_change_percentage+"  "+stock.session_change_percentage);
@@ -118,6 +120,7 @@ export class StocksPage {
         console.log('highc');
         return;
     }
+    
     if(al.low_yield && parseFloat(al.low_yield)>=parseFloat(stock.yield)){
         this.alerts[al.symbol].active=true;
         return;
@@ -126,6 +129,7 @@ export class StocksPage {
         this.alerts[al.symbol].active=true;
         return;
     }
+    
     if(al.low_per && parseFloat(al.low_per)>=parseFloat(stock.per)){
         this.alerts[al.symbol].active=true;
         return;
@@ -134,12 +138,19 @@ export class StocksPage {
         this.alerts[al.symbol].active=true;
         return;
     }
+    
     if(al.low_eps && parseFloat(al.low_eps)>=parseFloat(stock.eps)){
         this.alerts[al.symbol].active=true;
         return;
     }
     if(al.high_eps && parseFloat(al.high_eps)<=parseFloat(stock.eps)){
         this.alerts[al.symbol].active=true;
+        return;
+    }
+    
+    if(al.low_sell && parseFloat(al.low_sell)>=parseFloat(stock.value)){
+        this.alerts[al.symbol].active=true;
+        console.log('low_sell');
         return;
     }
   }

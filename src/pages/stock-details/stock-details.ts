@@ -92,6 +92,7 @@ export class StockDetailsPage {
     }else{
         delete this.alert_status.high;    
     }
+    
     if(this.alert.low_change_percentage && parseFloat(this.alert.low_change_percentage)>=parseFloat(this.stock.session_change_percentage)){
         console.log('lowc');
         this.alert_status.low_change_percentage=true;
@@ -104,6 +105,7 @@ export class StockDetailsPage {
     }else{
         delete this.alert_status.high_change_percentage;
     }
+    
     if(this.alert.low_yield && parseFloat(this.alert.low_yield)>=parseFloat(this.stock.yield)){
         this.alert_status.low_yield=true;
     }else{
@@ -114,6 +116,7 @@ export class StockDetailsPage {
     }else{
         delete this.alert_status.high_yield;
     }
+    
     if(this.alert.low_per && parseFloat(this.alert.low_per)>=parseFloat(this.stock.per)){
         this.alert_status.low_per=true;
     }else{
@@ -124,6 +127,7 @@ export class StockDetailsPage {
     }else{
         delete this.alert_status.high_per;
     }
+    
     if(this.alert.low_eps && parseFloat(this.alert.low_eps)>=parseFloat(this.stock.eps)){
         this.alert_status.low_eps=true;
     }else{
@@ -134,6 +138,14 @@ export class StockDetailsPage {
     }else{
         delete this.alert_status.high_eps;
     }
+    
+    if(this.alert.low_eps && parseFloat(this.alert.low_sell)>=parseFloat(this.stock.value)){
+        this.alert_status.low_sell=true;
+    }else{
+        delete this.alert_status.low_sell;
+    }
+    // no high
+
   }
   
 }

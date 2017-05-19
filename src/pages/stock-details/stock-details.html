@@ -147,6 +147,22 @@
        <b>Yield hist:</b> dividend.com, DivY/Price History graph, disable Price in legend
     </ion-col>
   </ion-row>
+  
+  <ion-row>
+    <ion-col width-30>
+      <h4>Portfolio</h4>
+      <p>Sell alert (stoploss)</p>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating><span *ngIf="!alert_status.low_sell">low</span><span style="color:red;" *ngIf="alert_status.low_sell">low</span></ion-label> 
+                <ion-input type="text" [value]="alert.low_sell" [(ngModel)]="alert.low_sell" (blur)="update_alert('low_sell','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            high<br />use alert
+    </ion-col>
+  </ion-row>
   </ion-grid>
   
 
