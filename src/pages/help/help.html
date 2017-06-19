@@ -12,36 +12,46 @@
 <b>Stockionic</b> has two main functionalities:
 <ul>
 <li>Stock search and sort</li>
-<li>Stock alerts</li>
+<li>Stock email alerts</li>
 </ul>
-Both are based on <b>fundamental analysis features</b> of stocks.<br />
+Both are based on <b>fundamental analysis features</b> of stocks.
+Stockionic is intended avoid you the need of being constantly monitoring or analyzing stocks so you can just wait for email alerts to come to you.
+<br />
 Note: the list of stocks is limited. To add more contact hectorlm1983@gmail.com.
 
 <br /><br />
 <b>Fundamental values used</b><br />
     <ul>
-    <li>Value: current value of the stock</li>
-    <li>Value change %: current % change of the stock</li>
-    <li>PER: Price to earnings (P/E) ratio</li>
-    <li>Yield: Anual dividend yield % and the number of dividends per year</li>
-    <li>52 weeks value (heat): the current position in the 52 weeks value variation. E.g., ...</li>
-    <li>52 weeks volatility: how much the value varied proportionally in 52 years. E.g., if you see 2x it means that the value doubled or shrinked to the half</li>
-    <li>EPS diff: what % the EPS differed since last time it was reported</li>
+    <li><b>Value</b>: current value of the stock</li>
+    <li><b>Value change %</b>: current % change of the stock.</li>
+    <li><b><span style="color:orange;">PER</span></b>: Price to earnings (P/E) ratio. The lower the better</li>
+    <li><b><span style="color:green;">YLD</span></b>: Anual dividend yield % and the number of dividends per year. The higher the better</li>
+    <li><b><span style="color:purple;">YPR</span></b>: Yeld divided by PER, this will be higher for stocks with higher dividend and lower per. I.e., the most profitable ones in terms of the earnings they have and the proportion they share with stock holders. The higher the better</li>
+    <li><b><span style="color:blue;">52 weeks value position</span></b>: the current position in the 52 weeks value variation range. E.g., if min=$1 and max $1 and current value is $1.5 it is 50% in the range</li>
+    <li><b><span style="color:blue;">52 weeks volatility (52W VO)</span></b>: how much the value varied proportionally in 52 years. E.g., if you see 2x it means that the value doubled or shrinked to the half</li>
+    <li><b><span style="color:orange;">EPSD</span></b>: what % the EPS differed since last time it was reported. E.g., if in Q1 EPS was 0.5 and now it is 1 then EPSD=2x (the earnings doubled).
+        There are some symbols for EPS evolution: <ul>
+        <li>Positive evolution: <span style="color:green;">/</span> (two consecutive increases) <span style="color:green;">v</span> (incriease after a decrease)</li>
+        <li>Negative evolution: <span style="color:red;">^</span> (decrease after an increase) <span style="color:red;">&#92;</span> (two consecutive decreases)</li>
+        </ul>
+    </li>
     </ul>
-
+The main mesure we use for sorting the stocks by default is <b><span style="color:purple;">YPR</span></b> since it gives a good balance between dividend and earnings.
+<br />
+Note: the data comes from google.com/finance.
 
 
 <br /><br />
 <b>Stock search and sort</b><br />
 At the beginning you see a list of stocks. You can:
 <ul>
-<li>Search for stock symbols, tickers or names in the search bar</li>
+<li>Search for stock symbols, tickers or names in the search bar (<ion-icon name="search"></ion-icon>)</li>
 <li>Sort the list using the buttons
     <ul>
-    <li>YPR (used by default)</li>
-    <li>PER, 2nd click EPS diff</li>
-    <li>Yield</li>
-    <li>52 weeks value, 2nd click reverse order, 3rd click volatility</li>
+    <li><span style="color:purple;">YPR</span> (used by default)</li>
+    <li><span style="color:orange;">PER</span>, 2nd click <span style="color:orange;">EPSD</span></li>
+    <li><span style="color:green;">YLD</span></li>
+    <li><span style="color:blue;">52W</span>, 2nd click reverse order <span style="color:blue;">52Wv</span>, 3rd click volatility <span style="color:blue;">52Wvo</span></li>
     <li>Alerts only: show only stocks for which you have alerts (see next section for more information)</li>
     </ul>
 
@@ -50,10 +60,10 @@ At the beginning you see a list of stocks. You can:
 </ul>
 
 <br /><br />
-<b>Stock alerts (<ion-icon name="notifications"></ion-icon>)</b><br />
+<b>Stock email alerts (<ion-icon name="notifications"></ion-icon>)</b><br />
 To add alerts you must click on the stock of your interest (e.g., GOOG).
-A screen with only that stock will be opened and you will see some form input fields to add alerts.
-You can add alerts for the cases where a value is lower or higher than what you want.
+A screen with only that stock will be opened and you will see form input fields to add alerts.
+You can add alerts for the cases where a value is <b>lower than</b> (left) or <b>higher than</b> (right) what you want.
 The values for which you can add alerts are:
 <ul>
 <li>Value</li>
@@ -62,17 +72,20 @@ The values for which you can add alerts are:
 <li>Yield</li>
 <li>EPS</li>
 </ul>
+E.g., if you set an alert for GOOG Value low at $900 if it ever goes down that value the alert will fire.
+<br /> <br />
 
-When an alert fires you will receive an email and you will see the stock highlighted in red.
-When you click on the alerts button you will see the stocks for which an alert has fired first.
+When an alert fires you will receive an email and in the app you will see the stock highlighted in a red background.
+Furthermore, in the app, when you click on the alerts button (<ion-icon name="notifications"></ion-icon>) you will see the stocks for which an alert has fired first.
+To stop receiving emails or seeing the red background you can remove the value of the alerted field or change the value.
 
 <br /><br />
 <b>How to use the app?</b><br />
-Let's describe some use examples.
+Some use examples.
 <ul>
-<li>You want to invest in a stock but only when it reaches certain params</li>
-<li>You don't know which stock to invest on. You want to see which ones could be better for you</li>
-<li>You monitor stocks to decide when to sell</li>
+<li>You want to invest in a stock but only when it reaches certain params: You would set some alerts and wait for emails</li>
+<li>You don't know which stock to invest on (which ones could be better): You would do some sortings to pick them e.g., pick the first ones sorting by YPR which should be the most profitable ones in terms of fundamental analysis, or even look for positive EPS evolution like <span style="color:green;">/</span> or <span style="color:green;">v</span></li>
+<li>You monitor stocks to decide when to sell: Like in the first case you would set some alerts and wait for emails</li>
 </ul>
 
 
