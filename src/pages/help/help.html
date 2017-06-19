@@ -1,0 +1,81 @@
+
+<ion-header>
+  <ion-navbar>
+    <button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Help</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+<b>Stockionic</b> has two main functionalities:
+<ul>
+<li>Stock search and sort</li>
+<li>Stock alerts</li>
+</ul>
+Both are based on <b>fundamental analysis features</b> of stocks.<br />
+Note: the list of stocks is limited. To add more contact hectorlm1983@gmail.com.
+
+<br /><br />
+<b>Fundamental values used</b><br />
+    <ul>
+    <li>Value: current value of the stock</li>
+    <li>Value change %: current % change of the stock</li>
+    <li>PER: Price to earnings (P/E) ratio</li>
+    <li>Yield: Anual dividend yield % and the number of dividends per year</li>
+    <li>52 weeks value (heat): the current position in the 52 weeks value variation. E.g., ...</li>
+    <li>52 weeks volatility: how much the value varied proportionally in 52 years. E.g., if you see 2x it means that the value doubled or shrinked to the half</li>
+    <li>EPS diff: what % the EPS differed since last time it was reported</li>
+    </ul>
+
+
+
+<br /><br />
+<b>Stock search and sort</b><br />
+At the beginning you see a list of stocks. You can:
+<ul>
+<li>Search for stock symbols, tickers or names in the search bar</li>
+<li>Sort the list using the buttons
+    <ul>
+    <li>YPR (used by default)</li>
+    <li>PER, 2nd click EPS diff</li>
+    <li>Yield</li>
+    <li>52 weeks value, 2nd click reverse order, 3rd click volatility</li>
+    <li>Alerts only: show only stocks for which you have alerts (see next section for more information)</li>
+    </ul>
+
+
+</li>
+</ul>
+
+<br /><br />
+<b>Stock alerts (<ion-icon name="notifications"></ion-icon>)</b><br />
+To add alerts you must click on the stock of your interest (e.g., GOOG).
+A screen with only that stock will be opened and you will see some form input fields to add alerts.
+You can add alerts for the cases where a value is lower or higher than what you want.
+The values for which you can add alerts are:
+<ul>
+<li>Value</li>
+<li>Value Change %</li>
+<li>PER</li>
+<li>Yield</li>
+<li>EPS</li>
+</ul>
+
+When an alert fires you will receive an email and you will see the stock highlighted in red.
+When you click on the alerts button you will see the stocks for which an alert has fired first.
+
+<br /><br />
+<b>How to use the app?</b><br />
+Let's describe some use examples.
+<ul>
+<li>You want to invest in a stock but only when it reaches certain params</li>
+<li>You don't know which stock to invest on. You want to see which ones could be better for you</li>
+<li>You monitor stocks to decide when to sell</li>
+</ul>
+
+
+
+
+</ion-content>

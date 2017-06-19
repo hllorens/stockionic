@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen, Toast } from 'ionic-native';
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { LogoutPage } from '../pages/logout/logout';
+import { HelpPage } from '../pages/help/help';
 //import { StocksPage } from '../pages/stocks/stocks';
 
 
@@ -30,6 +31,7 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       //{ title: 'Stocks', component: StocksPage },
+      { title: 'Help', component: HelpPage },
       { title: 'Logout', component: LogoutPage },
     ];
   }
@@ -80,7 +82,8 @@ export class MyApp {
     // close the menu when clicking a link from the menu
     this.menu.close();
     // navigate to the new page if it is not the current page
-    this.nav.setRoot(page.component);
+    if(page.component.name=='LogoutPage'){ this.nav.setRoot(page.component);}
+    else{ this.nav.push(page.component);}
   }
   confirmExitApp() {
         // avoid opening multiple

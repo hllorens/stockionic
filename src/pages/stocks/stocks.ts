@@ -171,6 +171,10 @@ export class StocksPage {
   public mult100(value) {
     return (parseFloat(value)*100).toFixed(0);
   }
+  public addx(value,addition,decimals) {
+    if(typeof(decimals)=='undefined') decimals=2;
+    return (parseFloat(value)+addition).toFixed(decimals);
+  }
   reorder(ev: any, val:string){
     if(this.reverseSort=='+') this.reverseSort='-';
     else this.reverseSort='+';
@@ -183,6 +187,29 @@ export class StocksPage {
   reorder_desc(ev: any, val:string){
     this.reverseSort='-';
     this.orderByField = this.reverseSort+val;
+  }
+  
+  reorder_per_eps(ev: any){
+    if(this.orderByField!='+per'){
+        this.reverseSort='+';
+        this.orderByField = this.reverseSort+'per';
+    }else{
+        this.reverseSort='-';
+        this.orderByField = this.reverseSort+'eps_hist_last_diff';
+    }
+  }
+  
+  reorder_52_heat_vol(ev:any){
+    if(this.orderByField.substring(1).split(' ')[0]!='range_52week_heat'){
+        this.reverseSort='+';
+        this.orderByField = this.reverseSort+'range_52week_heat';
+    }else if(this.orderByField.split(' ')[0]=='+range_52week_heat'){
+        this.reverseSort='-';
+        this.orderByField = this.reverseSort+'range_52week_heat';
+    }else{
+        this.reverseSort='-';
+        this.orderByField = this.reverseSort+'range_52week_volatility';
+    }
   }
 
   ionViewDidLoad() {
@@ -225,7 +252,6 @@ export class StocksPage {
             return (!this.alerts[item.name+":"+item.market].active);
         return false;
     });
-    
     this.stocks=alerted.concat(not_alerted);
   }
 

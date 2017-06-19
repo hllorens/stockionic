@@ -18,7 +18,8 @@ export interface Stock {
 	beta: string;
 	eps: string;
 	eps_hist: any[];
-	eps_hist_last_down: string;
+	eps_hist_last_diff: string;
+    eps_hist_trend: string;
 	per: string;
 	roe: string;
 }

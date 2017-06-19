@@ -11,20 +11,22 @@
           <button ion-button small clear (click)="reorder_desc($event,'yield_per_ratio +range_52week_heat')">
           <span style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1).split(' ')[0] != 'yield_per_ratio' ? '': 'ordbsel'}}">ypr</span>
           </button>
-          <button ion-button small clear (click)="reorder_asc($event,'per')">
-          <span style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'per' ? '': 'ordbsel'}}">per</span> 
+          <button ion-button small clear (click)="reorder_per_eps($event)"> <!-- reorder_asc($event,'per') -->
+            <span [hidden]="orderByField.substring(1).split(' ')[0]=='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'per' ? '': 'ordbsel'}}">per</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'eps_hist_last_diff' ? '': 'ordbsel'}}">epsd</span> 
           </button>
           <button ion-button small clear (click)="reorder_desc($event,'yield')">
           <span style="color:green;font-size:0.8em;" class="{{orderByField.substring(1) != 'yield' ? '': 'ordbsel'}}">yld</span>
           </button>
-          <button ion-button small clear (click)="reorder($event,'range_52week_heat +yield')">
-          <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52w</span> <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
+          <button ion-button small clear (click)="reorder_52_heat_vol($event)"> <!-- originally reorder($event,'range_52week_heat +yield')-->
+          <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52w</span> 
+                <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
+                <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_volatility'">vo</span>
           </button>
           <button ion-button small clear (click)="showAlerted()">
           <span style="color:black;font-size:0.8em;" class="{{alert_filter_on ? 'alerted': ''}}"><ion-icon name="notifications"></ion-icon></span>
           </button>
   </ion-navbar>
-
 </ion-header>
 
 
@@ -38,7 +40,7 @@
         <ion-row class="{{alerts[stock.name+':'+stock.market]?.active==true ? 'alerted': ''}}">
             <ion-col width-33>
               {{ stock.name }}:{{stock.market[0]}} <span style="color:purple;font-size:0.7em;">{{stock.yield_per_ratio}}</span> 
-              <p><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar></p>
+              <p style="width:50%;"><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar> <span style="color:blue;font-size:0.7em;">{{ addx(stock.range_52week_volatility,1,1) }}x</span></p>
             </ion-col>
             <ion-col width-33>
               <span style="color:blue;">{{ stock.value }}</span>
@@ -47,7 +49,10 @@
             <ion-col width-25>
                 <ion-badge color="secondary">{{ stock.yield }}% <span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge> 
                 <p style="color:orange;">{{ stock.per }}
-                <span style="font-size:0.7em;color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_down">{{stock.eps_hist_last_down}}%</span>
+                <span style="font-size:0.7em;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff && stock.eps_hist_last_diff!=0">
+                            <span style="color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff<0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
+                            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
+                </span>
                 </p>
             </ion-col>
             <ion-col width-10>

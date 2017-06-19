@@ -3,6 +3,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { LogoutPage } from '../pages/logout/logout';
+import { HelpPage } from '../pages/help/help';
 import { StockDetailsPage } from '../pages/stock-details/stock-details';
 import { StocksPage } from '../pages/stocks/stocks';
 
@@ -22,6 +23,7 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
   declarations: [
     MyApp,
     HelloIonicPage,
+    HelpPage,
     StockDetailsPage,
     StocksPage,
     LogoutPage,
@@ -36,6 +38,7 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
   entryComponents: [
     MyApp,
     HelloIonicPage,
+    HelpPage,
     StockDetailsPage,
     LogoutPage,
     StocksPage
