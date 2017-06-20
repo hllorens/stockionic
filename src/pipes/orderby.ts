@@ -21,7 +21,7 @@ export class OrderBy implements PipeTransform {
 
   transform(input:any, [config = '+']): any{
     let parsed_config:any;
-    if(config=='' || config=='none'){console.log('empty! (no order) config='+config);return input;}
+    if(config=='' || config=='none'){console.log('orderby.ts: empty! (no order) config='+config);return input;}
     if(!Array.isArray(input)) return input;
     if(!Array.isArray(config) && config.indexOf(" ")!=-1){
         parsed_config=config.split(" ");

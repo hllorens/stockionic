@@ -163,7 +163,9 @@ export class StocksPage {
   }
   
   initializeItems(){
+    //console.log('initializeItems() start');
     this.stocks=this.all_stocks;
+    //console.log('initializeItems() end');
   }
   public toFixed2(value) {
     return parseFloat(value).toFixed(2);
@@ -217,16 +219,18 @@ export class StocksPage {
   }
 
   getItems(ev: any) {
+    //console.log('getItems() start');
     // Reset items back to all of the items
     this.initializeItems();
 
     // set val to the value of the searchbar
     let val = ev.target.value;
+    console.log('searching: '+val);
 
     // if the value is an empty string don't filter the items
     if (val && val.trim() != '') {
       this.stocks = this.stocks.filter((item) => {
-        return ((item.name+item.market).toLowerCase().indexOf(val.toLowerCase()) > -1 || (item.title).toLowerCase().indexOf(val.toLowerCase()) > -1);
+        return ((item.name+item.market).toLowerCase().indexOf(val.toLowerCase()) > -1 || (item.title && (item.title).toLowerCase().indexOf(val.toLowerCase()) > -1)  );
       });
     }
   }
