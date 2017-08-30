@@ -14,6 +14,7 @@ import { NavController, NavParams } from 'ionic-angular';
 export class StockDetailsPage {
   stock: any;
   alert: any;
+  usdeur: any;
   alert_status: any= {};
   encuser: string = null;
 
@@ -22,6 +23,7 @@ export class StockDetailsPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
     this.alert = navParams.get('alert');
+    this.usdeur = navParams.get('usdeur');
     if(typeof(this.alert)=='undefined') this.alert={};
     this.check_alert_detailed();
   }
@@ -36,6 +38,13 @@ export class StockDetailsPage {
   }
   public mult100(value) {
     return (parseFloat(value)*100).toFixed(0);
+  }
+  public usd2eur(value){
+    return this.toFixed2(value*this.usdeur);
+  }
+  public usd_market(value){
+    if(value=="NASDAQ" || value=="NYSE"){return true;}
+    else{return false;}
   }
   
   public update_alert(field,restriction){

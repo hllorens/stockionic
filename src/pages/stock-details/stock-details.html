@@ -24,6 +24,7 @@
     <ion-col width-15>
       <h4 style="color:blue;">{{ stock.value }}</h4>
       <p><span style="text-align=right;font-size:0.8em;">{{ stock.range_52week_low }}-{{ stock.range_52week_high }}</span></p>
+      <span *ngIf="usd_market(stock.market)"  style="color:blue;">eur: {{usd2eur(stock.value)}} ({{toFixed2(usdeur)}})</span>
     </ion-col>
     <ion-col width-25>
             <ion-item>
@@ -104,7 +105,7 @@
   
   <ion-row>
     <ion-col>
-    <span style="color:purple;">YPR: {{stock.yield_per_ratio}}</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+    <span style="color:purple;">YPR: {{stock.avgyield_per_ratio}} (current non avg {{stock.yield_per_ratio}})</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
     </ion-col>
   </ion-row>
   
@@ -148,7 +149,24 @@
   </ion-row>
   <ion-row>
     <ion-col>
-       <b>Yield hist:</b> dividend.com, DivY/Price History graph, disable Price in legend
+       <b>Yield avg: <span style="color:green;">{{stock.avgyield}}</span></b>
+       <b>Yield hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let yield_item of stock.yield_hist" >
+             {{yield_item[0]}}: <b>{{yield_item[1]}}</b>
+            </li>
+        </ul>
+       <br /> alternative: dividend.com, DivY/Price History graph, disable Price in legend
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+       <b>PER hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let per_item of stock.per_hist" >
+             {{per_item[0]}}: <b>{{per_item[1]}}</b>
+            </li>
+        </ul>
     </ion-col>
   </ion-row>
   

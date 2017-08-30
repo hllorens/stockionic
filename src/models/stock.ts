@@ -11,7 +11,9 @@ export interface Stock {
     range_52week_heat: string;
     range_52week_volatility: string;
 	yield: string;
+	avgyield: string;
 	yield_per_ratio: string;
+	avgyield_per_ratio: string;
 	dividend: string;
 	divs_per_year: string;
 	dividend_total_year: string;
@@ -22,4 +24,5 @@ export interface Stock {
     eps_hist_trend: string;
 	per: string;
 	roe: string;
+    usdeur: string;
 }

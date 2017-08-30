@@ -21,19 +21,21 @@ export class StocksPage {
   stocks: Stock[];
   all_stocks: Stock[];
   searchQuery: string = '';
-  orderByField = '-yield_per_ratio +range_52week_heat';
+  orderByField = '-avgyield_per_ratio +range_52week_heat';
   reverseSort = '-';
   encuser: string = null;
   alerts: any = {};  //=[]   does not help
   alertsref: any;
   test_var: string = null;
   alert_filter_on: boolean=false;
+  usdeur: any;
   
   constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation
     cognitionisStocks.load().subscribe(result => {
       console.log('pulling stocks');
       this.all_stocks=result;
       this.initializeItems();
+      this.usdeur=(this.getStock('GOOG:NASDAQ')).usdeur;
       this.check_alerts();
     });
     // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
@@ -61,8 +63,7 @@ export class StocksPage {
       console.log('data received2'+cognitionis.get_timestamp_str());
       console.log('active page:'+this.navCtrl.getActive().name); // only log, .name does not work in prod
       let activeView = this.navCtrl.getActive();
-      if (activeView.component == StocksPage) {
-      //if(this.navCtrl.getActive().name === 'StocksPage'){
+      if (activeView.component == StocksPage) {   //if(this.navCtrl.getActive().name === 'StocksPage')
         console.log('detecting changes');
         this.cd.detectChanges(); // this fixes the issue, triggers change detection
         // seems to not work in Android??? perhaps add some badge... to see
@@ -155,10 +156,11 @@ export class StocksPage {
     }
   }
   
-  itemTapped(event, stock, alert) {
+  itemTapped(event, stock, alert, usdeur) {
     this.navCtrl.push(StockDetailsPage, {
           stock: stock,
-          alert: alert
+          alert: alert,
+          usdeur: usdeur
     });
   }
   
