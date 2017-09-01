@@ -13,7 +13,7 @@ import { Stock } from '../models/stock';
 */
 @Injectable()
 export class CognitionisStocks {
-  cognitionisUrl = 'http://www.cognitionis.com/cult/www/backend/get_stock.php';
+  cognitionisUrl = 'http://cognitionis.000webhostapp.com/cult/www/backend/get_stock.php';
   constructor(public http: Http) {
     console.log('Hello CognitionisStocks Provider');
   }
