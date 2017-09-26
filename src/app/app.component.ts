@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, MenuController, Nav, AlertController } from 'ionic-angular';
-import { StatusBar, Splashscreen, Toast } from 'ionic-native';
+import { StatusBar, Splashscreen } from 'ionic-native'; //, Toast
 
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { LogoutPage } from '../pages/logout/logout';

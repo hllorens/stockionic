@@ -40,7 +40,9 @@ export class StocksPage {
     });
     // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
   }
-  
+
+
+
   ngOnInit(){
     if(this.myfireauth.user){
         this.encuser=cognitionis.encodeAFemail(this.myfireauth.user.email);
@@ -102,15 +104,24 @@ export class StocksPage {
     
     if(al.low && parseFloat(al.low)>=parseFloat(stock.value)){
         this.alerts[al.symbol].active=true;
-        console.log('low');
+        //console.log('low');
         return;
     }
     if(al.high && parseFloat(al.high)<=parseFloat(stock.value)){
         this.alerts[al.symbol].active=true;
-        console.log('high');
+        //console.log('high');
         return;
     }
-    
+
+    if(al.lowe && parseFloat(al.lowe)>=parseFloat(this.usd2eur(stock.value))){
+        this.alerts[al.symbol].active=true;
+        return;
+    }
+    if(al.highe && parseFloat(al.highe)<=parseFloat(this.usd2eur(stock.value))){
+        this.alerts[al.symbol].active=true;
+        return;
+    }
+
     if(al.low_change_percentage && parseFloat(al.low_change_percentage)>=parseFloat(stock.session_change_percentage)){
         this.alerts[al.symbol].active=true;
         console.log('lowc'+al.low_change_percentage+"  "+stock.session_change_percentage);
@@ -148,10 +159,12 @@ export class StocksPage {
         this.alerts[al.symbol].active=true;
         return;
     }
-    
-    if(al.low_sell && parseFloat(al.low_sell)>=parseFloat(stock.value)){
+    if(al.portf && (
+        ( !this.usd_market(stock.market) && (parseFloat(al.portf)*0.8)>=parseFloat(stock.value) ) ||
+        (  this.usd_market(stock.market) && parseFloat(this.eur2usd(parseFloat(al.portf)*0.8))>=parseFloat(stock.value) )
+    )){ //*0.8 to see stop loss diff, note usdeur market
         this.alerts[al.symbol].active=true;
-        console.log('low_sell');
+        //console.log('portf '+al.symbol);
         return;
     }
   }
@@ -175,6 +188,29 @@ export class StocksPage {
   public mult100(value) {
     return (parseFloat(value)*100).toFixed(0);
   }
+  public usd2eur(value){
+    return this.toFixed2(value*this.usdeur);
+  }
+  public eur2usd(value){
+    return this.toFixed2(value/this.usdeur);
+  }
+  public usd_market(value){
+    if(value=="NASDAQ" || value=="NYSE"){return true;}
+    else{return false;}
+  }
+  public portfdiff(portf,market,value){
+    if(portf){
+        if(this.usd_market(market)){
+            return (parseFloat(this.usd2eur(value))-portf)/portf;
+        }else{
+            return (value-portf)/portf;
+        }
+    }else{
+        return;
+    }
+  }
+
+
   public addx(value,addition,decimals) {
     if(typeof(decimals)=='undefined') decimals=2;
     return (parseFloat(value)+addition).toFixed(decimals);
@@ -241,23 +277,38 @@ export class StocksPage {
     // Reset items back to all of the items
     this.initializeItems();
     if(this.alert_filter_on){
-        this.orderByField = '-yield_per_ratio +range_52week_heat';
+        this.orderByField = 'avgyield_per_ratio +range_52week_heat';
         this.reverseSort = '-';
         this.alert_filter_on=false;return;
     }
     this.orderByField='none';this.reverseSort='';
     this.alert_filter_on=true;
     if(!this.alerts){this.stocks=[];return;}
+    
+    let alertedp = this.stocks.filter((item) => {
+        if(this.alerts.hasOwnProperty(item.name+":"+item.market))
+            return (this.alerts[item.name+":"+item.market].active && this.alerts[item.name+":"+item.market].portf);
+        return false;
+    });
     let alerted = this.stocks.filter((item) => {
         if(this.alerts.hasOwnProperty(item.name+":"+item.market))
-            return (this.alerts[item.name+":"+item.market].active);
+            return (this.alerts[item.name+":"+item.market].active && !this.alerts[item.name+":"+item.market].portf);
+        return false;
+    });
+    alerted=alertedp.concat(alerted);
+    
+    let not_alertedp=this.stocks.filter((item) => {
+        if(this.alerts.hasOwnProperty(item.name+":"+item.market))
+            return (!this.alerts[item.name+":"+item.market].active && this.alerts[item.name+":"+item.market].portf);
         return false;
     });
     let not_alerted=this.stocks.filter((item) => {
         if(this.alerts.hasOwnProperty(item.name+":"+item.market))
-            return (!this.alerts[item.name+":"+item.market].active);
+            return (!this.alerts[item.name+":"+item.market].active && !this.alerts[item.name+":"+item.market].portf);
         return false;
     });
+    not_alerted=not_alertedp.concat(not_alerted);
+
     this.stocks=alerted.concat(not_alerted);
   }
 

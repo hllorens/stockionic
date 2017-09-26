@@ -7,7 +7,7 @@ import { AngularFire } from 'angularfire2'; //FirebaseListObservable
 import { MyFireAuth } from '../../providers/myfireauth';
 //import {cognitionis} from '../../lib/cognitionis.ts';
 
-import { StocksPage } from '../stocks/stocks';
+//import { StocksPage } from '../stocks/stocks';
 //import { ProvatablePage } from '../provatable/provatable';
 //import { AlertsPage } from '../alerts/alerts';
 

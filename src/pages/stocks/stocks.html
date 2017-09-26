@@ -16,15 +16,15 @@
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'eps_hist_last_diff' ? '': 'ordbsel'}}">epsd</span> 
           </button>
           <button ion-button small clear (click)="reorder_desc($event,'avgyield')">
-          <span style="color:green;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield' ? '': 'ordbsel'}}">yld</span>
+            <span style="color:green;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield' ? '': 'ordbsel'}}">yld</span>
           </button>
           <button ion-button small clear (click)="reorder_52_heat_vol($event)"> <!-- originally reorder($event,'range_52week_heat +yield')-->
-          <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52w</span> 
-                <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
-                <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_volatility'">vo</span>
+            <span style="font-size:0.8em;" class="{{orderByField.substring(1) != 'range_52week_heat +yield' ? '': 'ordbsel'}}">52w</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_heat'"><span [hidden]="reverseSort=='+'">^</span><span [hidden]="reverseSort=='-'">v</span></span>
+            <span [hidden]="orderByField.substring(1).split(' ')[0] != 'range_52week_volatility'">vo</span>
           </button>
           <button ion-button small clear (click)="showAlerted()">
-          <span style="color:black;font-size:0.8em;" class="{{alert_filter_on ? 'alerted': ''}}"><ion-icon name="notifications"></ion-icon></span>
+            <span style="color:black;font-size:0.8em;" class="{{alert_filter_on ? 'alerted': ''}}"><ion-icon name="notifications"></ion-icon></span>
           </button>
   </ion-navbar>
 </ion-header>
@@ -43,7 +43,8 @@
               <p style="width:50%;"><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar> <span style="color:blue;font-size:0.7em;">{{ addx(stock.range_52week_volatility,1,1) }}x</span></p>
             </ion-col>
             <ion-col width-33>
-              <span style="color:blue;">{{ stock.value }}</span>
+              <span style="color:blue;" *ngIf="!usd_market(stock.market)">{{ stock.value }}</span>
+              <span style="color:black;font-size:0.9em;" *ngIf="usd_market(stock.market)">{{usd2eur(stock.value)}}<span style="color:blue;font-size:0.7em;" > ${{ stock.value }}</span></span>
               <p><span style="text-align=right;font-size:0.8em;">{{ stock.range_52week_low }}-{{ stock.range_52week_high }}</span></p>
             </ion-col>
             <ion-col width-25>
@@ -56,6 +57,8 @@
                 </p>
             </ion-col>
             <ion-col width-10>
+                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)>=0" style="color:green">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
+                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)<0" style="color:red">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
                     <ion-icon name="notifications" *ngIf="alerts[stock.name+':'+stock.market]"></ion-icon>
             </ion-col>
         </ion-row>

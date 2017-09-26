@@ -42,10 +42,38 @@ export class StockDetailsPage {
   public usd2eur(value){
     return this.toFixed2(value*this.usdeur);
   }
+  public eur2usd(value){
+    return this.toFixed2(value/this.usdeur);
+  }
   public usd_market(value){
     if(value=="NASDAQ" || value=="NYSE"){return true;}
     else{return false;}
   }
+  public portfdiff(){
+    if(this.alert.portf){
+        if(this.usd_market(this.stock.market)){
+            return (parseFloat(this.usd2eur(this.stock.value))-this.alert.portf)/this.alert.portf;
+        }else{
+            return (this.stock.value-this.alert.portf)/this.alert.portf;
+        }
+    }else{
+        return;
+    }
+  }
+
+  public loss_percentage(val,percentage){
+    if(typeof(percentage)=='undefined') percentage=0.2;
+    return parseFloat(val)*(1-percentage);
+  }
+  
+  public loss_percentage_portf(){
+        if(this.usd_market(this.stock.market)){
+            return this.loss_percentage(parseFloat(this.eur2usd(this.alert.portf)),0.2);
+        }else{
+            return this.loss_percentage(parseFloat(this.alert.portf),0.2);
+        }
+  }
+  
   
   public update_alert(field,restriction){
       console.log(JSON.stringify(this.alert));
@@ -90,18 +118,29 @@ export class StockDetailsPage {
   check_alert_detailed(){
     this.alert_status={};
     if(this.alert.low && parseFloat(this.alert.low)>=parseFloat(this.stock.value)){
-        console.log('low');
+        //console.log('low');
         this.alert_status.low=true;
     }else{
         delete this.alert_status.low;
     }
     if(this.alert.high && parseFloat(this.alert.high)<=parseFloat(this.stock.value)){
-        console.log('high');
+        //console.log('high');
         this.alert_status.high=true;
     }else{
-        delete this.alert_status.high;    
+        delete this.alert_status.high;
     }
-    
+
+    if(this.alert.lowe && parseFloat(this.alert.lowe)>=parseFloat(this.usd2eur(this.stock.value))){
+        this.alert_status.lowe=true;
+    }else{
+        delete this.alert_status.lowe;
+    }
+    if(this.alert.highe && parseFloat(this.alert.highe)<=parseFloat(this.usd2eur(this.stock.value))){
+        this.alert_status.highe=true;
+    }else{
+        delete this.alert_status.highe;
+    }
+
     if(this.alert.low_change_percentage && parseFloat(this.alert.low_change_percentage)>=parseFloat(this.stock.session_change_percentage)){
         console.log('lowc');
         this.alert_status.low_change_percentage=true;
@@ -148,10 +187,10 @@ export class StockDetailsPage {
         delete this.alert_status.high_eps;
     }
     
-    if(this.alert.low_eps && parseFloat(this.alert.low_sell)>=parseFloat(this.stock.value)){
-        this.alert_status.low_sell=true;
+    if(this.alert.low_eps && (parseFloat(this.alert.portf)*0.8)>=parseFloat(this.stock.value)){
+        this.alert_status.portf=true;
     }else{
-        delete this.alert_status.low_sell;
+        delete this.alert_status.portf;
     }
     // no high
 

@@ -13,9 +13,10 @@
       <ion-col width-100><h3  style="color:blue">{{ stock.title }}</h3></ion-col>
   </ion-row>
   <ion-row>
-      <ion-col width-50><h5>FACTS</h5></ion-col>
+      <ion-col width-50><h5>FACTS <span style="font-size:0.7em;">updated:{{stock.date}}</span></h5></ion-col>
       <ion-col width-50><h5><ion-icon name="notifications"></ion-icon> ALERT  </h5></ion-col>
   </ion-row>
+  
   <ion-row>
     <ion-col width-15>
       <h4>Value</h4>
@@ -24,7 +25,6 @@
     <ion-col width-15>
       <h4 style="color:blue;">{{ stock.value }}</h4>
       <p><span style="text-align=right;font-size:0.8em;">{{ stock.range_52week_low }}-{{ stock.range_52week_high }}</span></p>
-      <span *ngIf="usd_market(stock.market)"  style="color:blue;">eur: {{usd2eur(stock.value)}} ({{toFixed2(usdeur)}})</span>
     </ion-col>
     <ion-col width-25>
             <ion-item>
@@ -39,6 +39,49 @@
             </ion-item>
     </ion-col>
   </ion-row>
+  
+  <ion-row *ngIf="usd_market(stock.market)">
+    <ion-col width-15>
+      <h4>ValEur: <span style="text-align=right;font-size:0.8em;">{{toFixed2(usdeur)}}</span></h4>
+    </ion-col>
+    <ion-col width-15>
+      <h4 style="color:blue;">{{usd2eur(stock.value)}}</h4>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating><span *ngIf="!alert_status.lowe">low</span><span style="color:red;" *ngIf="alert_status.lowe">low</span></ion-label> 
+                <ion-input type="text" [value]="alert.lowe" [(ngModel)]="alert.lowe" (blur)="update_alert('lowe','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating><span *ngIf="!alert_status.highe">high</span><span style="color:red;" *ngIf="alert_status.highe">high</span></ion-label>
+                <ion-input type="text" [value]="alert.highe" [(ngModel)]="alert.highe" (blur)="update_alert('highe','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+  </ion-row>
+
+  
+  <ion-row>
+    <ion-col width-15>
+      <h4>Portf</h4>
+    </ion-col>
+    <ion-col width-15>
+      <h5 style="color:green;" *ngIf="(portfdiff()>=0)">{{mult100(portfdiff())}}%</h5>
+      <h5 style="color:red;"   *ngIf="(portfdiff()<0)">{{mult100(portfdiff())}}%</h5>
+    </ion-col>
+    <ion-col width-25>
+            <ion-item>
+                <ion-label floating><span *ngIf="!alert_status.portf">valeur</span><span style="color:red;" *ngIf="alert_status.portf">valeur</span></ion-label> 
+                <ion-input type="text" [value]="alert.portf" [(ngModel)]="alert.portf" (blur)="update_alert('portf','num')"></ion-input>
+            </ion-item>
+    </ion-col>
+    <ion-col width-25  *ngIf="alert.portf">
+        stop (-20%val): <span>{{toFixed2(loss_percentage(stock.value))}}</span><br />
+        stop (-20%portf): <span>{{toFixed2(loss_percentage_portf(alert.portf))}}</span> 
+    </ion-col>
+  </ion-row>
+
   <ion-row>
     <ion-col width-15>
       <h4>Change</h4>
@@ -170,21 +213,7 @@
     </ion-col>
   </ion-row>
   
-  <ion-row>
-    <ion-col width-30>
-      <h4>Portfolio</h4>
-      <p>Sell alert (stoploss)</p>
-    </ion-col>
-    <ion-col width-25>
-            <ion-item>
-                <ion-label floating><span *ngIf="!alert_status.low_sell">low</span><span style="color:red;" *ngIf="alert_status.low_sell">low</span></ion-label> 
-                <ion-input type="text" [value]="alert.low_sell" [(ngModel)]="alert.low_sell" (blur)="update_alert('low_sell','num')"></ion-input>
-            </ion-item>
-    </ion-col>
-    <ion-col width-25>
-            high<br />use alert
-    </ion-col>
-  </ion-row>
+
   </ion-grid>
   
 
