@@ -25,4 +25,5 @@ export interface Stock {
 	per: string;
 	roe: string;
     usdeur: string;
+    h_souce: string;
 }

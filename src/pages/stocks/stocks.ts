@@ -228,7 +228,17 @@ export class StocksPage {
     this.reverseSort='-';
     this.orderByField = this.reverseSort+val;
   }
-  
+
+  reorder_ypr_hec(ev: any){
+    if(this.orderByField!='-avgyield_per_ratio +range_52week_heat'){
+        this.reverseSort='-';
+        this.orderByField = '-avgyield_per_ratio +range_52week_heat';
+    }else{
+        this.reverseSort='-';
+        this.orderByField = '-h_souce';
+    }
+  }
+
   reorder_per_eps(ev: any){
     if(this.orderByField!='+per'){
         this.reverseSort='+';
