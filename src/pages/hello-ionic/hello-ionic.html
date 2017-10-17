@@ -1,6 +1,8 @@
 
 <ion-content padding>
-<div [hidden]="af.auth | async" class="bottom"><button ion-button outline (click)="myfireauth.login()">Login</button></div>
+<div [hidden]="!show_login" class="bottom"><button ion-button outline (click)="myfireauth.login()">Login</button></div>
+<div [hidden]="show_login" class="bottom">loading...</div> <!-- this avoids the login button to show and then disappear (because the user was really logged but the servers has a response time...) -->
+<!--<div [hidden]="af.auth | async" class="bottom"><button ion-button outline (click)="myfireauth.login()">Login</button></div>
 <div [hidden]="!(af.auth | async)" class="bottom">Hi {{ myfireauth.user?.email }} <button ion-button outline (click)="myfireauth.logout()">Logout</button> </div>
-<button [hidden]="!(af.auth | async)" (click)="open_page()">stocks</button>
+<button [hidden]="!(af.auth | async)" (click)="open_page()">stocks</button>-->
 </ion-content>

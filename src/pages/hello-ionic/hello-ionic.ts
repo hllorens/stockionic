@@ -16,6 +16,8 @@ import { StocksPage } from '../stocks/stocks';
   templateUrl: 'hello-ionic.html'
 })
 export class HelloIonicPage {
+    show_login: boolean=false;
+
     constructor(public navCtrl: NavController, public alertCtrl: AlertController,
                 public af: AngularFire, public actionSheetCtrl: ActionSheetController, private platform: Platform,public myfireauth: MyFireAuth) {
     }
@@ -25,10 +27,11 @@ export class HelloIonicPage {
                 if(user) {
                     this.navCtrl.setRoot(StocksPage);
                 }else {
-                    //this.navCtrl.setRoot(HelloIonicPage);
                     console.log('fire user logged out'); 
+                    show_login=true; // now we can really show the button because it won't disappear
                     //this.user = null;
                     // go to login page is already this one... understand navigation...
+                    //this.navCtrl.setRoot(HelloIonicPage);
                 }
         });
     }

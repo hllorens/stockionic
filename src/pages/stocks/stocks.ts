@@ -287,9 +287,10 @@ export class StocksPage {
     // Reset items back to all of the items
     this.initializeItems();
     if(this.alert_filter_on){
-        this.orderByField = 'avgyield_per_ratio +range_52week_heat';
+        this.orderByField = '-avgyield_per_ratio +range_52week_heat';
         this.reverseSort = '-';
-        this.alert_filter_on=false;return;
+        this.alert_filter_on=false;
+        return;
     }
     this.orderByField='none';this.reverseSort='';
     this.alert_filter_on=true;
