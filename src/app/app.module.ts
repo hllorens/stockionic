@@ -4,6 +4,7 @@ import { MyApp } from './app.component';
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { LogoutPage } from '../pages/logout/logout';
 import { HelpPage } from '../pages/help/help';
+import { ExtraPage } from '../pages/extra/extra';
 import { StockDetailsPage } from '../pages/stock-details/stock-details';
 import { StocksPage } from '../pages/stocks/stocks';
 
@@ -24,6 +25,7 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
     MyApp,
     HelloIonicPage,
     HelpPage,
+    ExtraPage,
     StockDetailsPage,
     StocksPage,
     LogoutPage,
@@ -39,6 +41,7 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
     MyApp,
     HelloIonicPage,
     HelpPage,
+    ExtraPage,
     StockDetailsPage,
     LogoutPage,
     StocksPage

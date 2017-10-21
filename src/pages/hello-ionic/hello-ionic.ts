@@ -28,7 +28,7 @@ export class HelloIonicPage {
                     this.navCtrl.setRoot(StocksPage);
                 }else {
                     console.log('fire user logged out'); 
-                    show_login=true; // now we can really show the button because it won't disappear
+                    this.show_login=true; // now we can really show the button because it won't disappear
                     //this.user = null;
                     // go to login page is already this one... understand navigation...
                     //this.navCtrl.setRoot(HelloIonicPage);

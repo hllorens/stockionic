@@ -5,6 +5,7 @@ import { StatusBar, Splashscreen } from 'ionic-native'; //, Toast
 import { HelloIonicPage } from '../pages/hello-ionic/hello-ionic';
 import { LogoutPage } from '../pages/logout/logout';
 import { HelpPage } from '../pages/help/help';
+import { ExtraPage } from '../pages/extra/extra';
 //import { StocksPage } from '../pages/stocks/stocks';
 
 
@@ -31,6 +32,7 @@ export class MyApp {
     // set our app's pages
     this.pages = [
       //{ title: 'Stocks', component: StocksPage },
+      { title: 'Extra', component: ExtraPage },
       { title: 'Help', component: HelpPage },
       { title: 'Logout', component: LogoutPage },
     ];
