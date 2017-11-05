@@ -24,6 +24,21 @@ export interface Stock {
     eps_hist_trend: string;
 	per: string;
 	roe: string;
-    usdeur: string;
     h_souce: string;
+    
+  // THIS IS INDEED NEEDED, CAN WE JUST GET RID OF THE CLASS ITSELF?
+  // YES WE CAN IF WE DEFINE IT LIKE "ANY", DO THIS NORMALLY TO AVOID CLUTTER...
+  usdeur: string;
+  /*usdeur_change: string;
+  usdeur_hist:  any[];
+  usdeur_hist_last_diff: string;
+  usdeur_hist_trend: string;
+  avgusdeur: string;
+
+  btcusd: string;
+  btcusd_change: string;
+  btcusd_hist:  any[];
+  btcusd_hist_last_diff: string;
+  btcusd_hist_trend: string;
+  avgbtcusd: string;*/
 }

@@ -9,5 +9,34 @@
 </ion-header>
 
 <ion-content padding>
-<b>Extra</b> usdeur bitcoin gdppcap...
+<b>Extra</b>
+
+
+ <b>usdeur=<span style="color:green;">{{usdeur}}</span></b>
+  <ion-row>
+    <ion-col>
+       <b>avg: {{avgusdeur}}</b>
+       <b>hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let usdeur_item of usdeur_hist" >
+             {{usdeur_item[0]}}: <b>{{usdeur_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  
+ <b>btcusd=<span style="color:orange;">{{btcusd}}</span></b>
+  <ion-row>
+    <ion-col>
+       <b>avg: {{avgbtcusd}}</b>
+       <b>hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let btcusd_item of btcusd_hist" >
+             {{btcusd_item[0]}}: <b>{{btcusd_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+
+  gdppcap, unemployment ...
 </ion-content>
