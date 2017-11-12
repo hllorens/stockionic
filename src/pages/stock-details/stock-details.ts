@@ -22,6 +22,11 @@ export class StockDetailsPage {
     public af: AngularFire, public myfireauth: MyFireAuth) {
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
+    // partial calculations ypr
+    this.stock.calc_om=1;
+    this.stock.calc_ps=1;
+    this.stock.calc_om_ps=1;
+    this.stock.calc_lev_score=1;
     this.alert = navParams.get('alert');
     this.usdeur = navParams.get('usdeur');
     if(typeof(this.alert)=='undefined') this.alert={};

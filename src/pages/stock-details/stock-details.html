@@ -13,10 +13,20 @@
       <ion-col width-100><h3  style="color:blue">{{ stock.title }}</h3></ion-col>
   </ion-row>
   <ion-row>
+    <ion-col>
+      MktCap: {{stock.mktcap}} Shares: {{stock.shares}} Employees: {{stock.employees}}<br />
+    <span style="color:purple;">YPR: {{stock.avgyield_per_ratio}}</span> <br />
+    calc: YPR=({{stock.avgyield}}(max 7, min 0.75)/{{stock.per}}(min 6, max 100)) / {{stock.leverage}}/max(industry,2.5) (min 1, max 2)
+    calc: ypr_orig={{stock.avgyield_per_ratio_original}}
+    calc: om/ps om={{stock.operating_margin}}  ps={{stock.price_to_sales}}
+    calc: leverage: {{stock.leverage}} industry: {{stock.leverage_industry}} (min 2.5)
+    <br /> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+    </ion-col>
+  </ion-row>
+  <ion-row>
       <ion-col width-50><h5>FACTS <span style="font-size:0.7em;">updated:{{stock.date}}</span></h5></ion-col>
       <ion-col width-50><h5><ion-icon name="notifications"></ion-icon> ALERT  </h5></ion-col>
   </ion-row>
-  
   <ion-row>
     <ion-col width-15>
       <h4>Value</h4>
@@ -145,13 +155,6 @@
             </ion-item>
     </ion-col>
   </ion-row>
-  
-  <ion-row>
-    <ion-col>
-    <span style="color:purple;">YPR: {{stock.avgyield_per_ratio}} (current non avg {{stock.yield_per_ratio}})</span> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
-    </ion-col>
-  </ion-row>
-  
   <ion-row>
     <ion-col width-15>
       <h4>EPS(av)</h4>
@@ -173,8 +176,6 @@
             </ion-item>
     </ion-col>
   </ion-row>
-        
-
   <ion-row>
     <ion-col>
        <b>EPS hist (annual avg 4Q):</b> 
@@ -213,6 +214,46 @@
         </ul>
     </ion-col>
   </ion-row>
+
+  <ion-row>
+    <ion-col>
+       <b>revenue (yearly, remove the quarterly storage...) <span style="color:orange;">{{stock.revenue}}</span></b>
+       <b>revenue hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_hist" >
+             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  
+  
+  <ion-row>
+    <ion-col>
+       <b>leverage  <span style="color:brown;">{{stock.leverage}}</span> industry: {{stock.leverage_industry}} <!--avg: <span style="color:pink;">{{stock.avgleverage}}</span>--></b>
+       <b>leverage hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let lev_item of stock.leverage_hist" >
+             {{lev_item[0]}}: <b>{{lev_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col>
+       <b>price to book <span style="color:brown;">{{stock.price_to_book}}</span></b>
+       <b>price_to_book hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let price_to_book_item of stock.price_to_book_hist" >
+             {{price_to_book_item[0]}}: <b>{{price_to_book_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  
+  
+  
   
 
   </ion-grid>
