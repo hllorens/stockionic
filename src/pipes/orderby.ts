@@ -7,8 +7,14 @@ export class OrderBy implements PipeTransform {
     
     if((isNaN(parseFloat(a)) || !isFinite(a)) || (isNaN(parseFloat(b)) || !isFinite(b))){
       //Isn't a number so lowercase the string to properly compare
-      if(a.toLowerCase() < b.toLowerCase()) return -1;
-      if(a.toLowerCase() > b.toLowerCase()) return 1;
+      let a_safe:string;
+      let b_safe:string;
+      console.log('a='+a);
+      console.log('b='+a);
+      a_safe=""+a;
+      b_safe=""+b;
+      if(a_safe.toLowerCase() < b_safe.toLowerCase()) return -1;
+      if(a_safe.toLowerCase() > b_safe.toLowerCase()) return 1;
     }
     else{
       //Parse strings as numbers to compare properly

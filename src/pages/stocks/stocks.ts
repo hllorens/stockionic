@@ -230,12 +230,25 @@ export class StocksPage {
   }
 
   reorder_ypr_hec(ev: any){
-    if(this.orderByField!='-avgyield_per_ratio +range_52week_heat'){
+    if(this.orderByField!='-avgyield_per_ratio +range_52week_heat' && this.orderByField!='-h_souce' && this.orderByField!='-operating_margin' && this.orderByField!='+price_to_sales' && this.orderByField!='+leverage_industry_ratio' ){
         this.reverseSort='-';
         this.orderByField = '-avgyield_per_ratio +range_52week_heat';
-    }else{
+    }else if(this.orderByField=='-avgyield_per_ratio +range_52week_heat'){
         this.reverseSort='-';
         this.orderByField = '-h_souce';
+    }else if(this.orderByField.split(' ')[0]=='-h_souce'){
+        this.reverseSort='-';
+        this.orderByField = '-operating_margin';
+    }else if(this.orderByField.split(' ')[0]=='-operating_margin'){
+        this.reverseSort='+';
+        this.orderByField = '+price_to_sales';
+    }else if(this.orderByField.split(' ')[0]=='+price_to_sales'){
+        this.reverseSort='+';
+        this.orderByField = '+leverage_industry_ratio';
+    }else{
+        console.log('d');
+        this.reverseSort='-';
+        this.orderByField = '-mktcap';
     }
   }
 

@@ -14,12 +14,16 @@
   </ion-row>
   <ion-row>
     <ion-col>
-      MktCap: {{stock.mktcap}} Shares: {{stock.shares}} Employees: {{stock.employees}}<br />
+      MktCap: {{stock.mktcap}} Shares: {{stock.shares}} Employees: {{stock.employees}}k<br />
     <span style="color:purple;">YPR: {{stock.avgyield_per_ratio}}</span> <br />
-    calc: YPR=({{stock.avgyield}}(max 7, min 0.75)/{{stock.per}}(min 6, max 100)) / {{stock.leverage}}/max(industry,2.5) (min 1, max 2)
+    calc: YPR_orig=({{stock.avgyield}}(max 7, min 0.75)/{{stock.per}}(min 6, max 100))
+    per: last 4 quarters (note for es-es info is not always fresh use manual to freshen it quicker)
     calc: ypr_orig={{stock.avgyield_per_ratio_original}}
+    new: + max(min((om(max 55)/8),0.2),7) / ps*4 (min 6, max 100) (depends on industry... review hightest ratios maybe consider changes, some have 0.5 which is ridiculous so a minimum of 1.5x4 6 is ok I think)
+    all divided by {{stock.leverage}}/max(industry,2.5) (min 1, max 2)
     calc: om/ps om={{stock.operating_margin}}  ps={{stock.price_to_sales}}
-    calc: leverage: {{stock.leverage}} industry: {{stock.leverage_industry}} (min 2.5)
+    om (is last quarter, we prefer stable oms so if very bad quarter it will rank the company down)
+    calc: leverage ttm: {{stock.leverage}} industry: {{stock.leverage_industry}} (min 2.5)
     <br /> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
     </ion-col>
   </ion-row>
