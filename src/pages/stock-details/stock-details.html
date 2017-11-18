@@ -14,21 +14,41 @@
   </ion-row>
   <ion-row>
     <ion-col>
-      MktCap: {{stock.mktcap}} Shares: {{stock.shares}} Employees: {{stock.employees}}k<br />
-    <span style="color:purple;">YPR: {{stock.avgyield_per_ratio}}</span> <br />
-    calc: YPR_orig=({{stock.avgyield}}(max 7, min 0.75)/{{stock.per}}(min 6, max 100))
-    per: last 4 quarters (note for es-es info is not always fresh use manual to freshen it quicker)
-    calc: ypr_orig={{stock.avgyield_per_ratio_original}}
-    new: + max(min((om(max 55)/8),0.2),7) / ps*4 (min 6, max 100) (depends on industry... review hightest ratios maybe consider changes, some have 0.5 which is ridiculous so a minimum of 1.5x4 6 is ok I think)
-    all divided by {{stock.leverage}}/max(industry,2.5) (min 1, max 2)
-    calc: om/ps om={{stock.operating_margin}}  ps={{stock.price_to_sales}}
-    om (is last quarter, we prefer stable oms so if very bad quarter it will rank the company down)
-    calc: leverage ttm: {{stock.leverage}} industry: {{stock.leverage_industry}} (min 2.5)
-    <br /> - Volat: {{ stock.range_52week_volatility }}  -  Beta: {{stock.beta}}
+     <span style="font-size:0.8em;">Updated: {{stock.date}}, goog fin Q: {{stock.key_period}} </span><br />
+      MktCap: <b>{{stock.mktcap}}B</b> (<span [hidden]="stock.mktcap<10">big</span><span [hidden]="stock.mktcap>2">small</span>) Shares: {{stock.shares}} Employees: {{stock.employees}}k<br />
+      <div style="width:80%;background:white;margin:0 10%;float:left;">
+          <div style="width:100%;text-align:center;color:purple;background:white;margin:0 auto;">
+              YPR: <b>{{stock.avgyield_per_ratio}}</b>
+          </div>
+          <div style="width:100%;background:white;margin:0;padding-right:10%;float:left;text-align:center;">
+              <div style="width:50%;background:white;margin:0;float:left;text-align:center;">
+                  <div style="border:1px solid white;background:white;margin:0;float:right;text-align:left;">={{stock.avgyield_per_ratio_original}}</div>
+                  <div style="background:green;margin:0;float:right;text-align:center;">
+                      <div style="border-bottom:1px solid #32db64;margin:0;color:#32db64;background:white;text-align:center;">yield(ttm)=<b>{{stock.avgyield}}</b> [1.5 - 7]</div>
+                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">per(ttm)=<b>{{stock.per}}</b>[6 - 100] </div>
+                  </div>
+              </div>
+              <div style="width:50%;background:white;margin:0;padding-left:10%;float:right;text-align:center;">
+                  <div style="background:gray;margin:0;float:left;text-align:center;">
+                      <div style="border-bottom:1px solid #32db64;margin:0;color:#32db64;background:white;text-align:center;">op(mrq)=<b>{{stock.operating_margin}} (avg: {{stock.operating_margin_avg}})</b>(max 55)/8 [0.2 - 7]</div>
+                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">ps(ttm)=<b>{{stock.price_to_sales}}</b>*4 [6 - 100]</div>
+                  </div>
+                  <div style="border:1px solid white;background:white;margin:0;float:left;text-align:left;">={{stock.calc_om_ps}}</div>
+              </div>
+          </div>
+          <div style="width:100%;color:#black;background:white;text-align:center;float:left;">
+              rev_growth_qq_last_y=<b>{{stock.revenue_growth_qq_last_year}}</b>[-0.25 - 0.25] +<br />rev_growth_avg_5y=<b>{{stock.avg_revenue_growth_5y}}</b> [-0.25 - 0.25]
+          </div>
+          <div style="width:100%;color:#a33;background:white;text-align:center;float:left;">
+              lev(ttm)=<b>{{stock.leverage}}</b>/industry={{stock.leverage_industry}}(min 2.5,banks 11)=<b>{{stock.calc_lev_ind_ratio}}</b> [1 - 2]
+          </div>
+      </div>
+      <br style="clear:both" />
+    <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x  -  Beta: {{stock.beta}} 
     </ion-col>
   </ion-row>
   <ion-row>
-      <ion-col width-50><h5>FACTS <span style="font-size:0.7em;">updated:{{stock.date}}</span></h5></ion-col>
+      <ion-col width-50><h5>FACTS</h5></ion-col>
       <ion-col width-50><h5><ion-icon name="notifications"></ion-icon> ALERT  </h5></ion-col>
   </ion-row>
   <ion-row>
@@ -221,7 +241,7 @@
 
   <ion-row>
     <ion-col>
-       <b>revenue (yearly, remove the quarterly storage...) <span style="color:orange;">{{stock.revenue}}</span></b>
+       <b>revenue(last year):<span style="color:orange;">{{stock.revenue}}</span></b> 
        <b>revenue hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_hist" >

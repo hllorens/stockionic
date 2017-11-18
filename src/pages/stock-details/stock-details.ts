@@ -22,10 +22,13 @@ export class StockDetailsPage {
     public af: AngularFire, public myfireauth: MyFireAuth) {
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
+    this.stock.mktcap = parseFloat(this.stock.mktcap);
     // partial calculations ypr
-    this.stock.calc_om=1;
-    this.stock.calc_ps=1;
-    this.stock.calc_om_ps=1;
+    this.stock.calc_om_ps=this.toFixed2(Math.max((Math.min(parseFloat(this.stock.operating_margin),55)/8),0.2)/Math.min(Math.max(parseFloat(this.stock.price_to_sales)*4,6),100));
+    if(this.stock.operating_margin_avg!=0){
+        this.stock.calc_om_ps=this.toFixed2(Math.max((Math.min(parseFloat(this.stock.operating_margin_avg),55)/8),0.2)/Math.min(Math.max(parseFloat(this.stock.price_to_sales)*4,6),100));    
+    }
+    this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
     this.stock.calc_lev_score=1;
     this.alert = navParams.get('alert');
     this.usdeur = navParams.get('usdeur');
@@ -37,6 +40,10 @@ export class StockDetailsPage {
         this.encuser=cognitionis.encodeAFemail(this.myfireauth.user.email);
         console.log(this.encuser);
     }
+  }
+  public addx(value,addition,decimals) {
+    if(typeof(decimals)=='undefined') decimals=2;
+    return (parseFloat(value)+addition).toFixed(decimals);
   }
   public toFixed2(value) {
     return parseFloat(value).toFixed(2);
