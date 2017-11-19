@@ -15,7 +15,7 @@
   <ion-row>
     <ion-col>
      <span style="font-size:0.8em;">Updated: {{stock.date}}, goog fin Q: {{stock.key_period}} </span><br />
-      MktCap: <b>{{stock.mktcap}}B</b> (<span [hidden]="stock.mktcap<10">big</span><span [hidden]="stock.mktcap>2">small</span>) Shares: {{stock.shares}} Employees: {{stock.employees}}k<br />
+      MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
       <div style="width:80%;background:white;margin:0 10%;float:left;">
           <div style="width:100%;text-align:center;color:purple;background:white;margin:0 auto;">
               YPR: <b>{{stock.avgyield_per_ratio}}</b>

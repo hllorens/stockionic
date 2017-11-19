@@ -9,8 +9,8 @@ export class OrderBy implements PipeTransform {
       //Isn't a number so lowercase the string to properly compare
       let a_safe:string;
       let b_safe:string;
-      console.log('a='+a);
-      console.log('b='+a);
+      //console.log('a='+a);
+      //console.log('b='+b);
       a_safe=""+a;
       b_safe=""+b;
       if(a_safe.toLowerCase() < b_safe.toLowerCase()) return -1;
