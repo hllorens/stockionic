@@ -111,8 +111,8 @@
             </ion-item>
     </ion-col>
     <ion-col width-25  *ngIf="alert.portf">
-        stop (-20%val): <span>{{toFixed2(loss_percentage(stock.value))}}</span><br />
-        stop (-20%portf): <span>{{toFixed2(loss_percentage_portf(alert.portf))}}</span> 
+        <span *ngIf="show_stop_val()">stop (-20%val): <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage(stock.value))}}</b><br />worse: <b>{{stopdiff()}}%</b></span>
+        <span *ngIf="!show_stop_val()">stop (-20%portf): <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage_portf(alert.portf))}}</b><br />worse: <b>{{stopdiff()}}%</b></span> 
     </ion-col>
   </ion-row>
 

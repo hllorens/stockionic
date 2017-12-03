@@ -210,7 +210,11 @@ export class StocksPage {
     }
   }
 
-
+  public redux_format(value) {
+    if(parseFloat(value)>100) return parseFloat(value).toFixed(0);
+    if(parseFloat(value)<100 && parseFloat(value)>=10) return parseFloat(value).toFixed(1);
+    return value;
+  }
   public addx(value,addition,decimals) {
     if(typeof(decimals)=='undefined') decimals=2;
     return (parseFloat(value)+addition).toFixed(decimals);
