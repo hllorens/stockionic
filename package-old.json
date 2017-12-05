@@ -21,7 +21,6 @@
     "@angular/platform-server": "2.2.1",
     "@ionic/storage": "1.1.7",
     "angularfire2": "^2.0.0-beta.7",
-    "cordova-plugin-googleplus": "^5.1.1",
     "firebase": "^3.6.5",
     "ionic-angular": "2.0.0-rc.5",
     "ionic-native": "2.2.11",
@@ -43,12 +42,5 @@
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [],
-  "description": "stockionic: An Ionic project",
-  "cordova": {
-    "plugins": {
-      "cordova-plugin-googleplus": {
-        "REVERSED_CLIENT_ID": "com.googleusercontent.apps.718126583517-dsh4gj37l8hihqrpeilrlo6jehsj51lf"
-      }
-    }
-  }
+  "description": "stockionic: An Ionic project"
 }

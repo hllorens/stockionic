@@ -110,7 +110,7 @@
                 <ion-input type="text" [value]="alert.portf" [(ngModel)]="alert.portf" (blur)="update_alert('portf','num')"></ion-input>
             </ion-item>
     </ion-col>
-    <ion-col width-20  *ngIf="alert.portf">
+    <ion-col width-25  *ngIf="alert.portf">
         <span *ngIf="show_stop_val()">stop-20%val: <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage(stock.value))}}</b><br />w: <b>{{stopdiff()}}%</b></span>
         <span *ngIf="!show_stop_val()">stop-20%port: <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage_portf(alert.portf))}}</b><br />w: <b>{{stopdiff()}}%</b></span> 
     </ion-col>
