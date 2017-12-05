@@ -16,7 +16,7 @@
     <ion-col>
      <span style="font-size:0.8em;">Updated: {{stock.date}}, goog fin Q: {{stock.key_period}} </span><br />
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
-      <div style="width:80%;background:white;margin:0 10%;float:left;">
+      <div style="width:94%;background:white;margin:0 3%;float:left;">
           <div style="width:100%;text-align:center;color:purple;background:white;margin:0 auto;">
               YPR: <b>{{stock.avgyield_per_ratio}}</b>
           </div>
@@ -104,15 +104,15 @@
       <h5 style="color:green;" *ngIf="(portfdiff()>=0)">{{mult100(portfdiff())}}%</h5>
       <h5 style="color:red;"   *ngIf="(portfdiff()<0)">{{mult100(portfdiff())}}%</h5>
     </ion-col>
-    <ion-col width-25>
+    <ion-col width-15>
             <ion-item>
                 <ion-label floating><span *ngIf="!alert_status.portf">valeur</span><span style="color:red;" *ngIf="alert_status.portf">valeur</span></ion-label> 
                 <ion-input type="text" [value]="alert.portf" [(ngModel)]="alert.portf" (blur)="update_alert('portf','num')"></ion-input>
             </ion-item>
     </ion-col>
-    <ion-col width-25  *ngIf="alert.portf">
-        stop (-20%val): <span>{{toFixed2(loss_percentage(stock.value))}}</span><br />
-        stop (-20%portf): <span>{{toFixed2(loss_percentage_portf(alert.portf))}}</span> 
+    <ion-col width-20  *ngIf="alert.portf">
+        <span *ngIf="show_stop_val()">stop-20%val: <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage(stock.value))}}</b><br />w: <b>{{stopdiff()}}%</b></span>
+        <span *ngIf="!show_stop_val()">stop-20%port: <b><span *ngIf="usd_market(stock.market)">$</span>{{toFixed2(loss_percentage_portf(alert.portf))}}</b><br />w: <b>{{stopdiff()}}%</b></span> 
     </ion-col>
   </ion-row>
 

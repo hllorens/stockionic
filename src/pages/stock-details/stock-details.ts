@@ -75,7 +75,8 @@ export class StockDetailsPage {
 
   public loss_percentage(val,percentage){
     if(typeof(percentage)=='undefined') percentage=0.2;
-    return parseFloat(val)*(1-percentage);
+    if(this.usd_market(this.stock.market)) return (parseFloat(val)*(1-percentage));
+    return (parseFloat(val)*(1-percentage));
   }
   
   public loss_percentage_portf(){
@@ -86,6 +87,27 @@ export class StockDetailsPage {
         }
   }
   
+  public show_stop_val(){
+      var x=parseFloat(this.stock.value);
+      if(this.usd_market(this.stock.market)) x=parseFloat(this.usd2eur(x));
+      return this.alert.portf<x;
+  }
+  
+  public stopdiff(){
+    if (this.show_stop_val()){
+        if(this.alert.portf){
+            if(this.usd_market(this.stock.market)){
+                return (((parseFloat(this.usd2eur(this.stock.value))*0.8-this.alert.portf)/this.alert.portf)*100).toFixed(0);
+            }else{
+                return (((this.stock.value*0.8-this.alert.portf)/this.alert.portf)*100).toFixed(0);
+            }
+        }else{
+            return;
+        }
+    }else{
+        return "-20";
+    }
+  }
   
   public update_alert(field,restriction){
       console.log(JSON.stringify(this.alert));
