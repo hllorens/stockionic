@@ -6,6 +6,8 @@ stocks analysis and alerts
 - Need to configure a firebase project or have access to the existing one
 
 -- E.g., for auth go to console, authentication and at top right see "WEB SETUP" copy that to firebase.config.ts
+-- The web api key you can find it in config.xml but also in google document this better
+-- https://console.developers.google.com/apis/credentials?project=cult-game see android vs web-client
 
 - Make sure you add the domain to the OAuth redirect domains list in the Firebase console -> Auth section -> Sign in method tab.
 
