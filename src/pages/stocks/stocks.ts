@@ -17,11 +17,13 @@ import { StockDetailsPage } from '../stock-details/stock-details';
   selector: 'page-stocks',
   templateUrl: 'stocks.html'
 })
+
 export class StocksPage {
   stocks: Stock[];
   all_stocks: Stock[];
   searchQuery: string = '';
-  orderByField = '-avgyield_per_ratio +range_52week_heat';
+//  orderByField = '-avgyield_per_ratio +range_52week_heat';
+  orderByField = '-h_souce +range_52week_heat';
   reverseSort = '-';
   encuser: string = null;
   alerts: any = {};  //=[]   does not help
@@ -240,13 +242,17 @@ export class StocksPage {
   }
 
   reorder_ypr_hec(ev: any){
-    if(this.orderByField!='-avgyield_per_ratio +range_52week_heat' && this.orderByField!='-h_souce' && this.orderByField!='-operating_margin' && this.orderByField!='+price_to_sales' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
+    if(this.orderByField!='-value_hist_last_diff' && this.orderByField!='-h_souce +range_52week_heat' && this.orderByField!='-operating_margin' && this.orderByField!='+price_to_sales' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
         this.reverseSort='-';
-        this.orderByField = '-avgyield_per_ratio +range_52week_heat';
-    }else if(this.orderByField=='-avgyield_per_ratio +range_52week_heat'){
-        this.reverseSort='-';
-        this.orderByField = '-h_souce';
+        this.orderByField = '-h_souce +range_52week_heat';
+//      original -avgyield_per_ratio +range_52week_heat
+//    }else if(this.orderByField=='-avgyield_per_ratio +range_52week_heat'){
+//        this.reverseSort='-';
+//        this.orderByField = '-h_souce';
     }else if(this.orderByField.split(' ')[0]=='-h_souce'){
+        this.reverseSort='-';
+        this.orderByField = '-value_hist_last_diff';
+    }else if(this.orderByField.split(' ')[0]=='-value_hist_last_diff'){
         this.reverseSort='-';
         this.orderByField = '-operating_margin';
     }else if(this.orderByField.split(' ')[0]=='-operating_margin'){
@@ -316,7 +322,8 @@ export class StocksPage {
     // Reset items back to all of the items
     this.initializeItems();
     if(this.alert_filter_on){
-        this.orderByField = '-avgyield_per_ratio +range_52week_heat';
+        //this.orderByField = '-avgyield_per_ratio +range_52week_heat'; original
+        this.orderByField = '-h_souce +range_52week_heat';
         this.reverseSort = '-';
         this.alert_filter_on=false;
         return;
