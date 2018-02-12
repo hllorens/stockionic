@@ -299,7 +299,12 @@
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-       <b>revenue qq hist (under dev)</b><br />
+       <b>revenue qq hist</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
+             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
        <b>revenue 5y hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.avg_revenue_growth_5y_hist" >
