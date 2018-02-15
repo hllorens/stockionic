@@ -213,16 +213,15 @@
   <ion-row>
     <ion-col>
        <b>EPS hist (annual avg 4Q):</b> 
+        <div *ngIf="stock.eps_hist.length>1">EPS last diff: {{stock.eps_hist[stock.eps_hist.length-1][1]}}-{{stock.eps_hist[stock.eps_hist.length-2][1]}}=
+            <span style="color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff<0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
+            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>=0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
+        </div>
        <ul class="list">
             <li class="item" *ngFor="let eps_item of stock.eps_hist" >
              {{eps_item[0]}}: <b>{{eps_item[1]}}</b>
             </li>
         </ul>
-        <div *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff && stock.eps_hist_last_diff!=0">Last eps diff: <br />
-            {{stock.eps_hist[stock.eps_hist.length-1][1]}}-{{stock.eps_hist[stock.eps_hist.length-2][1]}}=
-            <span style="color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff<0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
-            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
-        </div>
     </ion-col>
   </ion-row>
   <ion-row>
@@ -244,7 +243,7 @@
   <ion-row>
     <ion-col>
        <b>PER avg: <span style="color:orange;">{{stock.avgper}}</span></b>
-       <b>PS last diff: 
+       <b>PER last diff: 
       <span style="color:red;" *ngIf="(stock.per_hist_last_diff>=0)">{{stock.per_hist_last_diff}}%</span>
       <span style="color:green;"   *ngIf="(stock.per_hist_last_diff<0)">{{stock.per_hist_last_diff}}%</span>
         </b>. 

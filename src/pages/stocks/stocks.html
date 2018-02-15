@@ -63,9 +63,9 @@
             <ion-col width-25>
                 <ion-badge color="secondary">{{ stock.avgyield }}<!--<span style="font-size:0.7em;">({{ stock.divs_per_year }})</span>--></ion-badge> 
                 <p style="color:orange;font-size:0.8em;">{{ redux_format_max(stock.per) }}
-                <span style="font-size:0.6em;" *ngIf="stock.eps_hist_last_diff && stock.eps_hist_last_diff!=0 && stock.eps_hist.length>1">
+                <span style="font-size:0.6em;" *ngIf="stock.eps_hist.length>1">
                             <span style="color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff<0">{{stock.eps_hist_last_diff}}{{stock.eps_hist_trend}}</span>
-                            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>0">{{stock.eps_hist_last_diff}}{{stock.eps_hist_trend}}</span>
+                            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>=0">{{stock.eps_hist_last_diff}}{{stock.eps_hist_trend}}</span>
                 </span>
                 </p>
             </ion-col>
