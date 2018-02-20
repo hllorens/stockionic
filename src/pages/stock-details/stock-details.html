@@ -18,26 +18,27 @@
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
       <div style="width:94%;background:white;margin:0 3%;float:left;">
           <div style="width:100%;text-align:center;color:purple;background:white;margin:0 auto;">
-              YPR: <b>{{stock.h_souce}} ({{stock.avgyield_per_ratio}} !bonus)</b>
+              YPR: <b>{{stock.h_souce}} ({{stock.avgyield_per_ratio}} !bonus)</b><br />
+              All values averaged with avg to smooth changes (see avg below)
           </div>
           <div style="width:100%;background:white;margin:0;padding-right:10%;float:left;text-align:center;">
               <div style="width:50%;background:white;margin:0;float:left;text-align:center;">
                   <div style="border:1px solid white;background:white;margin:0;float:right;text-align:left;">={{stock.avgyield_per_ratio_original}}</div>
                   <div style="background:green;margin:0;float:right;text-align:center;">
                       <div style="border-bottom:1px solid #32db64;margin:0;color:#32db64;background:white;text-align:center;">yield(ttm)=<b>{{stock.avgyield}}</b> [1.5 - 7]</div>
-                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">per(ttm)=<b>{{stock.per}}</b>[6 - 100] </div>
+                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">per(ttm)=<b>{{stock.per}}</b>(&{{stock.avgper}})[6 - 100] </div>
                   </div>
               </div>
               <div style="width:50%;background:white;margin:0;padding-left:10%;float:right;text-align:center;">
                   <div style="background:gray;margin:0;float:left;text-align:center;">
                       <div style="border-bottom:1px solid #32db64;margin:0;color:#32db64;background:white;text-align:center;">op(mrq)=<b>{{stock.operating_margin}} (avg: {{stock.operating_margin_avg}})</b>(max 55)/8 [0.2 - 7]</div>
-                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">ps(ttm)=<b>{{stock.price_to_sales}}</b>*4 [6 - 100]</div>
+                      <div style="border-top:1px solid orange;margin:0;color:orange;background:white;text-align:center;">ps(ttm)=<b>{{stock.price_to_sales}}</b>(&{{stock.avgprice_to_sales}})*4 [6 - 100]</div>
                   </div>
                   <div style="border:1px solid white;background:white;margin:0;float:left;text-align:left;">={{stock.calc_om_ps}}</div>
               </div>
           </div>
           <div style="width:100%;color:#black;background:white;text-align:center;float:left;">
-              rev_growth_qq_last_y=<b>{{stock.revenue_growth_qq_last_year}}</b>[-0.25 - 0.25] +<br />rev_growth_avg_5y=<b>{{stock.avg_revenue_growth_5y}}</b> [-0.25 - 0.20]
+              rev_growth_qq_last_y=<b>{{stock.revenue_growth_qq_last_year}}</b>(&{{stock.avgrevenue_growth_qq_last_year}})[-0.25 - 0.25] +<br />rev_growth_avg_5y=<b>{{stock.avg_revenue_growth_5y}}</b> [-0.25 - 0.20]
           </div>
           <div style="width:100%;color:#a33;background:white;text-align:center;float:left;">
               lev(ttm)=<b>{{stock.leverage}}</b>/industry={{stock.leverage_industry}}(min 2.5,banks 11)=<b>{{stock.calc_lev_ind_ratio}}</b> [1 - 2]
@@ -51,6 +52,7 @@
         <li>eps_trend_2 (max 0.05): {{stock.eps_trend}}</li>
         <li>high_yld_low_volat(&gt;3,&lt;1.4)(max: 0.05): {{stock.high_yld_low_volatility_bonus}}</li>
         <li>revenue_growth (qq&gt;5y) (max 0.05): {{stock.revenue_growth_bonus}}</li>
+        <li>neg_growth (max -0.15): {{stock.negative_growth_penalty}}</li>
       </ul>
       
       
@@ -258,6 +260,7 @@
 
   <ion-row>
     <ion-col>
+       <b>OP avg: <span style="color:orange;">{{stock.avgoperating_margin}}</span></b>
        <b>OP last diff:       
        <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
        <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
@@ -272,6 +275,7 @@
   </ion-row>
   <ion-row>
     <ion-col>
+        <b>PS avg: <span style="color:orange;">{{stock.avgprice_to_sales}}</span></b>
        <b>PS last diff: 
       <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
       <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
@@ -298,6 +302,7 @@
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
+       <b>revemie qq avg: <span style="color:orange;">{{stock.avgrevenue_growth_qq_last_year}}</span></b>
        <b>revenue qq hist</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
