@@ -242,7 +242,7 @@ export class StocksPage {
   }
 
   reorder_ypr_hec(ev: any){
-    if(this.orderByField!='-value_hist_last_diff' && this.orderByField!='-h_souce +range_52week_heat' && this.orderByField!='-operating_margin' && this.orderByField!='+price_to_sales' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
+    if(this.orderByField!='-value_hist_last_diff' && this.orderByField!='-val_change_5y' && this.orderByField!='-h_souce +range_52week_heat' && this.orderByField!='-operating_margin' && this.orderByField!='+price_to_sales' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
         this.reverseSort='-';
         this.orderByField = '-h_souce +range_52week_heat';
 //      original -avgyield_per_ratio +range_52week_heat
@@ -253,6 +253,9 @@ export class StocksPage {
         this.reverseSort='-';
         this.orderByField = '-value_hist_last_diff';
     }else if(this.orderByField.split(' ')[0]=='-value_hist_last_diff'){
+        this.reverseSort='-';
+        this.orderByField = '-val_change_5y';
+    }else if(this.orderByField.split(' ')[0]=='-val_change_5y'){
         this.reverseSort='-';
         this.orderByField = '-operating_margin';
     }else if(this.orderByField.split(' ')[0]=='-operating_margin'){

@@ -38,8 +38,13 @@
               </div>
           </div>
           <div style="width:100%;color:#black;background:white;text-align:center;float:left;">
-              rev_growth_qq_last_y=<b>{{stock.revenue_growth_qq_last_year}}</b>(&{{stock.avgrevenue_growth_qq_last_year}})[-0.25 - 0.25] +<br />rev_growth_avg_5y=<b>{{stock.avg_revenue_growth_5y}}</b> [-0.25 - 0.20]
+              rev_growth_qq_last_y=<b>{{stock.revenue_growth_qq_last_year}}</b>(&{{stock.avgrevenue_growth_qq_last_year}})[-0.10 - 0.10] +<br />
+              rev_growth_avg_5y=<b>{{stock.avg_revenue_growth_5y}}</b> [-0.20 - 0.20]
           </div>
+          <div style="width:100%;color:#black;background:white;text-align:center;float:left;">
+              val_change_5y=<b>{{stock.val_change_5y}}(&3y={{stock.val_change_3y}})</b> [-0.20 - 0.15]
+          </div>
+
           <div style="width:100%;color:#a33;background:white;text-align:center;float:left;">
               lev(ttm)=<b>{{stock.leverage}}</b>/industry={{stock.leverage_industry}}(min 2.5,banks 11)=<b>{{stock.calc_lev_ind_ratio}}</b> [1 - 2]
           </div>
@@ -53,6 +58,7 @@
         <li>high_yld_low_volat(&gt;3,&lt;1.4)(max: 0.05): {{stock.high_yld_low_volatility_bonus}}</li>
         <li>revenue_growth (qq&gt;5y) (max 0.05): {{stock.revenue_growth_bonus}}</li>
         <li>neg_growth (max -0.15): {{stock.negative_growth_penalty}}</li>
+        <li>% val yy drops (max -0.50): -{{stock.val_yy_drops}}/2</li>
       </ul>
       
       
