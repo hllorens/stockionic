@@ -56,7 +56,7 @@ export class StockDetailsPage {
     this.stock.calc_yield=0;
     this.stock.calc_computable_yield=Math.min(parseFloat(this.stock.avgyield),parseFloat(this.stock.yield))/100;
     if(this.stock.calc_computable_yield<=parseFloat(this.stock.epsp)){ // if it's a big (>3%) healthy viable yield (<=epsp)
-        this.stock.calc_yield=Math.min(0.30+((this.stock.calc_computable_yield-0.029)*25),1); // max 1 (if y>6)
+        this.stock.calc_yield=Math.min(0.30+((this.stock.calc_computable_yield-0.029)*25),1.0); // max 1 (if y>6)
     }
     this.stock.calc_val_growth=0;
     this.stock.calc_computable_val_growth=((Math.max(Math.min(parseFloat(this.stock.val_change_5y),20),-20)+
