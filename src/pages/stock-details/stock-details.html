@@ -16,6 +16,48 @@
     <ion-col>
      <span style="font-size:0.8em;">Updated: {{stock.date}}, goog fin Q: {{stock.key_period}} </span><br />
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
+      
+    <ion-grid>
+    <ion-row>
+         <ion-col>
+        <span *ngIf="stock.yield>=2.9">Exam: Dividend stock</span>
+        <span *ngIf="stock.yield<2.9">Exam: Regular stock</span>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+        Result: <span style="font-weight:bold" >{{stock.h_souce}}</span>
+        </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Yield</ion-col>
+      <ion-col>
+      y:{{toFixed2(stock.calc_computable_yield)}} &nbsp; epsp: {{toFixed2(stock.epsp)}}<br />
+      {{toFixed2(stock.calc_yield)}} * w({{stock.calc_type.weight_yield}})</ion-col>
+      <ion-col>{{toFixed2(stock.calc_yield_w)}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Value G</ion-col>
+      <ion-col>
+      5y:{{stock.val_change_5y}} p:{{stock.val_change_5yp}}<br />
+      3y:{{stock.val_change_3y}} p:{{stock.val_change_3yp}}<br />
+      avg+y: {{toFixed2(stock.calc_computable_val_growth_y)}}<br />
+      {{toFixed2(stock.calc_val_growth)}} * w({{stock.calc_type.weight_val_growth}})</ion-col>
+      <ion-col>{{toFixed2(stock.calc_val_growth_w)}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Rev G</ion-col>
+      <ion-col>{{toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
+      <ion-col>{{toFixed2(stock.calc_rev_growth_w)}}</ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>Leverage</ion-col>
+      <ion-col>{{toFixed2(stock.calc_leverage)}} * w({{stock.calc_type.weight_leverage}})</ion-col>
+      <ion-col>{{toFixed2(stock.calc_leverage_w)}}</ion-col>
+    </ion-row>
+    </ion-grid>
+      
+      
       <div style="width:94%;background:white;margin:0 3%;float:left;">
           <div style="width:100%;text-align:center;color:purple;background:white;margin:0 auto;">
               YPR: <b>{{stock.h_souce}} ({{stock.avgyield_per_ratio}} !bonus)</b><br />
@@ -308,7 +350,7 @@
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-       <b>revemie qq avg: <span style="color:orange;">{{stock.avgrevenue_growth_qq_last_year}}</span></b>
+       <b>revenue qq avg: <span style="color:orange;">{{stock.avgrevenue_growth_qq_last_year}}</span></b>
        <b>revenue qq hist</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
@@ -325,7 +367,7 @@
   </ion-row>  
   <ion-row>
     <ion-col>
-       <b>leverage  <span style="color:brown;">{{stock.leverage}}</span> industry: {{stock.leverage_industry}} <!--avg: <span style="color:pink;">{{stock.avgleverage}}</span>--></b>
+       <b>leverage  <span style="color:brown;">{{stock.leverage}}</span> industry: {{stock.leverage_industry}} lev-inds-ratio: {{leverage_industry_ratio}} <!--avg: <span style="color:pink;">{{stock.avgleverage}}</span>--></b>
        <b>leverage hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let lev_item of stock.leverage_hist" >

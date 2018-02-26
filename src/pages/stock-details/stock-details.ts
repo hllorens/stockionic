@@ -29,7 +29,57 @@ export class StockDetailsPage {
         this.stock.calc_om_ps=this.toFixed2(Math.max((Math.min(parseFloat(this.stock.operating_margin_avg),55)/8),0.2)/Math.min(Math.max(parseFloat(this.stock.price_to_sales)*4,6),100));    
     }
     this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
-    this.stock.calc_lev_score=1;
+    this.stock.calc_type={
+        name: "regular",
+        weight_yield: 0,
+        weight_val_growth: 5,
+        weight_rev_growth: 3,
+        weight_epsp: 1,
+        weight_leverage: 1,
+        weight_val_growth_penalty: 3,
+        weight_rev_growth_penalty: 2,
+        weight_eps_growth_penalty: 2
+    }
+    if(this.stock.yield>2.9){
+        this.stock.calc_type={
+            name: "dividend",
+            weight_yield: 2,
+            weight_val_growth: 2,
+            weight_rev_growth: 1,
+            weight_epsp: 4,
+            weight_leverage: 1,
+            weight_val_growth_penalty: 3,
+            weight_rev_growth_penalty: 2,
+            weight_eps_growth_penalty: 2
+        }
+    }
+    this.stock.calc_yield=0;
+    this.stock.calc_computable_yield=Math.min(parseFloat(this.stock.avgyield),parseFloat(this.stock.yield))/100;
+    if(this.stock.calc_computable_yield<=parseFloat(this.stock.epsp)){ // if it's a big (>3%) healthy viable yield (<=epsp)
+        this.stock.calc_yield=Math.min(0.30+((this.stock.calc_computable_yield-0.029)*25),1); // max 1 (if y>6)
+    }
+    this.stock.calc_val_growth=0;
+    this.stock.calc_computable_val_growth=((Math.max(Math.min(parseFloat(this.stock.val_change_5y),20),-20)+
+                                            Math.max(Math.min(parseFloat(this.stock.val_change_5yp),20),-20)+
+                                            Math.max(Math.min(parseFloat(this.stock.val_change_3y),20),-20)+
+                                            Math.max(Math.min(parseFloat(this.stock.val_change_3yp),20),-20))/4)
+                                            /100;
+    this.stock.calc_computable_val_growth_y=this.stock.calc_computable_val_growth+this.stock.calc_computable_yield;
+    if(this.stock.calc_computable_val_growth_y>0){
+        this.stock.calc_val_growth=Math.min(this.stock.calc_computable_val_growth_y*5,1);
+    }
+    this.stock.calc_rev_growth=0;
+    this.stock.calc_epsp=0;
+    this.stock.calc_leverage=(-1*this.stock.calc_lev_ind_ratio)+2;
+    
+    this.stock.calc_yield_w=this.stock.calc_yield*this.stock.calc_type.weight_yield;
+    this.stock.calc_val_growth_w=this.stock.calc_val_growth*this.stock.calc_type.weight_val_growth;
+                
+
+    this.stock.calc_rev_growth_w=this.stock.calc_rev_growth*this.stock.calc_type.weight_rev_growth;
+    this.stock.calc_epsp_w=this.stock.calc_epsp*this.stock.calc_type.weight_epsp;
+    this.stock.calc_leverage_w=this.stock.calc_leverage*this.stock.calc_type.weight_leverage;
+    
     this.alert = navParams.get('alert');
     this.usdeur = navParams.get('usdeur');
     if(typeof(this.alert)=='undefined') this.alert={};

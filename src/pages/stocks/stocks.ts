@@ -278,9 +278,9 @@ export class StocksPage {
   }
 
   reorder_per_eps(ev: any){
-    if(this.orderByField!='+per'){
-        this.reverseSort='+';
-        this.orderByField = this.reverseSort+'per';
+    if(this.orderByField!='-epsp'){
+        this.reverseSort='-';
+        this.orderByField = this.reverseSort+'epsp';
     }else{
         this.reverseSort='-';
         this.orderByField = this.reverseSort+'eps_hist_last_diff';
