@@ -18,39 +18,55 @@
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
       
     <ion-grid>
-    <ion-row>
-         <ion-col>
-        <span *ngIf="stock.yield>=2.9">Exam: Dividend stock</span>
-        <span *ngIf="stock.yield<2.9">Exam: Regular stock</span>
-        </ion-col>
-    </ion-row>
-    <ion-row>
+    <ion-row class="border">
         <ion-col>
-        Result: <span style="font-weight:bold" >{{stock.h_souce}}</span> / {{10}}
+        </ion-col>
+        <ion-col>
+        Exam:
+        <span *ngIf="stock.yield>=2.9" style="font-weight:bold"> Dividend stock</span>
+        <span *ngIf="stock.yield<2.9" style="font-weight:bold"> Regular stock</span>
+        </ion-col>
+        <ion-col>
+         <span style="font-weight:bold" >{{stock.h_souce}}</span> / {{10}}
         </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row class="border">
       <ion-col>Yield</ion-col>
       <ion-col>
       y:{{toFixed2(stock.calc_computable_yield)}} &nbsp; epsp: {{toFixed2(stock.epsp)}}<br />
       {{toFixed2(stock.calc_yield)}} * w({{stock.calc_type.weight_yield}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_yield_w)}} / {{stock.calc_type.weight_yield}}</ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row class="border">
       <ion-col>Value G</ion-col>
       <ion-col>
       5y:{{stock.val_change_5y}} p:{{stock.val_change_5yp}}<br />
       3y:{{stock.val_change_3y}} p:{{stock.val_change_3yp}}<br />
-      avg+y: {{toFixed2(stock.calc_computable_val_growth_y)}}<br />
+      avg+y: 
+      <span *ngIf="stock.calc_computable_val_growth_y>0" style="color:green">{{mult100(toFixed2(stock.calc_computable_val_growth_y))}}</span>
+      <span *ngIf="stock.calc_computable_val_growth_y<=0" style="color:red">{{mult100(toFixed2(stock.calc_computable_val_growth_y))}}</span>
+      % (max 20, 1p)<br />
       {{toFixed2(stock.calc_val_growth)}} * w({{stock.calc_type.weight_val_growth}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_val_growth_w)}} / {{stock.calc_type.weight_val_growth}}</ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col>Rev G</ion-col>
-      <ion-col>{{toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
+    <ion-row class="border">
+      <ion-col>Revenue G</ion-col>
+      <ion-col>
+      om/ps={{stock.avgoperating_margin}}/{{stock.avgprice_to_sales}}={{stock.calc_om_ps}} (max 0.1)<br />
+      5y=
+      <span *ngIf="stock.avg_revenue_growth_5y>0" style="color:green">{{stock.avg_revenue_growth_5y}}</span>
+      <span *ngIf="stock.avg_revenue_growth_5y<=0" style="color:red">{{stock.avg_revenue_growth_5y}}</span>
+      %(max 0.20, 1p)<br />
+      qq={{stock.avgrevenue_growth_qq_last_year}} (max 0.1)<br />
+      {{toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row class="border">
+      <ion-col>Earnings</ion-col>
+      <ion-col>{{toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
+      <ion-col>{{toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>
+    </ion-row>
+    <ion-row class="border">
       <ion-col>Leverage</ion-col>
       <ion-col>
       lev:{{stock.leverage}} ind:{{stock.leverage_industry}}(min 2.5) <br />

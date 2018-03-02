@@ -24,9 +24,9 @@ export class StockDetailsPage {
     this.stock = navParams.get('stock');
     this.stock.mktcap = parseFloat(this.stock.mktcap);
     // partial calculations ypr
-    this.stock.calc_om_ps=this.toFixed2(Math.max((Math.min(parseFloat(this.stock.operating_margin),55)/8),0.2)/Math.min(Math.max(parseFloat(this.stock.price_to_sales)*4,6),100));
+    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.avgoperating_margin)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.01),1),-1));
     if(this.stock.operating_margin_avg!=0){
-        this.stock.calc_om_ps=this.toFixed2(Math.max((Math.min(parseFloat(this.stock.operating_margin_avg),55)/8),0.2)/Math.min(Math.max(parseFloat(this.stock.price_to_sales)*4,6),100));    
+        this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.operating_margin_avg)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.01),1),-1));
     }
     this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
     this.stock.calc_type={
@@ -68,8 +68,34 @@ export class StockDetailsPage {
     if(this.stock.calc_computable_val_growth_y>0){
         this.stock.calc_val_growth=Math.min(this.stock.calc_computable_val_growth_y*5,1);
     }
+
     this.stock.calc_rev_growth=0;
+    if(parseFloat(this.stock.avg_revenue_growth_5y)>0){
+        this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.avg_revenue_growth_5y),20)*5/100; // *5 to make it reach max 1
+    }
+    this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.1; // max around 0.1 (can be penalizing -0.1)
+    // good quarter only +0.1 (cannot penalize), and only if om/ps>0.2
+    if(parseFloat(this.stock.avgrevenue_growth_qq_last_year)>0 && this.stock.calc_om_ps>0.2){
+        this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.avgrevenue_growth_qq_last_year),10)/100;
+    }
+    this.stock.calc_rev_growth=Math.max(Math.min(this.stock.calc_rev_growth,1),0);  // min 0 max 1
+    // IMPLEMENT IT TO SHOW... AND RELAX MAN... STOCKS ARE STOCKS U ARE NOT GOING TO PREDICT IT... YOUR PORTFOLIO IS ALREADY TOO BIG
+    
+    
     this.stock.calc_epsp=0;
+    if(this.stock.epsp>=0){
+        // the distribution of positive cases goes from 0 to 10%
+        this.stock.epsp=parseFloat(this.stock.epsp)*10;
+        if(this.stock.calc_computable_yield>parseFloat(this.stock.epsp))
+            this.stock.epsp-=parseFloat(this.stock.epsp)-this.stock.calc_computable_yield; // penalized if yield > $epsp
+            if(this.stock.eps_hist_trend=='/-') this.stock.epsp+=0.15; 
+            if(this.stock.eps_hist_trend=='_/') this.stock.epsp+=0.25; 
+            if(this.stock.eps_hist_trend=='/') this.stock.epsp+=0.5;
+        this.stock.epsp=Math.max(Math.min(this.stock.epsp,1),0);  // min 0 max 1
+    }
+
+    
+    
     this.stock.calc_leverage=(-1*this.stock.calc_lev_ind_ratio)+2;
     
     this.stock.calc_yield_w=this.stock.calc_yield*this.stock.calc_type.weight_yield;
