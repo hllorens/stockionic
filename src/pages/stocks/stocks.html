@@ -13,11 +13,11 @@
           </button>-->
           <button ion-button small clear (click)="reorder_ypr_hec($event)"> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]=='h_souce' || orderByField.substring(1).split(' ')[0]=='operating_margin' || orderByField.substring(1).split(' ')[0]=='price_to_sales' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield_per_ratio' ? '': 'ordbsel'}}">ypr</span>--> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='val_change_5y' || orderByField.substring(1).split(' ')[0]=='operating_margin' || orderByField.substring(1).split(' ')[0]=='price_to_sales' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'value_hist_last_diff' ? '': 'ordbsel'}}">val</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='val_change_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'val_change_5y' ? '': 'ordbsel'}}">v5y</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='operating_margin'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'operating_margin' ? '': 'ordbsel'}}">om</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'price_to_sales' ? '': 'ordbsel'}}">ps</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='computable_val_growth'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'computable_val_growth' ? '': 'ordbsel'}}">av</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='om_to_ps'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'om_to_ps' ? '': 'ordbsel'}}">om/ps</span> 
+            <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'price_to_sales' ? '': 'ordbsel'}}">ps</span> -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='leverage_industry_ratio'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'leverage_industry_ratio' ? '': 'ordbsel'}}">lev</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='mktcap'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'mktcap' ? '': 'ordbsel'}}">mktc</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'inst_own' ? '': 'ordbsel'}}">inst</span> 
@@ -60,42 +60,55 @@
               <span style="color:black;font-size:0.9em;" *ngIf="usd_market(stock.market)"><!--{{redux_format(usd2eur(stock.value))}}-->
                 <span style="color:blue;font-size:0.9em;" > ${{ redux_format(stock.value) }}</span>
               </span>
-              <p><span style="text-align=right;font-size:0.8em;">{{ redux_format_max(stock.range_52week_low) }}-{{ redux_format_max(stock.range_52week_high) }}</span></p>
+              <br />
+              <span style="text-align=right;font-size:0.8em;">{{ redux_format_max(stock.range_52week_low) }}-{{ redux_format_max(stock.range_52week_high) }}</span>
             </ion-col>
             <ion-col width-25>
-                <span style="color:green;font-size:0.8em;">{{ stock.avgyield }}%</span><!--<span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge> -->
-                <br />
-                <span style="color:orange;font-size:0.8em;" *ngIf="stock.epsp>=0">{{mult100(stock.epsp)}}%</span>
-                <span style="color:red;font-size:0.8em;" *ngIf="stock.epsp<0">{{mult100(stock.epsp)}}%</span>
+                <span style="color:green;font-size:0.8em;">{{ stock.avgyield }}%</span>
+                <span *ngIf="stock.avgyield>0 && stock.avgyield>mult100float(stock.epsp)" style="color:red;font-size:0.8em;">*</span>
+                <!--<span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge> -->
+                <!--<br />-->
+                <span style="color:orange;font-size:0.8em;" *ngIf="stock.epsp>=0">{{mult100_fix2(stock.epsp)}}%</span>
+                <span style="color:red;font-size:0.8em;" *ngIf="stock.epsp<0">{{mult100_fix2(stock.epsp)}}%</span>
                 <span style="font-size:0.8em;" *ngIf="stock.eps_hist.length>1">
                             <span style="color:red;" *ngIf="stock.eps_hist.length>1   && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span>
                             <span style="color:green;" *ngIf="stock.eps_hist.length>1 && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span>
                 </span>
+                <br />
+                <span style="color:blue;font-size:0.8em;">{{stock.om_to_ps}}</span> ~ 
+                <span style="color:blue;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y>=0">{{min(stock.avg_revenue_growth_5y,20,0)}}%</span>
+                <span style="color:red;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y<0">{{min(stock.avg_revenue_growth_5y,20,0)}}%</span>
+                <span style="color:black;font-size:0.8em;">- {{max(stock.leverage_industry_ratio,1,1)}}</span>
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='val_change_5y' || orderByField.substring(1).split(' ')[0]=='operating_margin' || orderByField.substring(1).split(' ')[0]=='price_to_sales' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap' || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'">
+            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap' || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'">
                     <span style="font-size:0.7em;"><ion-icon name="notifications" *ngIf="alerts[stock.name+':'+stock.market]"></ion-icon></span>
                     <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)>=0" style="color:green;font-size:0.7em;">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
                     <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)<0" style="color:red;font-size:0.7em;">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
                     <br />
-                    <span style="font-size:0.7em;">{{stock.value_hist_last_diff}}% ~</span>
+                    <span *ngIf="stock.value_hist_last_diff>=0" style="color:green;font-size:0.7em;">{{stock.value_hist_last_diff}}%</span>
+                    <span *ngIf="stock.value_hist_last_diff<0" style="color:red;font-size:0.7em;">{{stock.value_hist_last_diff}}%</span>
+                    ~
                     <span *ngIf="stock.computable_val_growth>=0" style="color:green;font-size:0.7em;">{{mult100(stock.computable_val_growth)}}%</span>
                     <span *ngIf="stock.computable_val_growth<0" style="color:red;font-size:0.7em;">{{mult100(stock.computable_val_growth)}}%</span>
                     
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff' && orderByField.substring(1).split(' ')[0]!='val_change_5y'">
-                    <p style="color:green;" *ngIf="(stock.value_hist_last_diff>=0)">1y:{{stock.value_hist_last_diff}}%</p>
-                    <p style="color:red;"   *ngIf="(stock.value_hist_last_diff<0)">1y:{{stock.value_hist_last_diff}}%</p>
+            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff' && orderByField.substring(1).split(' ')[0]!='computable_val_growth'">
+                    
+                    <p style="color:green;font-size:0.7em;" *ngIf="(stock.computable_val_growth>=0)">{{mult100(stock.computable_val_growth)}}%</p>
+                    <p style="color:red;font-size:0.7em;"   *ngIf="(stock.computable_val_growth<0)">{{mult100(stock.computable_val_growth)}}%</p>
+                    <p style="color:green;font-size:0.7em;" *ngIf="(stock.value_hist_last_diff>=0)">1y:{{stock.value_hist_last_diff}}%</p>
+                    <p style="color:red;font-size:0.7em;"   *ngIf="(stock.value_hist_last_diff<0)">1y:{{stock.value_hist_last_diff}}%</p>
                     <p style="color:green;font-size:0.7em;" *ngIf="(stock.val_change_3y>=0)">3y:{{stock.val_change_3y}}%</p>
                     <p style="color:red;font-size:0.7em;"   *ngIf="(val_change_3y)">3y:{{stock.val_change_3y}}%</p>
                     <p style="color:green;font-size:0.7em;" *ngIf="(stock.val_change_5y>=0)">5y:{{stock.val_change_5y}}%</p>
                     <p style="color:red;font-size:0.7em;"   *ngIf="(stock.val_change_5y<0)">5y:{{stock.val_change_5y}}%</p>
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='operating_margin'">
-                    <p style="color:green;font-size:0.7em;">{{ stock.operating_margin }}<br />p: {{stock.operating_margin_prev}}</p>
+            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='om_to_ps'">
+                    <p style="color:green;font-size:0.7em;">{{stock.om_to_ps}}<br />om:{{stock.avgoperating_margin}}({{stock.operating_margin_prev}})<br />ps:{{stock.avgprice_to_sales}}</p>
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'">
+            <!--<ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'">
                     <p style="color:orange;font-size:0.7em;">{{ stock.price_to_sales }}</p>
-            </ion-col>
+            </ion-col>-->
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='leverage_industry_ratio'">
                     <p style="color:red;font-size:0.7em;">{{ stock.leverage }}/{{stock.leverage_industry}}<br />={{stock.leverage_industry_ratio}}</p>
             </ion-col>

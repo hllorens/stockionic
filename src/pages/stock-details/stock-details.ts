@@ -24,9 +24,9 @@ export class StockDetailsPage {
     this.stock = navParams.get('stock');
     this.stock.mktcap = parseFloat(this.stock.mktcap);
     // partial calculations ypr
-    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.avgoperating_margin)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.01),1),-1));
+    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.avgoperating_margin)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.1),1),-1));
     if(this.stock.operating_margin_avg!=0){
-        this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.operating_margin_avg)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.01),1),-1));
+        this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.operating_margin_avg)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.1),1),-1));
     }
     this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
     this.stock.calc_yield=0;
@@ -38,7 +38,9 @@ export class StockDetailsPage {
     this.stock.calc_computable_val_growth=((Math.max(Math.min(parseFloat(this.stock.val_change_5y),20),-20)+
                                             Math.max(Math.min(parseFloat(this.stock.val_change_5yp),20),-20)+
                                             Math.max(Math.min(parseFloat(this.stock.val_change_3y),20),-20)+
-                                            Math.max(Math.min(parseFloat(this.stock.val_change_3yp),20),-20))/4)
+                                            Math.max(Math.min(parseFloat(this.stock.val_change_3yp),20),-20)+
+                                            Math.max(Math.min(parseFloat(this.stock.val_change_3ypp),20),-20))
+                                            /5)
                                             /100;
     this.stock.calc_computable_val_growth_y=this.stock.calc_computable_val_growth+this.stock.calc_computable_yield;
     if(this.stock.calc_computable_val_growth_y>0){
@@ -48,8 +50,8 @@ export class StockDetailsPage {
         name: "Regular",
         weight_yield: 0,
         weight_val_growth: 5,
-        weight_rev_growth: 3,
-        weight_epsp: 1,
+        weight_rev_growth: 2,
+        weight_epsp: 2,
         weight_leverage: 1,
         weight_val_growth_penalty: 3,
         weight_rev_growth_penalty: 2,
@@ -58,10 +60,10 @@ export class StockDetailsPage {
     if(this.stock.calc_computable_yield>=0.029 && this.stock.calc_computable_val_growth<0.15){
         this.stock.calc_type={
             name: "Dividend",
-            weight_yield: 1,
-            weight_val_growth: 3,
-            weight_rev_growth: 1,
-            weight_epsp: 4,
+            weight_yield: 0,
+            weight_val_growth: 5,
+            weight_rev_growth: 2,
+            weight_epsp: 2,
             weight_leverage: 1,
             weight_val_growth_penalty: 3,
             weight_rev_growth_penalty: 2,
@@ -84,9 +86,9 @@ export class StockDetailsPage {
     
     this.stock.calc_epsp=0;
     if(this.stock.epsp>=0){
-        // the distribution of positive cases goes from 0 to 10% (avg 4.5)
-        this.stock.calc_epsp=(parseFloat(this.stock.epsp)+0.005)*10;
-        if(this.stock.calc_computable_yield>parseFloat(this.stock.calc_epsp)) this.stock.calc_epsp-=parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield; // penalized if yield > $epsp
+        // the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
+        this.stock.calc_epsp=(parseFloat(this.stock.epsp))*15;
+        if(this.stock.calc_computable_yield>(parseFloat(this.stock.calc_epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
         if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.10; 
         if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.20; 
         if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.30;
@@ -161,6 +163,9 @@ export class StockDetailsPage {
   }
   public mult100(value) {
     return (parseFloat(value)*100).toFixed(0);
+  }
+  public mult100_fix2(value) {
+    return (parseFloat(value)*100).toFixed(2);
   }
   public usd2eur(value){
     return this.toFixed2(value*this.usdeur);
