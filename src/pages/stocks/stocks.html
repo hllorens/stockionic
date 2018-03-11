@@ -58,6 +58,7 @@
               <span style="color:blue;font-size:0.9em;" *ngIf="usd_market(stock.market)">$</span>
               <span style="color:blue;font-size:0.9em;">{{ redux_format(stock.value) }}</span>
               <span style="color:green;font-size:0.9em;" *ngIf="cheap(stock.value,stock.guessed_value)">*</span>
+              <span style="color:red;font-size:0.9em;" *ngIf="expensive(stock.value,stock.guessed_value)">*</span>
               <br />
               <span style="text-align=right;font-size:0.8em;">{{ redux_format_max(stock.range_52week_low) }}-{{ redux_format_max(stock.range_52week_high) }}</span>
             </ion-col>

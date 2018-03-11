@@ -222,10 +222,14 @@ export class StocksPage {
   }
   
   cheap(market, guess){
-      if(parseFloat(market)<parseFloat(guess)) return true;
+      if(parseFloat(market)<parseFloat(guess)*0.97) return true;
       return false;
   }
-
+  expensive(market, guess){
+      if(parseFloat(market)>parseFloat(guess)*2) return true;
+      return false;
+  }
+  
   public redux_format(value) {
     if(parseFloat(value)>100) return parseFloat(value).toFixed(0);
     if(parseFloat(value)<100 && parseFloat(value)>=10) return parseFloat(value).toFixed(1);
