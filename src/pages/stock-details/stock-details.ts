@@ -143,6 +143,23 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-1;
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
 
+    this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
+    this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min(parseFloat(this.stock.avgoperating_margin)/33,1)).toFixed(1);
+    this.stock.calc_value_asset_share=(parseFloat(this.stock.value)/Math.max(0.0001,parseFloat(this.stock.price_to_book))).toFixed(1);
+    this.stock.calc_value_mult_factor=                          ((
+                            Math.max(Math.min(
+                            Math.min(parseFloat(this.stock.avg_revenue_growth_5y),40)   // max 40
+                            +(Math.min(parseFloat(this.stock.epsp),0.06)*400)           // max 24
+                            ,60),1)   // max 60, min 1                
+                          )/7).toFixed(1); // ideally 7.5 but accounting for optimism
+    
+    this.stock.calc_value=((parseFloat(this.stock.calc_value_sell_share)
+                          *
+                          parseFloat(this.stock.calc_value_mult_factor))
+                          +parseFloat(this.stock.calc_value_asset_share)
+                          ).toFixed(1);
+    
+    
     this.alert = navParams.get('alert');
     this.usdeur = navParams.get('usdeur');
     if(typeof(this.alert)=='undefined') this.alert={};

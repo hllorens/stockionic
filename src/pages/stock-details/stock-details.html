@@ -91,11 +91,26 @@
     </ion-row>
     </ion-grid>
       
+    <b>Share Price VALUATION</b>:<br /> 
+    <ion-grid>
+        <ion-row>
+            <ion-col>Market: <b>{{ stock.value }}</b></ion-col>
+            <ion-col>Guess: <b>{{stock.calc_value}}</b></ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>Sales times operating*3: {{stock.calc_value_sell_share}} (raw:{{stock.calc_value_sell_share_raw}})</ion-col>
+            <ion-col>(Growth+(Earnings*4))/7: {{stock.calc_value_mult_factor}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>Assets-Liabilities (Equity):    {{stock.calc_value_asset_share}}</ion-col>
+            <ion-col>~ PB: {{stock.price_to_book}}</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col>Guess=({{stock.calc_value_sell_share}}*{{stock.calc_value_mult_factor}})+{{stock.calc_value_asset_share}}={{stock.calc_value}}</ion-col>
+        </ion-row>
+    </ion-grid>
       
 
-      
-      
-    <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x  -  Beta: {{stock.beta}} 
     </ion-col>
   </ion-row>
   <ion-row>
@@ -108,7 +123,7 @@
       <p><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar></p>
     </ion-col>
     <ion-col width-15>
-      <h4 style="color:blue;">{{ stock.value }}</h4>
+      <h4 style="color:blue;">{{ stock.value }} </h4>
       <p><span style="text-align=right;font-size:0.8em;">{{ stock.range_52week_low }}-{{ stock.range_52week_high }}</span></p>
     </ion-col>
     <ion-col width-25>
@@ -390,6 +405,8 @@
              {{price_to_book_item[0]}}: <b>{{price_to_book_item[1]}}</b>
             </li>
         </ul>
+    <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x  -  Beta: {{stock.beta}} 
+    <br />
     </ion-col>
   </ion-row>
   
