@@ -48,9 +48,9 @@
     <ion-row class="border">
       <ion-col>Revenue G</ion-col>
       <ion-col>
-      om/ps={{stock.avgoperating_margin}}/{{stock.avgprice_to_sales}}={{stock.calc_om_ps}} (max 0.1)<br />
       5y=<span *ngIf="stock.avg_revenue_growth_5y>0" style="color:green">{{stock.avg_revenue_growth_5y}}</span><span *ngIf="stock.avg_revenue_growth_5y<=0" style="color:red">{{stock.avg_revenue_growth_5y}}</span>%(max 0.20*5, 1p)<br />
       qq={{stock.avgrevenue_growth_qq_last_year}} (max 0.1)<br />
+      om/ps={{stock.avgoperating_margin}}/{{stock.avgprice_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />
       {{toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
     </ion-row>

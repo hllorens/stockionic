@@ -75,7 +75,7 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.avg_revenue_growth_5y)>0){
         this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.avg_revenue_growth_5y),20)*5/100; // *5 to make it reach max 1
     }
-    this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.1; // max around 0.1 (can be penalizing -0.1)
+    this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.3; // max around 0.3 (can be penalizing -0.1)
     // good quarter only +0.1 (cannot penalize), and only if om/ps>0.2
     if(parseFloat(this.stock.avgrevenue_growth_qq_last_year)>0 && this.stock.calc_om_ps>0.2){
         this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.avgrevenue_growth_qq_last_year),10)/100;
