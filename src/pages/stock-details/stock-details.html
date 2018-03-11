@@ -406,6 +406,14 @@
             </li>
         </ul>
     <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x  -  Beta: {{stock.beta}} 
+    <br /><br />
+   <b>h_souce hist:</b>
+   <ul class="list">
+        <li class="item" *ngFor="let h_item of stock.h_souce_hist" >
+         {{h_item[0]}}: <b>{{h_item[1]}}</b>
+        </li>
+    </ul>
+
     <br />
     </ion-col>
   </ion-row>
