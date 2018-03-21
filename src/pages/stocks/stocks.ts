@@ -144,20 +144,11 @@ export class StocksPage {
         return;
     }
     
-    if(al.low_per && parseFloat(al.low_per)>=parseFloat(stock.per)){
+    if(al.low_epsp && parseFloat(al.low_epsp)>=parseFloat(stock.epsp)){
         this.alerts[al.symbol].active=true;
         return;
     }
-    if(al.high_per && parseFloat(al.high_per)<=parseFloat(stock.per)){
-        this.alerts[al.symbol].active=true;
-        return;
-    }
-    
-    if(al.low_eps && parseFloat(al.low_eps)>=parseFloat(stock.eps)){
-        this.alerts[al.symbol].active=true;
-        return;
-    }
-    if(al.high_eps && parseFloat(al.high_eps)<=parseFloat(stock.eps)){
+    if(al.high_epsp && parseFloat(al.high_epsp)<=parseFloat(stock.epsp)){
         this.alerts[al.symbol].active=true;
         return;
     }
@@ -221,11 +212,30 @@ export class StocksPage {
     }
   }
   
-  cheap(market, guess){
+  public outdated(stock){
+    stock.last_financials_year = 0;
+    var max_dist=1;
+    var curr_month=(new Date()).getMonth()+1;
+    var curr_year=(new Date()).getFullYear();
+    if(stock.hasOwnProperty('revenue_hist') && stock.revenue_hist.length>0){
+        //console.log(stock.name+" "+stock.revenue_hist.length);
+        stock.last_financials_year = parseFloat((stock.revenue_hist[(stock.revenue_hist.length - 1)][0]).substr(0,4));
+        if(curr_month<3){
+            max_dist=2;
+        }
+        if((curr_year-stock.last_financials_year)>max_dist){
+            return true;
+        }
+    }
+
+    return false;
+  }
+  
+  public cheap(market, guess){
       if(parseFloat(market)<parseFloat(guess)*0.97) return true;
       return false;
   }
-  expensive(market, guess){
+  public expensive(market, guess){
       if(parseFloat(market)>parseFloat(guess)*2) return true;
       return false;
   }
@@ -295,9 +305,6 @@ export class StocksPage {
     }else if(this.orderByField.split(' ')[0]=='+leverage_industry_ratio'){
         this.reverseSort='-';
         this.orderByField = '-mktcap';
-    }else if(this.orderByField.split(' ')[0]=='-mktcap'){
-        this.reverseSort='-';
-        this.orderByField = '-inst_own';
     }else{
         console.log('d');
         this.reverseSort='-';
@@ -309,10 +316,10 @@ export class StocksPage {
     if(this.orderByField!='-epsp'){
         this.reverseSort='-';
         this.orderByField = this.reverseSort+'epsp';
-    }else{
+    }/*else{
         this.reverseSort='-';
         this.orderByField = this.reverseSort+'eps_hist_last_diff';
-    }
+    }*/
   }
   
   reorder_52_heat_vol(ev:any){

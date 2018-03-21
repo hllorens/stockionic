@@ -10,13 +10,12 @@
 <ion-content>
   <ion-grid>
   <ion-row>
-      <ion-col width-100><h3  style="color:blue">{{ stock.title }}</h3></ion-col>
+      <ion-col width-100><h3  style="color:blue">{{ stock.title }} ({{stock.last_financials_year}})</h3></ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
-     <span style="font-size:0.8em;">Updated: {{stock.date}}, goog fin Q: {{stock.key_period}} </span><br />
+     <span style="font-size:0.8em;">Updated: {{stock.date}}</span><br />
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
-      
     <ion-grid>
     <ion-row class="border">
         <ion-col>
@@ -49,8 +48,8 @@
       <ion-col>Revenue G</ion-col>
       <ion-col>
       5y=<span *ngIf="stock.avg_revenue_growth_5y>0" style="color:green">{{stock.avg_revenue_growth_5y}}</span><span *ngIf="stock.avg_revenue_growth_5y<=0" style="color:red">{{stock.avg_revenue_growth_5y}}</span>%(max 0.20*5, 1p)<br />
-      qq={{stock.avgrevenue_growth_qq_last_year}} (max 0.1)<br />
-      om/ps={{stock.avgoperating_margin}}/{{stock.avgprice_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />
+      qq={{stock.revenue_growth_qq_last_year}} (max 0.1)<br />
+      om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />
       {{toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
     </ion-row>
@@ -268,20 +267,6 @@
   </ion-row>
   <ion-row>
     <ion-col>
-       <b>EPS hist (annual avg 4Q):</b> 
-        <div *ngIf="stock.eps_hist.length>1">EPS last diff: {{stock.eps_hist[stock.eps_hist.length-1][1]}}-{{stock.eps_hist[stock.eps_hist.length-2][1]}}=
-            <span style="color:red;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff<0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
-            <span style="color:green;" *ngIf="stock.eps_hist.length>1 && stock.eps_hist_last_diff>=0">{{stock.eps_hist_last_diff}}% {{stock.eps_hist_trend}}</span>
-        </div>
-       <ul class="list">
-            <li class="item" *ngFor="let eps_item of stock.eps_hist" >
-             {{eps_item[0]}}: <b>{{eps_item[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
        <b>Yield avg: <span style="color:green;">{{stock.avgyield}}</span></b>
        <b>Yield last diff:       
        <span style="color:green;" *ngIf="(stock.yield_hist_last_diff>=0)">{{stock.yield_hist_last_diff}}%</span>
@@ -296,25 +281,23 @@
        <br /> alternative: dividend.com, DivY/Price History graph, disable Price in legend
     </ion-col>
   </ion-row>
-  <ion-row>
+  <!--<ion-row>
     <ion-col>
-       <b>PER avg: <span style="color:orange;">{{stock.avgper}}</span></b>
-       <b>PER last diff: 
-      <span style="color:red;" *ngIf="(stock.per_hist_last_diff>=0)">{{stock.per_hist_last_diff}}%</span>
-      <span style="color:green;"   *ngIf="(stock.per_hist_last_diff<0)">{{stock.per_hist_last_diff}}%</span>
+       <b>EPSP last diff: 
+      <span style="color:red;" *ngIf="(stock.epsp_hist_last_diff>=0)">{{stock.epsp_hist_last_diff}}%</span>
+      <span style="color:green;"   *ngIf="(stock.epsp_hist_last_diff<0)">{{stock.epsp_hist_last_diff}}%</span>
         </b>. 
-       <b>PER hist:</b>
+       <b>EPSP hist:</b>
        <ul class="list">
-            <li class="item" *ngFor="let per_item of stock.per_hist" >
-             {{per_item[0]}}: <b>{{per_item[1]}}</b>
+            <li class="item" *ngFor="let item of stock.epsp_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
             </li>
         </ul>
     </ion-col>
-  </ion-row>
-
+  </ion-row>-->
   <ion-row>
     <ion-col>
-       <b>OP avg: <span style="color:orange;">{{stock.avgoperating_margin}}</span></b>
+       <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
        <b>OP last diff:       
        <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
        <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
@@ -329,7 +312,7 @@
   </ion-row>
   <ion-row>
     <ion-col>
-        <b>PS avg: <span style="color:orange;">{{stock.avgprice_to_sales}}</span></b>
+        <b>PS: <span style="color:orange;">{{stock.price_to_sales}}</span></b>
        <b>PS last diff: 
       <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
       <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
@@ -356,7 +339,7 @@
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-       <b>revenue qq avg: <span style="color:orange;">{{stock.avgrevenue_growth_qq_last_year}}</span></b>
+       <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b>
        <b>revenue qq hist</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
@@ -405,7 +388,7 @@
              {{price_to_book_item[0]}}: <b>{{price_to_book_item[1]}}</b>
             </li>
         </ul>
-    <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x  -  Beta: {{stock.beta}} 
+    <br /> - Volat: {{ addx(stock.range_52week_volatility,1,1) }}x 
     <br /><br />
    <b>h_souce hist:</b>
    <ul class="list">

@@ -23,11 +23,14 @@ export class StockDetailsPage {
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
     this.stock.mktcap = parseFloat(this.stock.mktcap);
-    // partial calculations ypr
-    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.avgoperating_margin)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.1),1),-1));
-    if(this.stock.operating_margin_avg!=0){
-        this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.operating_margin_avg)/Math.max((parseFloat(this.stock.avgprice_to_sales)*10),0.1),1),-1));
+    this.stock.revenue = 0;
+    this.stock.last_financials_year = "0000";
+    if(this.stock.hasOwnProperty('revenue_hist')){
+        this.stock.revenue = parseFloat(this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][1]);
+        this.stock.last_financials_year = (this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][0]).substr(0,4);
     }
+    // partial calculations ypr
+    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min((parseFloat(this.stock.operating_margin)*300)/Math.max((parseFloat(this.stock.price_to_sales)*10),0.1),1),-1));
     this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
     this.stock.calc_yield=0;
     this.stock.calc_computable_yield=Math.min(parseFloat(this.stock.avgyield),parseFloat(this.stock.yield))/100;
@@ -77,8 +80,8 @@ export class StockDetailsPage {
     }
     this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.3; // max around 0.3 (can be penalizing -0.1)
     // good quarter only +0.1 (cannot penalize), and only if om/ps>0.2
-    if(parseFloat(this.stock.avgrevenue_growth_qq_last_year)>0 && this.stock.calc_om_ps>0.2){
-        this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.avgrevenue_growth_qq_last_year),10)/100;
+    if(parseFloat(this.stock.revenue_growth_qq_last_year)>0 && this.stock.calc_om_ps>0.2){
+        this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.revenue_growth_qq_last_year),10)/100;
     }
     this.stock.calc_rev_growth=Math.max(Math.min(this.stock.calc_rev_growth,1),0);  // min 0 max 1
     // IMPLEMENT IT TO SHOW... AND RELAX MAN... STOCKS ARE STOCKS U ARE NOT GOING TO PREDICT IT... YOUR PORTFOLIO IS ALREADY TOO BIG
@@ -144,7 +147,7 @@ export class StockDetailsPage {
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
 
     this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
-    this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min(parseFloat(this.stock.avgoperating_margin)/33,1)).toFixed(1);
+    this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min((parseFloat(this.stock.operating_margin)*100)/33,1)).toFixed(1);
     this.stock.calc_value_asset_share=(parseFloat(this.stock.value)/Math.max(0.0001,parseFloat(this.stock.price_to_book))).toFixed(1);
     this.stock.calc_value_mult_factor=                          ((
                             Math.max(Math.min(

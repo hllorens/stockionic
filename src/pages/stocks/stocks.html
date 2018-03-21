@@ -13,19 +13,19 @@
           </button>-->
           <button ion-button small clear (click)="reorder_ypr_hec($event)"> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]=='h_souce' || orderByField.substring(1).split(' ')[0]=='operating_margin' || orderByField.substring(1).split(' ')[0]=='price_to_sales' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield_per_ratio' ? '': 'ordbsel'}}">ypr</span>--> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'value_hist_last_diff' ? '': 'ordbsel'}}">val</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='computable_val_growth'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'computable_val_growth' ? '': 'ordbsel'}}">av</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='om_to_ps'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'om_to_ps' ? '': 'ordbsel'}}">om/ps</span> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'price_to_sales' ? '': 'ordbsel'}}">ps</span> -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='leverage_industry_ratio'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'leverage_industry_ratio' ? '': 'ordbsel'}}">lev</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='mktcap'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'mktcap' ? '': 'ordbsel'}}">mktc</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'inst_own' ? '': 'ordbsel'}}">inst</span> 
+            <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'inst_own' ? '': 'ordbsel'}}">inst</span> -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avg_revenue_growth_5y' ? '': 'ordbsel'}}">grw</span> 
           </button>
           <button ion-button small clear (click)="reorder_per_eps($event)"> <!-- reorder_asc($event,'per, now epsp') -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]=='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'epsp' ? '': 'ordbsel'}}">epsp</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'eps_hist_last_diff' ? '': 'ordbsel'}}">epsd</span> 
+            <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='eps_hist_last_diff'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'eps_hist_last_diff' ? '': 'ordbsel'}}">epspd</span> -->
           </button>
           <button ion-button small clear (click)="reorder_desc($event,'avgyield')">
             <span style="color:green;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield' ? '': 'ordbsel'}}">yld</span>
@@ -51,7 +51,10 @@
     <ion-grid>
         <ion-row class="{{alerts[stock.name+':'+stock.market]?.active==true ? 'alerted': ''}}">
             <ion-col width-33>
-              <span style="color:purple;font-size:0.7em;">{{addx(i,1,0)}}</span> {{ stock.name }} <span *ngIf="stock.h_souce>=5" style="color:purple;font-size:0.8em;">{{stock.h_souce}}</span><span *ngIf="stock.h_souce<5" style="color:red;font-size:0.8em;">{{stock.h_souce}}</span> <!--:{{stock.market[0]}}-->
+              <span style="color:purple;font-size:0.7em;">{{addx(i,1,0)}}</span> {{ stock.name }}
+              <span *ngIf="stock.h_souce>=5" style="color:purple;font-size:0.8em;">{{stock.h_souce}}</span><span *ngIf="stock.h_souce<5" style="color:red;font-size:0.8em;">{{stock.h_souce}}</span> <!--:{{stock.market[0]}}-->
+              <span style="color:red;font-size:0.8em;" *ngIf="outdated(stock)">(old)</span>
+
               <p style="width:50%;"><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar> <span style="color:blue;font-size:0.7em;">{{ addx(stock.range_52week_volatility,1,1) }}x</span></p>
             </ion-col>
             <ion-col width-25>
@@ -119,11 +122,11 @@
                     <p style="color:red;font-size:0.7em;">{{ stock.leverage }}/{{stock.leverage_industry}}<br />={{stock.leverage_industry_ratio}}</p>
             </ion-col>
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='mktcap'">
-                    <p style="color:blue;font-size:0.7em;">{{ stock.mktcap }}<br />s:{{stock.shares}}<br />e:{{stock.employees}}</p>
+                    <p style="color:blue;font-size:0.7em;">{{ stock.mktcap }}<br />sh:{{stock.shares}}</p>
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'">
+            <!--<ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'">
                     <p style="color:blue;color:font-size:0.7em;">{{ stock.inst_own }}</p>
-            </ion-col>
+            </ion-col>-->
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='avg_revenue_growth_5y'">
                     <p style="color:blue;font-size:0.7em;">{{stock.avg_revenue_growth_5y}}</p>
                     <p style="color:blue;font-size:0.7em;">qq:{{stock.revenue_growth_qq_last_year}}</p>
