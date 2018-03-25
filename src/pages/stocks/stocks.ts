@@ -96,6 +96,7 @@ export class StocksPage {
   check_alerts(){
     if(!this.alerts) return;
     for(var i=0;i<this.alerts.length;i++){
+        console.log('check_alerts'+i);
         this.check_alert(this.alerts[i]);
     }
   }
@@ -217,9 +218,9 @@ export class StocksPage {
     var max_dist=1;
     var curr_month=(new Date()).getMonth()+1;
     var curr_year=(new Date()).getFullYear();
-    if(stock.hasOwnProperty('revenue_hist') && stock.revenue_hist.length>0){
+    if(stock.hasOwnProperty('revenue_hist') && typeof(stock.revenue_hist)!='undefined' && stock.revenue_hist.length>0){
         //console.log(stock.name+" "+stock.revenue_hist.length);
-        stock.last_financials_year = parseFloat((stock.revenue_hist[(stock.revenue_hist.length - 1)][0]).substr(0,4));
+        stock.last_financials_year = parseFloat((stock.revenue_hist[((stock.revenue_hist.length) - 1)][0]).substr(0,4));
         if(curr_month<3){
             max_dist=2;
         }
@@ -232,13 +233,17 @@ export class StocksPage {
   }
   
   public cheap(market, guess){
-      if(parseFloat(market)<parseFloat(guess)*0.97) return true;
+      if(parseFloat(market)<parseFloat(guess)*0.90) return true;
       return false;
   }
   public expensive(market, guess){
       if(parseFloat(market)>parseFloat(guess)*2) return true;
       return false;
   }
+  public mkt_guess_ratio(market,guess){
+    return ((parseFloat(market)/parseFloat(guess)).toFixed(1));
+  }
+
   
   public redux_format(value) {
     if(parseFloat(value)>100) return parseFloat(value).toFixed(0);

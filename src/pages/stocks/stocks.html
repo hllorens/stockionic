@@ -60,8 +60,8 @@
             <ion-col width-25>
               <span style="color:blue;font-size:0.9em;" *ngIf="usd_market(stock.market)">$</span>
               <span style="color:blue;font-size:0.9em;">{{ redux_format(stock.value) }}</span>
-              <span style="color:green;font-size:0.9em;" *ngIf="cheap(stock.value,stock.guessed_value)">*</span>
-              <span style="color:red;font-size:0.9em;" *ngIf="expensive(stock.value,stock.guessed_value)">*</span>
+              <span style="color:green;font-size:0.7em;" *ngIf="cheap(stock.value,stock.guessed_value)">{{mkt_guess_ratio(stock.value,stock.guessed_value)}}</span>
+              <span style="color:red;font-size:0.7em;" *ngIf="expensive(stock.value,stock.guessed_value)">{{mkt_guess_ratio(stock.value,stock.guessed_value)}}</span>
               <br />
               <span style="text-align=right;font-size:0.8em;">{{ redux_format_max(stock.range_52week_low) }}-{{ redux_format_max(stock.range_52week_high) }}</span>
             </ion-col>
@@ -75,7 +75,7 @@
                 <span style="color:orange;font-size:0.8em;font-weight:bold;" *ngIf="stock.epsp>=0 && stock.epsp>=0.05">{{mult100_fix2(stock.epsp)}}%</span>
                 <span style="color:black;font-size:0.8em;" *ngIf="stock.epsp>=0 && stock.epsp<0.05">{{mult100_fix2(stock.epsp)}}%</span>
                 <span style="color:red;font-size:0.8em;" *ngIf="stock.epsp<0">{{mult100_fix2(stock.epsp)}}%</span>
-                <span style="font-size:0.8em;" *ngIf="stock.eps_hist.length>1">
+                <span style="font-size:0.8em;" *ngIf="stock.eps_hist && stock.eps_hist.length>1">
                             <span style="color:red;" *ngIf="stock.eps_hist.length>1   && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span>
                             <span style="color:green;" *ngIf="stock.eps_hist.length>1 && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span>
                 </span>

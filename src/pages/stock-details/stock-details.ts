@@ -25,10 +25,21 @@ export class StockDetailsPage {
     this.stock.mktcap = parseFloat(this.stock.mktcap);
     this.stock.revenue = 0;
     this.stock.last_financials_year = "0000";
-    if(this.stock.hasOwnProperty('revenue_hist')){
+    this.stock.last_financials_outdated = true;
+    if(this.stock.hasOwnProperty('revenue_hist') && this.stock.revenue_hist.length>0){
         this.stock.revenue = parseFloat(this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][1]);
         this.stock.last_financials_year = (this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][0]).substr(0,4);
+        var max_dist=1;
+        var curr_month=(new Date()).getMonth()+1;
+        var curr_year=(new Date()).getFullYear();
+        if(curr_month<3){
+            max_dist=2;
+        }
+        if((curr_year-parseFloat(this.stock.last_financials_year))<=max_dist){
+            this.stock.last_financials_outdated=false;
+        }
     }
+        
     // partial calculations ypr
     this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min((parseFloat(this.stock.operating_margin)*300)/Math.max((parseFloat(this.stock.price_to_sales)*10),0.1),1),-1));
     this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));

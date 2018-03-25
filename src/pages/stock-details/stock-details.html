@@ -10,7 +10,10 @@
 <ion-content>
   <ion-grid>
   <ion-row>
-      <ion-col width-100><h3  style="color:blue">{{ stock.title }} ({{stock.last_financials_year}})</h3></ion-col>
+      <ion-col width-100><h3  style="color:blue">{{ stock.title }} 
+        <span *ngIf="stock.last_financials_outdated" style="color:red;">({{stock.last_financials_year}})</span>
+        <span *ngIf="!stock.last_financials_outdated">({{stock.last_financials_year}})</span>
+      </h3></ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
@@ -226,26 +229,6 @@
   </ion-row>  
   <ion-row>
     <ion-col width-15>
-      <h4>PE Ratio</h4>
-    </ion-col>
-    <ion-col width-15>
-      <h5 style="color:orange;">{{ stock.per }}</h5>
-    </ion-col>
-    <ion-col width-25>
-            <ion-item>
-                <ion-label floating><span *ngIf="!alert_status.low_per">low</span><span style="color:red;" *ngIf="alert_status.low_per">low</span></ion-label>
-                <ion-input type="text" [value]="alert.low_per" [(ngModel)]="alert.low_per" (blur)="update_alert('low_per','num')"></ion-input>
-            </ion-item>
-    </ion-col>
-    <ion-col width-25>
-            <ion-item>
-                <ion-label floating><span *ngIf="!alert_status.high_per">high</span><span style="color:red;" *ngIf="alert_status.high_per">high</span></ion-label>
-                <ion-input type="text" [value]="alert.high_per" [(ngModel)]="alert.high_per" (blur)="update_alert('high_per','num')"></ion-input>
-            </ion-item>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col width-15>
       <h4>EPS(av)</h4>
       <p>price-ind 4q</p>
     </ion-col>
@@ -329,29 +312,43 @@
 
   <ion-row>
     <ion-col>
-       <b>revenue(last year):
-      <span style="color:green;" *ngIf="(stock.value_hist_last_diff>=0)">{{stock.revenue_hist_last_diff}}%</span>
-      <span style="color:red;"   *ngIf="(stock.value_hist_last_diff<0)">{{stock.revenue_hist_last_diff}}%</span>
-        </b>. 
        <b>revenue hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_hist" >
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-       <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b>
+       <b>revenue growth hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_arr" >
+                <b>{{mult100(revenue_item,0)}}</b>
+            </li>
+        </ul>
+       <b>revenue acc avg: <span style="color:orange;">{{stock.revenue_acceleration}}</span></b><br />
+       <b>revenue 5y: <span style="color:orange;">{{stock.avg_revenue_growth_5y}}</span></b><br />
+       <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b><br />
        <b>revenue qq hist</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-       <b>revenue 5y hist:</b>
+
+       <b>op inc hist:</b>
        <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.avg_revenue_growth_5y_hist" >
+            <li class="item" *ngFor="let revenue_item of stock.operating_income_hist" >
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
+
+
+       <b>net inc hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.net_income_hist" >
+             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
+
     </ion-col>
   </ion-row>  
   <ion-row>
