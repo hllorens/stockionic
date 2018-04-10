@@ -71,19 +71,6 @@ export class StockDetailsPage {
         weight_rev_growth_penalty: 2,
         weight_eps_growth_penalty: 2
     }
-    if(this.stock.calc_computable_yield>=0.029 && this.stock.calc_computable_val_growth<0.15){
-        this.stock.calc_type={
-            name: "Dividend",
-            weight_yield: 0,
-            weight_val_growth: 5,
-            weight_rev_growth: 2,
-            weight_epsp: 2,
-            weight_leverage: 1,
-            weight_val_growth_penalty: 3,
-            weight_rev_growth_penalty: 2,
-            weight_eps_growth_penalty: 2
-        }
-    }
     
     this.stock.calc_rev_growth=0;
     if(parseFloat(this.stock.avg_revenue_growth_5y)>0){
@@ -254,6 +241,13 @@ export class StockDetailsPage {
     }else{
         return "-20";
     }
+  }
+  
+  public diff_percentage(arr,i){
+      //console.log(i+"hola"+arr[i]);
+      var divisor=parseFloat(arr[i-1][1]);
+      if(divisor==0){divisor=0.1;}
+      return parseInt((((parseFloat(arr[i][1])-parseFloat(arr[i-1][1]))/divisor)*100).toFixed(0));
   }
   
   public update_alert(field,restriction){

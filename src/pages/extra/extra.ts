@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController, Platform } from 'ionic-angular';
-import { AngularFire } from 'angularfire2'; //FirebaseListObservable
+import { NavController } from 'ionic-angular';
+//import { AngularFire } from 'angularfire2'; //FirebaseListObservable
 //import {GooglePlus} from 'ionic-native';
 //import firebase from 'firebase'
 
 import { MyFireAuth } from '../../providers/myfireauth';
 //import {cognitionis} from '../../lib/cognitionis.ts';
 
-import { Stock } from '../../models/stock';
+//import { Stock } from '../../models/stock';
 import { CognitionisStocks } from '../../providers/cognitionis-stocks';
 
 
@@ -43,7 +43,7 @@ export class ExtraPage {
 //  "usdeur_hist_last_diff":"2","btcusd_hist":[["2017-03-31",1088],["2017-06-31",2457],["2017-09-31",4156],["2017-11-04",7364.69]],"btcusd_hist_last_diff":"77","avgusdeur":"0.88","usdeur_hist_trend":"v","avgbtcusd":"3766.42","btcusd_hist_trend":"\/"
   
   //public navParams: NavParams,
-  constructor(public navCtrl: NavController, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth) { //,public location: PlatformLocation
+  constructor(public navCtrl: NavController, public myfireauth: MyFireAuth, public cognitionisStocks: CognitionisStocks,) { //,public location: PlatformLocation, 
     cognitionisStocks.load().subscribe(result => {
       console.log('pulling stocks');
       this.all_stocks=result;

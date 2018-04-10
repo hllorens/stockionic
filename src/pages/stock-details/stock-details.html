@@ -280,50 +280,30 @@
   </ion-row>-->
   <ion-row>
     <ion-col>
-       <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
-       <b>OP last diff:       
-       <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
-       <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
+       <b>val diff 54w: 
+      <span class="{{stock.value_hist_last_diff > 10 ? 'green': ''}} {{stock.value_hist_last_diff < -10 ? 'red': '' }}">{{stock.value_hist_last_diff}}%</span>
         </b>. 
-       <b>OP hist:</b>
+       <b>value hist:</b>
        <ul class="list">
-            <li class="item" *ngFor="let item of stock.operating_margin_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b>
+            <li class="item" *ngFor="let valhist of stock.value_hist; let i=index;" >
+             {{valhist[0]}}: {{valhist[1]}} &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.value_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.value_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.value_hist,i)}}%</span>
             </li>
         </ul>
     </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-        <b>PS: <span style="color:orange;">{{stock.price_to_sales}}</span></b>
-       <b>PS last diff: 
-      <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
-      <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
-        </b>. 
-       <b>PS hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let item of stock.price_to_sales_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
-  </ion-row>
-
-
-  <ion-row>
     <ion-col>
        <b>revenue hist:</b>
        <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.revenue_hist" >
-             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+            <li class="item" *ngFor="let revenue_item of stock.revenue_hist; let i=index;" >
+             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>  &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.revenue_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.revenue_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.revenue_hist,i)}}%</span>
+
             </li>
         </ul>
-       <b>revenue growth hist:</b>
+       <!--<b>revenue growth hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_growth_arr" >
                 <b>{{mult100(revenue_item,0)}}</b>
             </li>
-        </ul>
+        </ul>-->
        <b>revenue acc avg: <span style="color:orange;">{{stock.revenue_acceleration}}</span></b><br />
        <b>revenue 5y: <span style="color:orange;">{{stock.avg_revenue_growth_5y}}</span></b><br />
        <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b><br />
@@ -348,8 +328,45 @@
              {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
-
+       <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
+       <b>OP last diff:       
+       <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
+       <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
+        </b>. 
+       <b>OP hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.operating_margin_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
+            </li>
+        </ul>
     </ion-col>
+    <ion-col>
+       <b>EQ hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.equity_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b> 
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+        <b>PS: <span style="color:orange;">{{stock.price_to_sales}}</span></b>
+       <b>PS last diff: 
+      <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
+      <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
+        </b>. 
+       <b>PS hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.price_to_sales_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row>
   </ion-row>  
   <ion-row>
     <ion-col>
@@ -363,18 +380,6 @@
     </ion-col>
   </ion-row>
   <ion-row>
-    <ion-col>
-       <b>val diff since Jan 1: 
-      <span style="color:green;" *ngIf="(stock.value_hist_last_diff>=0)">{{stock.value_hist_last_diff}}%</span>
-      <span style="color:red;"   *ngIf="(stock.value_hist_last_diff<0)">{{stock.value_hist_last_diff}}%</span>
-        </b>. 
-       <b>value hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let valhist of stock.value_hist" >
-             {{valhist[0]}}: <b>{{valhist[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
   </ion-row>
   <ion-row>
     <ion-col>
