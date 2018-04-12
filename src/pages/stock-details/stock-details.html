@@ -60,7 +60,7 @@
       <ion-col>Earnings</ion-col>
       <ion-col>
       epsp=<span *ngIf="stock.epsp>0" style="color:orange">{{mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{mult100_fix2(stock.epsp)}}%</span>(max 1)<br />
-      trend=<span style="color:red;" *ngIf="stock.eps_hist.length>1   && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist.length>1 && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
+      trend=<span style="color:red;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
       {{toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
       <ion-col>{{toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>
     </ion-row>
