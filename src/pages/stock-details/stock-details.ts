@@ -17,9 +17,11 @@ export class StockDetailsPage {
   usdeur: any;
   alert_status: any= {};
   encuser: string = null;
+  cognitionis:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public af: AngularFire, public myfireauth: MyFireAuth) {
+    this.cognitionis=cognitionis;
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
     this.stock.mktcap = parseFloat(this.stock.mktcap);
@@ -41,8 +43,8 @@ export class StockDetailsPage {
     }
         
     // partial calculations ypr
-    this.stock.calc_om_ps=this.toFixed2(Math.max(Math.min((parseFloat(this.stock.operating_margin)*300)/Math.max((parseFloat(this.stock.price_to_sales)*10),0.1),1),-1));
-    this.stock.calc_lev_ind_ratio=this.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
+    this.stock.calc_om_ps=cognitionis.toFixed2(Math.max(Math.min((parseFloat(this.stock.operating_margin)*300)/Math.max((parseFloat(this.stock.price_to_sales)*10),0.1),1),-1));
+    this.stock.calc_lev_ind_ratio=cognitionis.toFixed2(Math.max(Math.min(parseFloat(this.stock.leverage_industry_ratio),2),1));
     this.stock.calc_yield=0;
     this.stock.calc_computable_yield=Math.min(parseFloat(this.stock.avgyield),parseFloat(this.stock.yield))/100;
     if(this.stock.calc_computable_yield>0.029 && this.stock.calc_computable_yield<=parseFloat(this.stock.epsp)){ // if it's a big (>3%) healthy viable yield (<=epsp)
@@ -99,6 +101,14 @@ export class StockDetailsPage {
     
     
     this.stock.calc_leverage=(-1*this.stock.calc_lev_ind_ratio)+2;
+    this.stock.eq=parseFloat(this.stock.equity_hist[(this.stock.equity_hist.length -1 )][1]);
+    this.stock.calc_eqps= (this.stock.eq/parseFloat(this.stock.shares));
+    this.stock.calc_eqp= this.stock.calc_eqps/parseFloat(this.stock.value);
+    this.stock.calc_pb= parseFloat(this.stock.value)/this.stock.calc_eqps;
+    this.stock.assets=parseFloat(this.stock.leverage)*this.stock.eq;
+    this.stock.calc_ap= (this.stock.assets/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
+    this.stock.calc_lp= ((this.stock.assets-this.stock.eq)/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
+    
     
     this.stock.calc_yield_w=this.stock.calc_yield*this.stock.calc_type.weight_yield;
     this.stock.calc_val_growth_w=this.stock.calc_val_growth*this.stock.calc_type.weight_val_growth;
@@ -172,32 +182,15 @@ export class StockDetailsPage {
         console.log(this.encuser);
     }
   }
-  public addx(value,addition,decimals) {
-    if(typeof(decimals)=='undefined') decimals=2;
-    return (parseFloat(value)+addition).toFixed(decimals);
-  }
-  public toFixed2(value) {
-    return parseFloat(value).toFixed(2);
-  }
-  public mult100(value) {
-    return (parseFloat(value)*100).toFixed(0);
-  }
-  public mult100_fix2(value) {
-    return (parseFloat(value)*100).toFixed(2);
-  }
   public usd2eur(value){
-    return this.toFixed2(value*this.usdeur);
+    return cognitionis.toFixed2(value*this.usdeur);
   }
   public eur2usd(value){
-    return this.toFixed2(value/this.usdeur);
-  }
-  public usd_market(value){
-    if(value=="NASDAQ" || value=="NYSE"){return true;}
-    else{return false;}
+    return cognitionis.toFixed2(value/this.usdeur);
   }
   public portfdiff(){
     if(this.alert.portf){
-        if(this.usd_market(this.stock.market)){
+        if(cognitionis.usd_market(this.stock.market)){
             return (parseFloat(this.usd2eur(this.stock.value))-this.alert.portf)/this.alert.portf;
         }else{
             return (this.stock.value-this.alert.portf)/this.alert.portf;
@@ -209,12 +202,12 @@ export class StockDetailsPage {
 
   public loss_percentage(val,percentage){
     if(typeof(percentage)=='undefined') percentage=0.2;
-    if(this.usd_market(this.stock.market)) return (parseFloat(val)*(1-percentage));
+    if(cognitionis.usd_market(this.stock.market)) return (parseFloat(val)*(1-percentage));
     return (parseFloat(val)*(1-percentage));
   }
   
   public loss_percentage_portf(){
-        if(this.usd_market(this.stock.market)){
+        if(cognitionis.usd_market(this.stock.market)){
             return this.loss_percentage(parseFloat(this.eur2usd(this.alert.portf)),0.2);
         }else{
             return this.loss_percentage(parseFloat(this.alert.portf),0.2);
@@ -223,14 +216,14 @@ export class StockDetailsPage {
   
   public show_stop_val(){
       var x=parseFloat(this.stock.value);
-      if(this.usd_market(this.stock.market)) x=parseFloat(this.usd2eur(x));
+      if(cognitionis.usd_market(this.stock.market)) x=parseFloat(this.usd2eur(x));
       return this.alert.portf<x;
   }
   
   public stopdiff(){
     if (this.show_stop_val()){
         if(this.alert.portf){
-            if(this.usd_market(this.stock.market)){
+            if(cognitionis.usd_market(this.stock.market)){
                 return (((parseFloat(this.usd2eur(this.stock.value))*0.8-this.alert.portf)/this.alert.portf)*100).toFixed(0);
             }else{
                 return (((this.stock.value*0.8-this.alert.portf)/this.alert.portf)*100).toFixed(0);

@@ -4,7 +4,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <span *ngIf="stocks" style="color:black;font-size:0.7em;">{{getStock('GOOG:NASDAQ')?.date}}</span>
+    <span *ngIf="stocks" style="color:black;font-size:0.7em;">{{last_updated}}</span>
           <!--<button ion-button small clear (click)="reorder_asc($event,'name')">
           <span style="color:black;font-size:0.8em;" class="{{orderByField.substring(1) != 'name' ? '': 'ordbsel'}}">n</span>
           </button>-->
@@ -51,30 +51,30 @@
     <ion-grid>
         <ion-row class="{{alerts[stock.name+':'+stock.market]?.active==true ? 'alerted': ''}}">
             <ion-col width-33>
-              <span style="color:purple;font-size:0.7em;">{{addx(i,1,0)}}</span> {{ stock.name }}
+              <span style="color:purple;font-size:0.7em;">{{cognitionis.addx(i,1,0)}}</span> {{ stock.name }}
               <span *ngIf="stock.h_souce>=5" style="color:purple;font-size:0.8em;">{{stock.h_souce}}</span><span *ngIf="stock.h_souce<5" style="color:red;font-size:0.8em;">{{stock.h_souce}}</span> <!--:{{stock.market[0]}}-->
               <span style="color:red;font-size:0.8em;" *ngIf="outdated(stock)">(old)</span>
 
-              <p style="width:50%;"><progress-bar [progress]="mult100(stock.range_52week_heat)"></progress-bar> <span style="color:blue;font-size:0.7em;">{{ addx(stock.range_52week_volatility,1,1) }}x</span></p>
+              <p style="width:50%;"><progress-bar [progress]="cognitionis.mult100(stock.range_52week_heat)"></progress-bar> <span style="color:blue;font-size:0.7em;">{{ cognitionis.addx(stock.range_52week_volatility,1,1) }}x</span></p>
             </ion-col>
             <ion-col width-25>
-              <span style="color:blue;font-size:0.9em;" *ngIf="usd_market(stock.market)">$</span>
-              <span style="color:blue;font-size:0.9em;">{{ redux_format(stock.value) }}</span>
+              <span style="color:blue;font-size:0.9em;" *ngIf="cognitionis.usd_market(stock.market)">$</span>
+              <span style="color:blue;font-size:0.9em;">{{ cognitionis.redux_format(stock.value) }}</span>
               <span style="color:green;font-size:0.7em;" *ngIf="cheap(stock.value,stock.guessed_value)">{{mkt_guess_ratio(stock.value,stock.guessed_value)}}</span>
               <span style="color:red;font-size:0.7em;" *ngIf="expensive(stock.value,stock.guessed_value)">{{mkt_guess_ratio(stock.value,stock.guessed_value)}}</span>
               <br />
-              <span style="text-align=right;font-size:0.8em;">{{ redux_format_max(stock.range_52week_low) }}-{{ redux_format_max(stock.range_52week_high) }}</span>
+              <span style="text-align=right;font-size:0.8em;">{{ cognitionis.redux_format_max(stock.range_52week_low) }}-{{ cognitionis.redux_format_max(stock.range_52week_high) }}</span>
             </ion-col>
             <ion-col width-25>
                 <span *ngIf="stock.avgyield<1" style="color:black;font-size:0.8em;">{{ stock.avgyield }}%</span> 
                 <span *ngIf="stock.avgyield>=1 && stock.avgyield<1.9" style="color:green;font-size:0.8em;">{{ stock.avgyield }}%</span> 
                 <span *ngIf="stock.avgyield>=1.9" style="color:green;font-size:0.8em;font-weight:bold;">{{ stock.avgyield }}%</span> 
-                <span *ngIf="stock.avgyield>0 && stock.avgyield>mult100float(stock.epsp)" style="color:red;font-size:0.8em;">*</span>
+                <span *ngIf="stock.avgyield>0 && stock.avgyield>cognitionis.mult100float(stock.epsp)" style="color:red;font-size:0.8em;">*</span>
                 <!--<span style="font-size:0.7em;">({{ stock.divs_per_year }})</span></ion-badge> -->
                 <!--<br />-->
-                <span style="color:orange;font-size:0.8em;font-weight:bold;" *ngIf="stock.epsp>=0 && stock.epsp>=0.05">{{mult100_fix2(stock.epsp)}}%</span>
-                <span style="color:black;font-size:0.8em;" *ngIf="stock.epsp>=0 && stock.epsp<0.05">{{mult100_fix2(stock.epsp)}}%</span>
-                <span style="color:red;font-size:0.8em;" *ngIf="stock.epsp<0">{{mult100_fix2(stock.epsp)}}%</span>
+                <span style="color:orange;font-size:0.8em;font-weight:bold;" *ngIf="stock.epsp>=0 && stock.epsp>=0.05">{{cognitionis.mult100_fix2(stock.epsp)}}%</span>
+                <span style="color:black;font-size:0.8em;" *ngIf="stock.epsp>=0 && stock.epsp<0.05">{{cognitionis.mult100_fix2(stock.epsp)}}%</span>
+                <span style="color:red;font-size:0.8em;" *ngIf="stock.epsp<0">{{cognitionis.mult100_fix2(stock.epsp)}}%</span>
                 <span style="font-size:0.8em;" *ngIf="stock.eps_hist && stock.eps_hist.length>1">
                             <span style="color:red;" *ngIf="stock.eps_hist.length>1   && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span>
                             <span style="color:green;" *ngIf="stock.eps_hist.length>1 && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span>
@@ -84,27 +84,27 @@
                 <span style="color:blue;font-size:0.8em;font-weight:bold;" *ngIf="stock.om_to_ps>=0.99">{{stock.om_to_ps}}</span>
                 <span style="color:black;font-size:0.8em;" *ngIf="stock.om_to_ps<0.99">{{stock.om_to_ps}}</span>
                 ~ 
-                <span style="color:blue;font-size:0.8em;font-weight:bold;" *ngIf="stock.avg_revenue_growth_5y>=10">{{min(stock.avg_revenue_growth_5y,20,0)}}%</span>
-                <span style="color:black;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y>=0 && stock.avg_revenue_growth_5y<10">{{min(stock.avg_revenue_growth_5y,20,0)}}%</span>
-                <span style="color:red;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y<0">{{min(stock.avg_revenue_growth_5y,20,0)}}%</span>
-                <span style="color:black;font-size:0.8em;">- {{max(stock.leverage_industry_ratio,1,1)}}</span>
+                <span style="color:blue;font-size:0.8em;font-weight:bold;" *ngIf="stock.avg_revenue_growth_5y>=10">{{cognitionis.min(stock.avg_revenue_growth_5y,20,0)}}%</span>
+                <span style="color:black;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y>=0 && stock.avg_revenue_growth_5y<10">{{cognitionis.min(stock.avg_revenue_growth_5y,20,0)}}%</span>
+                <span style="color:red;font-size:0.8em;" *ngIf="stock.avg_revenue_growth_5y<0">{{cognitionis.min(stock.avg_revenue_growth_5y,20,0)}}%</span>
+                <span style="color:black;font-size:0.8em;">- {{cognitionis.max(stock.leverage_industry_ratio,1,1)}}</span>
             </ion-col>
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap' || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'">
                     <span style="font-size:0.7em;"><ion-icon name="notifications" *ngIf="alerts[stock.name+':'+stock.market]"></ion-icon></span>
-                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)>=0" style="color:green;font-size:0.7em;">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
-                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)<0" style="color:red;font-size:0.7em;">{{mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
+                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)>=0" style="color:green;font-size:0.7em;">{{cognitionis.mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
+                    <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)<0" style="color:red;font-size:0.7em;">{{cognitionis.mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
                     <br />
                     <span *ngIf="stock.value_hist_last_diff>=0" style="color:green;font-size:0.7em;">{{stock.value_hist_last_diff}}%</span>
                     <span *ngIf="stock.value_hist_last_diff<0" style="color:red;font-size:0.7em;">{{stock.value_hist_last_diff}}%</span>
                     ~
-                    <span *ngIf="stock.computable_val_growth>=0" style="color:green;font-size:0.7em;">{{mult100(stock.computable_val_growth)}}%</span>
-                    <span *ngIf="stock.computable_val_growth<0" style="color:red;font-size:0.7em;">{{mult100(stock.computable_val_growth)}}%</span>
+                    <span *ngIf="stock.computable_val_growth>=0" style="color:green;font-size:0.7em;">{{cognitionis.mult100(stock.computable_val_growth)}}%</span>
+                    <span *ngIf="stock.computable_val_growth<0" style="color:red;font-size:0.7em;">{{cognitionis.mult100(stock.computable_val_growth)}}%</span>
                     
             </ion-col>
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff' && orderByField.substring(1).split(' ')[0]!='computable_val_growth'">
                     
-                    <p style="color:green;font-size:0.7em;" *ngIf="(stock.computable_val_growth>=0)">{{mult100(stock.computable_val_growth)}}%</p>
-                    <p style="color:red;font-size:0.7em;"   *ngIf="(stock.computable_val_growth<0)">{{mult100(stock.computable_val_growth)}}%</p>
+                    <p style="color:green;font-size:0.7em;" *ngIf="(stock.computable_val_growth>=0)">{{cognitionis.mult100(stock.computable_val_growth)}}%</p>
+                    <p style="color:red;font-size:0.7em;"   *ngIf="(stock.computable_val_growth<0)">{{cognitionis.mult100(stock.computable_val_growth)}}%</p>
                     <p style="color:green;font-size:0.7em;" *ngIf="(stock.value_hist_last_diff>=0)">1y:{{stock.value_hist_last_diff}}%</p>
                     <p style="color:red;font-size:0.7em;"   *ngIf="(stock.value_hist_last_diff<0)">1y:{{stock.value_hist_last_diff}}%</p>
                     <p style="color:green;font-size:0.7em;" *ngIf="(stock.val_change_3y>=0)">3y:{{stock.val_change_3y}}%</p>

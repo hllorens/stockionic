@@ -31,13 +31,17 @@ export class StocksPage {
   test_var: string = null;
   alert_filter_on: boolean=false;
   usdeur: any;
+  last_updated:any;
+  cognitionis:any;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation
+  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation, public cognitionis: cognitionis, 
+    this.cognitionis=cognitionis;
     cognitionisStocks.load().subscribe(result => {
       console.log('pulling stocks');
       this.all_stocks=result;
       this.initializeItems();
-      this.usdeur=(this.getStock('GOOG:NASDAQ')).usdeur;
+      this.usdeur=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).usdeur;
+      this.last_updated=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).date;
       this.check_alerts();
     });
     // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
@@ -60,7 +64,7 @@ export class StocksPage {
               //console.log('key '+al.symbol);
               this.alerts[al.symbol]=al;
               this.check_alert(al);
-              //if(this.alerts[al.symbol].active==true) this.all_stocks[this.getStockIndex(al.symbol)].alerted=true;
+              //if(this.alerts[al.symbol].active==true) this.all_stocks[cognitionis.getStockIndex(this.all_stocks,al.symbol)].alerted=true;
               //BKIA:BME 0.65 1.50  -5 5 0 10 2017-02-04 
           }
         });
@@ -79,20 +83,7 @@ export class StocksPage {
     return value[0];
   }
   
-  getStockIndex(symbol){
-    if(!this.all_stocks){return -1;} // seems that sometimes it is empty (refresh)
-    for(let i=0;i<this.all_stocks.length;i++){
-        if(symbol==this.all_stocks[i].name+':'+this.all_stocks[i].market){
-            return i;
-        }
-    }
-    return -1;
-  }
-  getStock(symbol){
-    let index=this.getStockIndex(symbol);
-    if(index==-1) return;
-    else return this.all_stocks[index];
-  }
+
   check_alerts(){
     if(!this.alerts) return;
     for(var i=0;i<this.alerts.length;i++){
@@ -101,7 +92,7 @@ export class StocksPage {
     }
   }
   check_alert(al){
-    let stock=this.getStock(al.symbol);
+    let stock=cognitionis.getStock(this.all_stocks,al.symbol);
     if(!stock) return;
     this.alerts[al.symbol].active=false;
     
@@ -154,8 +145,8 @@ export class StocksPage {
         return;
     }
     if(al.portf && (
-        ( !this.usd_market(stock.market) && (parseFloat(al.portf)*0.8)>=parseFloat(stock.value) ) ||
-        (  this.usd_market(stock.market) && parseFloat(this.eur2usd(parseFloat(al.portf)*0.8))>=parseFloat(stock.value) )
+        ( !cognitionis.usd_market(stock.market) && (parseFloat(al.portf)*0.8)>=parseFloat(stock.value) ) ||
+        (  cognitionis.usd_market(stock.market) && parseFloat(this.eur2usd(parseFloat(al.portf)*0.8))>=parseFloat(stock.value) )
     )){ //*0.8 to see stop loss diff, note usdeur market
         this.alerts[al.symbol].active=true;
         //console.log('portf '+al.symbol);
@@ -176,34 +167,17 @@ export class StocksPage {
     this.stocks=this.all_stocks;
     //console.log('initializeItems() end');
   }
-  public toFixed(value,decimals) {
-    return parseFloat(value).toFixed(decimals);
-  }
-  public toFixed2(value) {
-    return parseFloat(value).toFixed(2);
-  }
-  public mult100(value) {
-    return (parseFloat(value)*100).toFixed(0);
-  }
-  public mult100_fix2(value) {
-    return (parseFloat(value)*100).toFixed(2);
-  }
-  public mult100float(value) {
-    return (parseFloat(value)*100);
-  }
+  
+
   public usd2eur(value){
-    return this.toFixed2(value*this.usdeur);
+    return cognitionis.toFixed2(value*this.usdeur);
   }
   public eur2usd(value){
-    return this.toFixed2(value/this.usdeur);
-  }
-  public usd_market(value){
-    if(value=="NASDAQ" || value=="NYSE"){return true;}
-    else{return false;}
+    return cognitionis.toFixed2(value/this.usdeur);
   }
   public portfdiff(portf,market,value){
     if(portf){
-        if(this.usd_market(market)){
+        if(cognitionis.usd_market(market)){
             return (parseFloat(this.usd2eur(value))-portf)/portf;
         }else{
             return (value-portf)/portf;
@@ -245,31 +219,7 @@ export class StocksPage {
   }
 
   
-  public redux_format(value) {
-    if(parseFloat(value)>100) return parseFloat(value).toFixed(0);
-    if(parseFloat(value)<100 && parseFloat(value)>=10) return parseFloat(value).toFixed(1);
-    return value;
-  }
-  public redux_format_max(value) {
-    if(parseFloat(value)>1000) return (parseFloat(value)/1000).toFixed(0)+"k";
-    if(parseFloat(value)>10) return parseFloat(value).toFixed(0);
-    if(parseFloat(value)<10 && parseFloat(value)>=10) return parseFloat(value).toFixed(1);
-    return value;
-  }
-  public addx(value,addition,decimals) {
-    if(typeof(decimals)=='undefined') decimals=2;
-    return (parseFloat(value)+addition).toFixed(decimals);
-  }
-  public max(value,max,decimals) {
-    if(typeof(max)=='undefined') max=100;
-    if(typeof(decimals)=='undefined') decimals=2;
-    return (Math.max(parseFloat(value),max)).toFixed(decimals);
-  }
-  public min(value,min,decimals) {
-    if(typeof(min)=='undefined') min=0;
-    if(typeof(decimals)=='undefined') decimals=2;
-    return (Math.min(parseFloat(value),min)).toFixed(decimals);
-  }
+
   reorder(ev: any, val:string){
     if(this.reverseSort=='+') this.reverseSort='-';
     else this.reverseSort='+';

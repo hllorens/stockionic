@@ -14,6 +14,7 @@ import { Stock } from '../models/stock';
 @Injectable()
 export class CognitionisStocks {
   cognitionisUrl = 'http://cognitionis.000webhostapp.com/cult/www/backend/get_stock.php';
+  //cognitionisUrl = 'http://cognitionis.atwebpages.com/cult/www/backend/get_stock.php'; works CORS and cron-job.org but cannot acces external servers (curl/email)
   constructor(public http: Http) {
     console.log('Hello CognitionisStocks Provider');
   }
@@ -21,5 +22,4 @@ export class CognitionisStocks {
     return this.http.get(`${this.cognitionisUrl}`)
       .map(res => <Stock[]>res.json());
   }
-
 }

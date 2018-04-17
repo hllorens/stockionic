@@ -7,6 +7,7 @@ import { HelpPage } from '../pages/help/help';
 import { ExtraPage } from '../pages/extra/extra';
 import { StockDetailsPage } from '../pages/stock-details/stock-details';
 import { StocksPage } from '../pages/stocks/stocks';
+import { StatsPage } from '../pages/stats/stats';
 
 
 import { OrderBy } from '../pipes/orderby';
@@ -28,6 +29,7 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
     ExtraPage,
     StockDetailsPage,
     StocksPage,
+    StatsPage,
     LogoutPage,
     OrderBy,
     ProgressBarComponent
@@ -44,7 +46,8 @@ import {firebaseConfig, firebaseAuthConfig} from "../environments/firebase.confi
     ExtraPage,
     StockDetailsPage,
     LogoutPage,
-    StocksPage
+    StocksPage,
+    StatsPage
   ],
   providers: [{provide: ErrorHandler, useClass: IonicErrorHandler},MyFireAuth,CognitionisStocks] //,CognitionisAlerts
 })

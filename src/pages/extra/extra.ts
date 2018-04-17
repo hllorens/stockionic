@@ -5,7 +5,7 @@ import { NavController } from 'ionic-angular';
 //import firebase from 'firebase'
 
 import { MyFireAuth } from '../../providers/myfireauth';
-//import {cognitionis} from '../../lib/cognitionis.ts';
+import {cognitionis} from '../../lib/cognitionis.ts';
 
 //import { Stock } from '../../models/stock';
 import { CognitionisStocks } from '../../providers/cognitionis-stocks';
@@ -49,22 +49,15 @@ export class ExtraPage {
       this.all_stocks=result;
       this.initializeItems();
       
-      this.goog=(this.getStock('GOOG:NASDAQ'));
+      this.goog=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ'));
       
       
-      this.usdeur=(this.getStock('GOOG:NASDAQ')).usdeur;
-      this.usdeur_change=(this.getStock('GOOG:NASDAQ')).usdeur_change;
-      this.usdeur_hist=(this.getStock('GOOG:NASDAQ')).usdeur_hist;
-      this.usdeur_hist_last_diff=(this.getStock('GOOG:NASDAQ')).usdeur_hist_last_diff;
-      this.usdeur_hist_trend=(this.getStock('GOOG:NASDAQ')).usdeur_hist_trend;
-      this.avgusdeur=(this.getStock('GOOG:NASDAQ')).avgusdeur;
+      this.usdeur=this.goog.usdeur;
+      this.usdeur_change=this.goog.usdeur_change;
+      this.usdeur_hist=this.goog.usdeur_hist;
+      //this.avgusdeur=(this.getStock('GOOG:NASDAQ')).avgusdeur;
 
-      this.btcusd=(this.getStock('GOOG:NASDAQ')).btcusd;
-      this.btcusd_change=(this.getStock('GOOG:NASDAQ')).btcusd_change;
-      this.btcusd_hist=(this.getStock('GOOG:NASDAQ')).btcusd_hist;
-      this.btcusd_hist_last_diff=(this.getStock('GOOG:NASDAQ')).btcusd_hist_last_diff;
-      this.btcusd_hist_trend=(this.getStock('GOOG:NASDAQ')).btcusd_hist_trend;
-      this.avgbtcusd=(this.getStock('GOOG:NASDAQ')).avgbtcusd;
+
 
     });
   }
@@ -74,21 +67,7 @@ export class ExtraPage {
 
   }
   
-  getStockIndex(symbol){
-    if(!this.all_stocks){return -1;} // seems that sometimes it is empty (refresh)
-    for(let i=0;i<this.all_stocks.length;i++){
-        if(symbol==this.all_stocks[i].name+':'+this.all_stocks[i].market){
-            return i;
-        }
-    }
-    return -1;
-  }
-  
-  getStock(symbol){
-    let index=this.getStockIndex(symbol);
-    if(index==-1) return;
-    else return this.all_stocks[index];
-  }
+
   initializeItems(){
     //console.log('initializeItems() start');
     this.stocks=this.all_stocks;
