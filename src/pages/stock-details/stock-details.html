@@ -280,13 +280,24 @@
   </ion-row>-->
   <ion-row>
     <ion-col>
+        hola
+       <ul class="list">
+            <li class="item" *ngFor="let year of tsv_arr_keys" >
+             {{year}}: {{tsv_arr[year].value}}
+            </li>
+        </ul>
+        adios
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
        <b>val diff 54w: 
       <span class="{{stock.value_hist_last_diff > 10 ? 'green': ''}} {{stock.value_hist_last_diff < -10 ? 'red': '' }}">{{stock.value_hist_last_diff}}%</span>
         </b>. 
        <b>value hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let valhist of stock.value_hist; let i=index;" >
-             {{valhist[0]}}: {{valhist[1]}} &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.value_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.value_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.value_hist,i)}}%</span>
+             {{cognitionis.get_year_2(valhist[0])}}: {{valhist[1]}} &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.value_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.value_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.value_hist,i)}}%</span>
             </li>
         </ul>
     </ion-col>
@@ -294,7 +305,7 @@
        <b>revenue hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.revenue_hist; let i=index;" >
-             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>  &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.revenue_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.revenue_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.revenue_hist,i)}}%</span>
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>  &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.revenue_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.revenue_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.revenue_hist,i)}}%</span>
 
             </li>
         </ul>
@@ -317,7 +328,7 @@
        <b>op inc hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.operating_income_hist" >
-             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
 
@@ -325,7 +336,7 @@
        <b>net inc hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let revenue_item of stock.net_income_hist" >
-             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
             </li>
         </ul>
        <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
@@ -344,7 +355,7 @@
        <b>EQ hist:</b>
        <ul class="list">
             <li class="item" *ngFor="let item of stock.equity_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b> 
+             {{cognitionis.get_year_2(item[0])}}: <b>{{item[1]}}</b> 
             </li>
         </ul>
     </ion-col>

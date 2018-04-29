@@ -15,6 +15,8 @@ export class StockDetailsPage {
   stock: any;
   alert: any;
   usdeur: any;
+  tsv_arr: any;
+  tsv_arr_keys: any;
   alert_status: any= {};
   encuser: string = null;
   cognitionis:any;
@@ -101,7 +103,9 @@ export class StockDetailsPage {
     
     
     this.stock.calc_leverage=(-1*this.stock.calc_lev_ind_ratio)+2;
-    this.stock.eq=parseFloat(this.stock.equity_hist[(this.stock.equity_hist.length -1 )][1]);
+    this.stock.eq=0.001;
+    if(this.stock.equity_hist && this.stock.equity_hist.length>0)
+        this.stock.eq=parseFloat(this.stock.equity_hist[(this.stock.equity_hist.length -1 )][1]);
     this.stock.calc_eqps= (this.stock.eq/parseFloat(this.stock.shares));
     this.stock.calc_eqp= this.stock.calc_eqps/parseFloat(this.stock.value);
     this.stock.calc_pb= parseFloat(this.stock.value)/this.stock.calc_eqps;
@@ -169,6 +173,26 @@ export class StockDetailsPage {
                           parseFloat(this.stock.calc_value_mult_factor))
                           +parseFloat(this.stock.calc_value_asset_share)
                           ).toFixed(1);
+    
+    
+    
+    this.tsv_arr={};
+    
+    if(this.stock.name.substr(0,5)!='INDEX'){
+        this.tsv_arr=cognitionis.get_anualized_data('value',this.stock,this.tsv_arr);
+        this.tsv_arr=cognitionis.get_anualized_data('revenue',this.stock,this.tsv_arr);
+    }
+    
+    console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
+    this.tsv_arr_keys=[];
+    for (var key in this.tsv_arr) {
+        if (this.tsv_arr.hasOwnProperty(key) && key[0]=='2') {
+            console.log(key);
+            this.tsv_arr_keys.push(key);
+        }
+    }
+    console.log(this.tsv_arr_keys);
+    
     
     
     this.alert = navParams.get('alert');
