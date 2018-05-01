@@ -277,11 +277,11 @@
   </ion-row>-->
   <ion-row>
     <ion-col>
-        hola
+        hola om_max={{this.stock.om_max}}
        <ul class="list">
             <li class="item" *ngFor="let year of tsv_arr_keys" >
               <span *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">
-             {{year}}: {{tsv_arr[year].value}} {{tsv_arr[year].revenue}} {{tsv_arr[year].operating_income}} {{tsv_arr[year].net_income}} {{tsv_arr[year].equity}} 
+             {{year}}: {{tsv_arr[year].value}} {{tsv_arr[year].revenue}} {{tsv_arr[year].operating_income}} om:{{tsv_arr[year].om}} {{tsv_arr[year].net_income}} {{tsv_arr[year].equity}} 
               </span>
            </li>
         </ul>

@@ -185,6 +185,15 @@ export class StockDetailsPage {
         this.tsv_arr=cognitionis.get_anualized_data('net_income',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('equity',this.stock,this.tsv_arr);
     }
+	this.stock.om_max=parseFloat(this.stock.operating_margin);
+    for (var key in this.tsv_arr) {
+       if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
+          console.log(key);
+          this.tsv_arr[key].om=parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue);
+          if(this.tsv_arr[key].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[key].om;
+       }
+    }
+
     
     //console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
     this.tsv_arr_keys=[];
