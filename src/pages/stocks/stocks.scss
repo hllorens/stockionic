@@ -1,19 +1,23 @@
 page-stocks {
-.label-md {
-    margin: 3px 8px 3px 0;
-}
+    .label-md {
+        margin: 3px 8px 3px 0;
+    }
 
-.alerted{
-    background-color:#fab;
-}
+    .alerted{
+        background-color:#fab;
+    }
 
-.item-md{
-    padding-left:0;
-}
+    .item-md{
+        padding-left:0;
+    }
 
-.ordbsel{
-    font-weight:bold;
-    text-decoration: underline;
-}
+    .ordbsel{
+        font-weight:bold;
+        text-decoration: underline;
+    }
+
+    .red{color:red;}
+    .green{color:green;}
+    .blue{color:blue;}
 
 }

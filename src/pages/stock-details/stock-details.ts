@@ -181,13 +181,16 @@ export class StockDetailsPage {
     if(this.stock.name.substr(0,5)!='INDEX'){
         this.tsv_arr=cognitionis.get_anualized_data('value',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('revenue',this.stock,this.tsv_arr);
+        this.tsv_arr=cognitionis.get_anualized_data('operating_income',this.stock,this.tsv_arr);
+        this.tsv_arr=cognitionis.get_anualized_data('net_income',this.stock,this.tsv_arr);
+        this.tsv_arr=cognitionis.get_anualized_data('equity',this.stock,this.tsv_arr);
     }
     
-    console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
+    //console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
     this.tsv_arr_keys=[];
     for (var key in this.tsv_arr) {
         if (this.tsv_arr.hasOwnProperty(key) && key[0]=='2') {
-            console.log(key);
+            //console.log(key);
             this.tsv_arr_keys.push(key);
         }
     }

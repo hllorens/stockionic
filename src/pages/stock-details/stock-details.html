@@ -40,9 +40,6 @@
     <ion-row class="border">
       <ion-col>Value G</ion-col>
       <ion-col>
-      5y:{{stock.val_change_5y}} p:{{stock.val_change_5yp}}<br />
-      3y:{{stock.val_change_3y}} p:{{stock.val_change_3yp}} pp:{{stock.val_change_3ypp}}<br />
-      avg: <span *ngIf="stock.calc_computable_val_growth>0" style="color:green">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth))}}%</span><span *ngIf="stock.calc_computable_val_growth<=0" style="color:red">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth))}}%</span> y:<span style="color:green">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_yield))}}%</span><br />
       avg+y: <span *ngIf="stock.calc_computable_val_growth_y>0" style="color:green">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth_y))}}%</span><span *ngIf="stock.calc_computable_val_growth_y<=0" style="color:red">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth_y))}}%</span>(max 20*5, 1p)<br />
       {{cognitionis.toFixed2(stock.calc_val_growth)}} * w({{stock.calc_type.weight_val_growth}})</ion-col>
       <ion-col>{{cognitionis.toFixed2(stock.calc_val_growth_w)}} / {{stock.calc_type.weight_val_growth}}</ion-col>
@@ -59,7 +56,7 @@
     <ion-row class="border">
       <ion-col>Earnings</ion-col>
       <ion-col>
-      epsp=<span *ngIf="stock.epsp>0" style="color:orange">{{cognitionis.mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{cognitionis.cognitionis.mult100_fix2(stock.epsp)}}%</span>(max 1)<br />
+      epsp=<span *ngIf="stock.epsp>0" style="color:orange">{{cognitionis.mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{cognitionis.mult100_fix2(stock.epsp)}}%</span>(max 1)<br />
       trend=<span style="color:red;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
       {{cognitionis.toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
       <ion-col>{{cognitionis.toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>
@@ -283,8 +280,10 @@
         hola
        <ul class="list">
             <li class="item" *ngFor="let year of tsv_arr_keys" >
-             {{year}}: {{tsv_arr[year].value}}
-            </li>
+              <span *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">
+             {{year}}: {{tsv_arr[year].value}} {{tsv_arr[year].revenue}} {{tsv_arr[year].operating_income}} {{tsv_arr[year].net_income}} {{tsv_arr[year].equity}} 
+              </span>
+           </li>
         </ul>
         adios
     </ion-col>
