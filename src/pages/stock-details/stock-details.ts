@@ -67,11 +67,11 @@ export class StockDetailsPage {
     this.stock.calc_type={
         name: "Regular",
         weight_yield: 0,
-        weight_val_growth: 5,
-        weight_rev_growth: 2,
-        weight_epsp: 2,
+        weight_val_growth: 3,
+        weight_rev_growth: 3,
+        weight_epsp: 3,
         weight_leverage: 1,
-        weight_val_growth_penalty: 3,
+        weight_val_growth_penalty: 2,
         weight_rev_growth_penalty: 2,
         weight_eps_growth_penalty: 2
     }
@@ -90,13 +90,13 @@ export class StockDetailsPage {
     
     
     this.stock.calc_epsp=0;
-    if(this.stock.epsp>=0){
+    if(this.stock.prod>=0){
         // the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
-        this.stock.calc_epsp=(parseFloat(this.stock.epsp))*15;
+        this.stock.calc_epsp=(parseFloat(this.stock.prod))*5;
         if(this.stock.calc_computable_yield>(parseFloat(this.stock.calc_epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
-        if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.10; 
+        if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.05; 
         if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.20; 
-        if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.30;
+        if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.25;
         this.stock.calc_epsp=Math.max(Math.min(this.stock.calc_epsp,1),0);  // min 0 max 1
     }
 

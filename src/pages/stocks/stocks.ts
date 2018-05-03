@@ -271,6 +271,9 @@ export class StocksPage {
     if(this.orderByField!='-epsp'){
         this.reverseSort='-';
         this.orderByField = this.reverseSort+'epsp';
+    }else{
+        this.reverseSort='-';
+        this.orderByField = this.reverseSort+'prod';
     }/*else{
         this.reverseSort='-';
         this.orderByField = this.reverseSort+'eps_hist_last_diff';

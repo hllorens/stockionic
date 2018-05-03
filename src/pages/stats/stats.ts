@@ -29,6 +29,8 @@ export class StatsPage {
       this.calculations('epsp',-1,0.5);
       this.calculations('leverage',1,15);
       this.calculations('price_to_book',0.01,10);
+      this.calculations('oip',-1,0.5);
+      this.calculations('prod',-1,0.5);
       this.stats_string=JSON.stringify(this.stats, null, 3);
     });
     // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
