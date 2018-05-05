@@ -77,12 +77,13 @@ export class StockDetailsPage {
     }
     
     this.stock.calc_rev_growth=0;
-    if(parseFloat(this.stock.avg_revenue_growth_5y)>0){
-        this.stock.calc_rev_growth=Math.min(Math.min(parseFloat(this.stock.avg_revenue_growth_5y),parseFloat(this.stock.revenue_growth)*100),20)*5/100; // *5 to make it reach max 1
+    if(parseFloat(this.stock.revenue_growth)>0){
+        this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.revenue_growth)*100,34)*2/100; // *3 to make it reach max 1
+		
     }
-    this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.3; // max around 0.3 (can be penalizing -0.1)
+    //this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.3; // max around 0.3 (can be penalizing -0.1)
     // good quarter only +0.1 (cannot penalize), and only if om/ps>0.2
-    if(parseFloat(this.stock.revenue_growth_qq_last_year)>0 && this.stock.calc_om_ps>0.2){
+    if(parseFloat(this.stock.revenue_growth_qq_last_year)>0){ // && this.stock.calc_om_ps>0.2
         this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.revenue_growth_qq_last_year),10)/100;
     }
     this.stock.calc_rev_growth=Math.max(Math.min(this.stock.calc_rev_growth,1),0);  // min 0 max 1
@@ -91,12 +92,12 @@ export class StockDetailsPage {
     
     this.stock.calc_epsp=0;
     if(this.stock.prod>=0){
-        // the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
-        this.stock.calc_epsp=(parseFloat(this.stock.prod))*5;
+        // DEPRECATED the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
+        this.stock.calc_epsp=(parseFloat(this.stock.prod))*8;
         if(this.stock.calc_computable_yield>(parseFloat(this.stock.calc_epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
         if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.05; 
-        if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.20; 
-        if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.25;
+        if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.08; 
+        if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.10;
         this.stock.calc_epsp=Math.max(Math.min(this.stock.calc_epsp,1),0);  // min 0 max 1
     }
 
@@ -150,13 +151,22 @@ export class StockDetailsPage {
     
     this.stock.calc_eps_growth_penalty=0.0;
     if(parseFloat(this.stock.epsp)<0.03){
-        if(this.stock.eps_hist_trend=='\\') this.stock.calc_eps_growth_penalty=-1;
-        if(this.stock.eps_hist_trend=='-\\') this.stock.calc_eps_growth_penalty=-0.5;
-        if(this.stock.eps_hist_trend=='\_') this.stock.calc_eps_growth_penalty=-0.5;
+        if(this.stock.eps_hist_trend=='\\') this.stock.calc_eps_growth_penalty=-0.5;
+        if(this.stock.eps_hist_trend=='-\\') this.stock.calc_eps_growth_penalty=-0.25;
+        if(this.stock.eps_hist_trend=='\_') this.stock.calc_eps_growth_penalty=-0.15;
         if(this.stock.eps_hist_trend=='^') this.stock.calc_eps_growth_penalty=-0.25;
     }
-    if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-1;
+    if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-0.5;
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
+	
+	this.stock.calc_h_souce= (this.stock.calc_val_growth_w) +
+						(this.stock.calc_rev_growth_w) +
+						(this.stock.calc_epsp_w) +
+						(this.stock.calc_leverage_w) +
+						(this.stock.calc_eps_growth_penalty_w) +
+						(this.stock.calc_rev_growth_penalty_w) +
+						(this.stock.calc_val_growth_penalty_w);
+
 
     this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
     this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min((parseFloat(this.stock.operating_margin)*100)/33,1)).toFixed(1);

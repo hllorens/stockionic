@@ -27,7 +27,7 @@
         Exam: <b>{{stock.calc_type.name}}</b> 
         </ion-col>
         <ion-col>
-         <span *ngIf="stock.h_souce>=5" style="font-weight:bold;color:purple">{{stock.h_souce}}</span><span *ngIf="stock.h_souce<5" style="font-weight:bold;color:red">{{stock.h_souce}}</span> / {{10}}
+         <span *ngIf="stock.h_souce>=5" style="font-weight:bold;color:purple">{{stock.h_souce}} ({{stock.calc_h_souce}})</span><span *ngIf="stock.h_souce<5" style="font-weight:bold;color:red">{{stock.h_souce}}</span> / {{10}}
         </ion-col>
     </ion-row>
     <!--<ion-row class="border">
@@ -47,16 +47,16 @@
     <ion-row class="border">
       <ion-col>Revenue G</ion-col>
       <ion-col>
-      5y=<span *ngIf="stock.avg_revenue_growth_5y>0" style="color:green">{{stock.avg_revenue_growth_5y}}</span><span *ngIf="stock.avg_revenue_growth_5y<=0" style="color:red">{{stock.avg_revenue_growth_5y}}</span>%(max 0.20*5, 1p)<br />
-      qq={{stock.revenue_growth_qq_last_year}} (max 0.1)<br />
-      om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />
+      g=<span *ngIf="stock.revenue_growth>0" style="color:green">{{stock.revenue_growth}}</span><span *ngIf="stock.revenue_growth<=0" style="color:red">{{stock.revenue_growth}}</span>%<br />
+      qq={{stock.revenue_growth_qq_last_year}} (10%)<br />
+      <!--om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />-->
       {{cognitionis.toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
       <ion-col>{{cognitionis.toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
     </ion-row>
     <ion-row class="border">
-      <ion-col>Earnings</ion-col>
+      <ion-col>Prod</ion-col>
       <ion-col>
-      epsp=<span *ngIf="stock.epsp>0" style="color:orange">{{cognitionis.mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{cognitionis.mult100_fix2(stock.epsp)}}%</span>(max 1)<br />
+      prod=<span *ngIf="stock.prod>0" style="color:orange">{{cognitionis.mult100_fix2(stock.prod)}}%</span><span *ngIf="stock.prod<=0" style="color:red">{{cognitionis.mult100_fix2(stock.prod)}}%</span><br />
       trend=<span style="color:red;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
       {{cognitionis.toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
       <ion-col>{{cognitionis.toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>

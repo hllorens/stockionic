@@ -7,7 +7,7 @@ import {cognitionis} from '../../lib/cognitionis.ts';
 import firebase from 'firebase'
 
 import { Stock } from '../../models/stock';
-import { CognitionisStocks } from '../../providers/cognitionis-stocks';
+//import { CognitionisStocks } from '../../providers/cognitionis-stocks';
 //import { OrderBy } from '../../pipes/orderby';
 //import { ProgressBarComponent } from '../../components/progress-bar/progress-bar';
 
@@ -28,22 +28,24 @@ export class StocksPage {
   encuser: string = null;
   alerts: any = {};  //=[]   does not help
   alertsref: any;
+  firestocksref: any;
   test_var: string = null;
   alert_filter_on: boolean=false;
   usdeur: any;
   last_updated:any;
   cognitionis:any;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation, public cognitionis: cognitionis, 
+  constructor(public navCtrl: NavController, public navParams: NavParams,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation, public cognitionis: cognitionis,  private cognitionisStocks: CognitionisStocks
     this.cognitionis=cognitionis;
-    cognitionisStocks.load().subscribe(result => {
+    /*cognitionisStocks.load().subscribe(result => {
       console.log('pulling stocks');
       this.all_stocks=result;
       this.initializeItems();
       this.usdeur=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).usdeur;
       this.last_updated=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).date;
       this.check_alerts();
-    });
+    });*/
+	
     // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
   }
 
@@ -54,30 +56,54 @@ export class StocksPage {
         this.encuser=cognitionis.encodeAFemail(this.myfireauth.user.email);
         console.log(this.encuser);
     }
-    this.alertsref = firebase.database().ref('alerts/'+this.encuser);
-    this.alertsref.on('value', snap => {
-      console.log('data received');
-      this.alerts={}; // re-init
-      snap.forEach( alert => {
-          let al=alert.val();
-          if(al.hasOwnProperty('symbol')){
-              //console.log('key '+al.symbol);
-              this.alerts[al.symbol]=al;
-              this.check_alert(al);
-              //if(this.alerts[al.symbol].active==true) this.all_stocks[cognitionis.getStockIndex(this.all_stocks,al.symbol)].alerted=true;
-              //BKIA:BME 0.65 1.50  -5 5 0 10 2017-02-04 
-          }
-        });
-      console.log('data received2'+cognitionis.get_timestamp_str());
-      console.log('active page:'+this.navCtrl.getActive().name); // only log, .name does not work in prod
-      let activeView = this.navCtrl.getActive();
-      if (activeView.component == StocksPage) {   //if(this.navCtrl.getActive().name === 'StocksPage')
-        console.log('detecting changes');
-        this.cd.detectChanges(); // this fixes the issue, triggers change detection
-        // seems to not work in Android??? perhaps add some badge... to see
-      }
+    this.firestocksref = firebase.database().ref('stocks_formatted/');
+    this.firestocksref.on('value', snap => {
+		console.log('stocks received');
+		this.all_stocks=snap;
+		this.all_stocks=[]; // re-init
+		snap.forEach( stock => {
+		  let al=stock.val();
+		  if(al.hasOwnProperty('name')){
+			  this.all_stocks.push(al);
+			  //if(all_stocks.alerts[al.symbol].active==true) this.all_stocks[cognitionis.getStockIndex(this.all_stocks,al.symbol)].alerted=true;
+			  //BKIA:BME 0.65 1.50  -5 5 0 10 2017-02-04 
+		  }
+		});
+		this.initializeItems();
+		this.usdeur=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).usdeur;
+		this.last_updated=(cognitionis.getStock(this.all_stocks,'GOOG:NASDAQ')).date;
+		this.alertsref = firebase.database().ref('alerts/'+this.encuser);
+		this.alertsref.on('value', snap => {
+		  console.log('data received');
+		  this.alerts={}; // re-init
+		  snap.forEach( alert => {
+			  let al=alert.val();
+			  if(al.hasOwnProperty('symbol')){
+				  //console.log('key '+al.symbol);
+				  this.alerts[al.symbol]=al;
+				  this.check_alert(al);
+				  //if(this.alerts[al.symbol].active==true) this.all_stocks[cognitionis.getStockIndex(this.all_stocks,al.symbol)].alerted=true;
+				  //BKIA:BME 0.65 1.50  -5 5 0 10 2017-02-04 
+			  }
+			});
+		  console.log('data received2'+cognitionis.get_timestamp_str());
+		  console.log('active page:'+this.navCtrl.getActive().name); // only log, .name does not work in prod
+		  let activeView = this.navCtrl.getActive();
+		  if (activeView.component == StocksPage) {   //if(this.navCtrl.getActive().name === 'StocksPage')
+			console.log('detecting changes');
+			this.cd.detectChanges(); // this fixes the issue, triggers change detection
+			// seems to not work in Android??? perhaps add some badge... to see
+		  }
+		});
     });
   }
+
+  initializeItems(){
+    //console.log('initializeItems() start');
+    this.stocks=this.all_stocks;
+    //console.log('initializeItems() end');
+  }
+
   
   public first_char(value) {
     return value[0];
@@ -162,11 +188,6 @@ export class StocksPage {
     });
   }
   
-  initializeItems(){
-    //console.log('initializeItems() start');
-    this.stocks=this.all_stocks;
-    //console.log('initializeItems() end');
-  }
   
 
   public usd2eur(value){
