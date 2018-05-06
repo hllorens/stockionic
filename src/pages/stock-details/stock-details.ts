@@ -78,8 +78,12 @@ export class StockDetailsPage {
     
     this.stock.calc_rev_growth=0;
     if(parseFloat(this.stock.revenue_growth)>0){
-        this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.revenue_growth)*100,34)*2/100; // *3 to make it reach max 1
-		
+        this.stock.calc_rev_growth=parseFloat(this.stock.revenue_growth)*2; // *3 to make it reach max 1
+		if(parseFloat(this.stock.revenue_growth)>0.01) this.stock.calc_rev_growth+=0.1;
+		if(parseFloat(this.stock.revenue_growth)>0.04) this.stock.calc_rev_growth+=0.1;
+		if(parseFloat(this.stock.revenue_growth)>0.05) this.stock.calc_rev_growth+=0.1;
+		if(parseFloat(this.stock.revenue_growth)>0.06) this.stock.calc_rev_growth+=0.1;
+		if(parseFloat(this.stock.revenue_growth)>0.10) this.stock.calc_rev_growth+=0.1;
     }
     //this.stock.calc_rev_growth+=this.stock.calc_om_ps*0.3; // max around 0.3 (can be penalizing -0.1)
     // good quarter only +0.1 (cannot penalize), and only if om/ps>0.2
@@ -170,7 +174,9 @@ export class StockDetailsPage {
 
     this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
     this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min((parseFloat(this.stock.operating_margin)*100)/33,1)).toFixed(1);
-    this.stock.calc_value_asset_share=(parseFloat(this.stock.value)/Math.max(0.0001,parseFloat(this.stock.price_to_book))).toFixed(1);
+    // max 0.5 of the value... rest must be operating income and revG
+    this.stock.calc_value_asset_share=Math.min(parseFloat(this.stock.value)/Math.max(0.0001,parseFloat(this.stock.price_to_book)),
+                                               parseFloat(this.stock.value)*0.5).toFixed(1);
     this.stock.calc_value_mult_factor=                          ((
                             Math.max(Math.min(
                             Math.min(parseFloat(this.stock.avg_revenue_growth_5y),40)   // max 40
@@ -188,32 +194,107 @@ export class StockDetailsPage {
     
     this.tsv_arr={};
     
+	this.stock.om_max=parseFloat(this.stock.operating_margin);
+	this.stock.om_avg=0;
     if(this.stock.name.substr(0,5)!='INDEX'){
         this.tsv_arr=cognitionis.get_anualized_data('value',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('revenue',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('operating_income',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('net_income',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('equity',this.stock,this.tsv_arr);
-    }
-	this.stock.om_max=parseFloat(this.stock.operating_margin);
-    for (var key in this.tsv_arr) {
-       if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
-          console.log(key);
-          this.tsv_arr[key].om=parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue);
-          if(this.tsv_arr[key].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[key].om;
-       }
-    }
-
-    
-    //console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
-    this.tsv_arr_keys=[];
-    for (var key in this.tsv_arr) {
-        if (this.tsv_arr.hasOwnProperty(key) && key[0]=='2') {
-            //console.log(key);
-            this.tsv_arr_keys.push(key);
+        var num_elems=0;
+        for (var key in this.tsv_arr) {
+           if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
+              //console.log(key);
+              num_elems++;
+              this.tsv_arr[key].om=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue)));
+              this.stock.om_avg+=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue)));
+              if(this.tsv_arr[key].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[key].om;
+           }
         }
+        this.stock.om_avg=parseFloat(cognitionis.toFixed2(this.stock.om_avg/num_elems));
+        this.stock.om_pot=Math.max((this.stock.om_avg+this.stock.om_max)/2,this.stock.operating_margin);
+        
+        for (var key in this.tsv_arr) {
+           if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
+              // get the last stuff
+              this.stock.operating_income_ps=Math.max(parseFloat(this.tsv_arr[key].operating_income_ps),
+                                                      parseFloat(this.tsv_arr[key].net_income_ps)*1.1,
+                                                      parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
+                                                      );
+              this.tsv_arr[key].prod_ps=Math.max(     parseFloat(this.tsv_arr[key].operating_income_ps),
+                                                      parseFloat(this.tsv_arr[key].net_income_ps)*1.1,
+                                                      parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
+                                                      );
+
+              this.stock.revenue_ps=parseFloat(this.tsv_arr[key].revenue_ps);
+              this.stock.equity_ps=parseFloat(this.tsv_arr[key].equity_ps);
+              this.stock.last_value=parseFloat(this.tsv_arr[key].value);
+              // guess value for every year
+              this.tsv_arr[key].guess1=  ( Math.min(this.tsv_arr[key].equity_ps,this.tsv_arr[key].value/2) +
+                                            (
+                                                (3*this.tsv_arr[key].operating_income_ps) *
+                                                ((
+                                                    Math.max(Math.min(
+                                                    Math.min(parseFloat(this.tsv_arr[key].revenue_g)*100,50)   // max 40
+                                                    +(Math.min(parseFloat(this.tsv_arr[key].net_income_psp),0.06)*400)           // max 24
+                                                    /*+(Math.min(Math.max(parseFloat(this.tsv_arr[key].net_income_psp)*1.1,
+                                                                        parseFloat(this.tsv_arr[key].operating_income_psp),
+                                                                        parseFloat(this.tsv_arr[key].revenue_psp)*this.stock.om_pot
+                                                                        
+                                                                        ),0.10)*400)*/           // max 24
+                                                    ,60),1)   // max 60, min 1                
+                                                )/7)
+                                            )
+                                          ).toFixed(1);
+              this.tsv_arr[key].guess5=  (  Math.min(this.tsv_arr[key].equity_ps,this.tsv_arr[key].value/2) + 
+                                             //this.tsv_arr[key].operating_income_ps + // this is to count something the current year
+                                            (
+                                               5*cognitionis.compound_interest_4(
+                                                                                    this.tsv_arr[key].prod_ps
+                                                                                    ,
+                                                                                  Math.min(parseFloat(this.tsv_arr[key].revenue_g)+
+                                                                                           Math.max(-0.1,Math.min(0.1,parseFloat(this.tsv_arr[key].revenue_a)/2))
+                                                                                           ,0.50) // %50 sustained growth in 5 years is a reasonable max (more might be impossible)
+                                                                                   ,5) // in 5 y we don't limit the revenue_g
+                                            )
+                                          ).toFixed(1);
+              this.tsv_arr[key].guess10=  ( Math.min(this.tsv_arr[key].equity_ps,this.tsv_arr[key].value/2) +
+                                             //this.tsv_arr[key].operating_income_ps + // this is to count something the current year
+                                            (
+                                               10*cognitionis.compound_interest_4(this.tsv_arr[key].prod_ps,
+                                                                                  Math.min(parseFloat(this.tsv_arr[key].revenue_g)+
+                                                                                           Math.max(-0.1,Math.min(0.1,parseFloat(this.tsv_arr[key].revenue_a)/2))
+                                                                                           ,0.30) // %30 sustained growth in 10 years is a reasonable max (although some might beat it)
+                                                                                           ,10)
+                                            )
+                                          ).toFixed(1);
+           }
+        }
+        //console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
+        this.tsv_arr_keys=[];
+        for (var key in this.tsv_arr) {
+            if (this.tsv_arr.hasOwnProperty(key) && key[0]=='2') {
+                //console.log(key);
+                this.tsv_arr_keys.push(key);
+            }
+        }
+        //console.log(this.tsv_arr_keys);
+        this.stock.guess_5y=Math.min(this.stock.equity_ps,this.stock.value/2) +
+                            5*cognitionis.compound_interest_4(this.stock.operating_income_ps,
+                                                              (parseFloat(this.stock.revenue_growth)+
+                                                               Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2)))
+                                                               ,5);
+        this.stock.guess_10y=Math.min(this.stock.equity_ps,this.stock.value/2) +
+                             10*cognitionis.compound_interest_4(this.stock.operating_income_ps,
+                                                                Math.min(
+                                                               parseFloat(this.stock.revenue_growth)+
+                                                               Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
+                                                               ,0.30)
+                                                               ,10);
+        //this.stock.guess_5_10_avg=cognitionis.toFixed(((this.stock.guess_5y+this.stock.guess_10y)/2),1);
+        //this.stock.guess_5_10_avg_and_eq=cognitionis.toFixed(this.stock.guess_5_10_avg+this.stock.calc_value_asset_share,1);
     }
-    console.log(this.tsv_arr_keys);
     
     
     

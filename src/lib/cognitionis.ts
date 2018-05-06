@@ -54,7 +54,10 @@ export var cognitionis = {
         if (typeof value == 'number')  return true;
         return !isNaN(value - 0);
     },
-    
+    isIndexStock: function(market){
+        if(market.substr(0,5)=="INDEX") return true
+        return false;
+    },
     getStockIndex:function(arr, symbol){
         if(!arr){return -1;} // seems that sometimes it is empty (refresh)
         for(let i=0;i<arr.length;i++){
@@ -157,9 +160,9 @@ export var cognitionis = {
                     seen_years[valdata[0].substr(0, 4)] = true;
                     if(!tsv_arr.hasOwnProperty(valdata[0].substr(0, 4)))
                         tsv_arr[valdata[0].substr(0, 4)]={};
-                    tsv_arr[valdata[0].substr(0, 4)][param] = valdata[1];
+                    tsv_arr[valdata[0].substr(0, 4)][param] = parseFloat(valdata[1]);
                     tsv_arr[valdata[0].substr(0, 4)][param + "_ps"] = parseFloat(this.toFixed(parseFloat(valdata[1]) / parseFloat(stock_data["shares"]), 2));
-                    tsv_arr[valdata[0].substr(0, 4)][param + "_psp"] = this.toFixed(tsv_arr[valdata[0].substr(0, 4)][param + "_ps"] / parseFloat(tsv_arr[valdata[0].substr(0, 4)]["value"]), 2);
+                    tsv_arr[valdata[0].substr(0, 4)][param + "_psp"] = parseFloat(this.toFixed(tsv_arr[valdata[0].substr(0, 4)][param + "_ps"] / parseFloat(tsv_arr[valdata[0].substr(0, 4)]["value"]), 2));
                     if (tsv_arr.hasOwnProperty(valdata[0].substr(0, 4))) {
                         if (i == 0) {
                             tsv_arr[valdata[0].substr(0, 4)][param + "_g"] = 0;
@@ -173,12 +176,12 @@ export var cognitionis = {
                                 tsv_arr[valdata[0].substr(0, 4)][param + "_a"] = val_a[i - 2];
                             }
                         }
+                        i++;
                     } else {
                         console.log("ERROR: in " + param + ", year "
                             +valdata[0].substr(0, 4) + " is not in tsv_arr<br />");
                         return tsv_arr;
                     }
-                    i++;
                 }
             }
         } else {
@@ -187,7 +190,7 @@ export var cognitionis = {
         return tsv_arr;
     },
     compound_interest_4:function (principal, interest, years) {
-        return parseFloat(this.toFixed(principal * Math.pow(1 + parseFloat(interest) / 4, years * 4), 2));
+        return parseFloat(this.toFixed(parseFloat(principal) * Math.pow(1 + parseFloat(interest) / 4, years * 4), 2));
     },
     compound_average_growth:function (fromval, to, periods) {
         if (typeof periods == 'undefined') periods = 1.0;

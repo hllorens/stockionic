@@ -19,99 +19,310 @@
     <ion-col>
      <span style="font-size:0.8em;">Updated: {{stock.date}}</span><br />
       MktCap: <b>{{stock.mktcap}}B</b> <span [hidden]="stock.mktcap<10" style="font-size:0.8em;color:red;">big</span><span [hidden]="stock.mktcap>2" style="font-size:0.8em;color:purple;">small</span> Shares: {{stock.shares}} Employees: {{stock.employees}}k Inst: {{stock.inst_own}}<br />
-    <ion-grid>
-    <ion-row class="border">
-        <ion-col>
-        </ion-col>
-        <ion-col>
-        Exam: <b>{{stock.calc_type.name}}</b> 
-        </ion-col>
-        <ion-col>
-         <span *ngIf="stock.h_souce>=5" style="font-weight:bold;color:purple">{{stock.h_souce}} ({{stock.calc_h_souce}})</span><span *ngIf="stock.h_souce<5" style="font-weight:bold;color:red">{{stock.h_souce}}</span> / {{10}}
-        </ion-col>
-    </ion-row>
-    <!--<ion-row class="border">
-      <ion-col>Yield</ion-col>
-      <ion-col>
-      y:<span style="color:green">{{mult100_fix2(stock.calc_computable_yield)}}%</span> &nbsp; epsp: <span *ngIf="stock.epsp>0" style="color:orange">{{mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{mult100_fix2(stock.epsp)}}%</span><br /><br />
-      {{cognitionis.toFixed2(stock.calc_yield)}} * w({{stock.calc_type.weight_yield}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_yield_w)}} / {{stock.calc_type.weight_yield}}</ion-col>
-    </ion-row>-->
-    <ion-row class="border">
-      <ion-col>Value G</ion-col>
-      <ion-col>
-      avg+y: <span *ngIf="stock.calc_computable_val_growth_y>0" style="color:green">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth_y))}}%</span><span *ngIf="stock.calc_computable_val_growth_y<=0" style="color:red">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth_y))}}%</span>(max 20*5, 1p)<br />
-      {{cognitionis.toFixed2(stock.calc_val_growth)}} * w({{stock.calc_type.weight_val_growth}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_val_growth_w)}} / {{stock.calc_type.weight_val_growth}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Revenue G</ion-col>
-      <ion-col>
-      g=<span *ngIf="stock.revenue_growth>0" style="color:green">{{stock.revenue_growth}}</span><span *ngIf="stock.revenue_growth<=0" style="color:red">{{stock.revenue_growth}}</span>%<br />
-      qq={{stock.revenue_growth_qq_last_year}} (10%)<br />
-      <!--om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />-->
-      {{cognitionis.toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Prod</ion-col>
-      <ion-col>
-      prod=<span *ngIf="stock.prod>0" style="color:orange">{{cognitionis.mult100_fix2(stock.prod)}}%</span><span *ngIf="stock.prod<=0" style="color:red">{{cognitionis.mult100_fix2(stock.prod)}}%</span><br />
-      trend=<span style="color:red;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
-      {{cognitionis.toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Leverage</ion-col>
-      <ion-col>
-      lev:{{stock.leverage}} ind:{{stock.leverage_industry}}(min 2.5) <br />
-      ratio:<span *ngIf="stock.leverage_industry_ratio<=1.9" style="color:green">{{stock.leverage_industry_ratio}}</span><span *ngIf="stock.leverage_industry_ratio>1.9" style="color:red">{{stock.leverage_industry_ratio}}</span><br />
-      {{cognitionis.toFixed2(stock.calc_leverage)}} * w({{stock.calc_type.weight_leverage}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_leverage_w)}} / {{stock.calc_type.weight_leverage}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Negative val growth</ion-col>
-      <ion-col>
-      yy_drops:{{stock.val_yy_drops}}%<br />
-      {{cognitionis.toFixed2(stock.calc_val_growth_penalty)}} * w({{stock.calc_type.weight_val_growth_penalty}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_val_growth_penalty_w)}} / -{{stock.calc_type.weight_val_growth_penalty}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Negative rev growth</ion-col>
-      <ion-col>
-      {{cognitionis.toFixed2(stock.calc_rev_growth_penalty)}} * w({{stock.calc_type.weight_rev_growth_penalty}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_rev_growth_penalty_w)}} / -{{stock.calc_type.weight_rev_growth_penalty}}</ion-col>
-    </ion-row>
-    <ion-row class="border">
-      <ion-col>Negative eps growth</ion-col>
-      <ion-col>
-      {{cognitionis.toFixed2(stock.calc_eps_growth_penalty)}} * w({{stock.calc_type.weight_eps_growth_penalty}})</ion-col>
-      <ion-col>{{cognitionis.toFixed2(stock.calc_eps_growth_penalty_w)}} / -{{stock.calc_type.weight_eps_growth_penalty}}</ion-col>
-    </ion-row>
-    </ion-grid>
-      
-    <b>Share Price VALUATION</b>:<br /> 
-    <ion-grid>
-        <ion-row>
-            <ion-col>Market: <b>{{ stock.value }}</b></ion-col>
-            <ion-col>Guess: <b>{{stock.calc_value}}</b></ion-col>
+        <ion-grid>
+        <ion-row class="border">
+            <ion-col>
+            </ion-col>
+            <ion-col>
+            (c{{cognitionis.toFixed(stock.calc_h_souce,1)}}) <!-- Exam <b>{{stock.calc_type.name}}</b> -->
+            </ion-col>
+            <ion-col>
+             <span *ngIf="stock.h_souce>=5" style="font-weight:bold;color:purple">{{stock.h_souce}}</span><span *ngIf="stock.h_souce<5" style="font-weight:bold;color:red">{{stock.h_souce}}</span> /{{10}}
+            </ion-col>
         </ion-row>
-        <ion-row>
-            <ion-col>Sales times operating*3: {{stock.calc_value_sell_share}} (raw:{{stock.calc_value_sell_share_raw}})</ion-col>
-            <ion-col>(Growth+(Earnings*4))/7: {{stock.calc_value_mult_factor}}</ion-col>
+        <!--<ion-row class="border">
+          <ion-col>Yield</ion-col>
+          <ion-col>
+          y:<span style="color:green">{{mult100_fix2(stock.calc_computable_yield)}}%</span> &nbsp; epsp: <span *ngIf="stock.epsp>0" style="color:orange">{{mult100_fix2(stock.epsp)}}%</span><span *ngIf="stock.epsp<=0" style="color:red">{{mult100_fix2(stock.epsp)}}%</span><br /><br />
+          {{cognitionis.toFixed2(stock.calc_yield)}} * w({{stock.calc_type.weight_yield}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_yield_w)}} / {{stock.calc_type.weight_yield}}</ion-col>
+        </ion-row>-->
+        <ion-row class="border">
+          <ion-col>ValG</ion-col>
+          <ion-col>
+          avg+y: <span class="{{ stock.calc_computable_val_growth_y > 0 ? 'green' : 'red'}}">{{cognitionis.mult100_fix2(cognitionis.toFixed2(stock.calc_computable_val_growth_y))}}</span><br />
+          {{cognitionis.toFixed2(stock.calc_val_growth)}} * w({{stock.calc_type.weight_val_growth}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_val_growth_w)}} / {{stock.calc_type.weight_val_growth}}</ion-col>
         </ion-row>
-        <ion-row>
-            <ion-col>Assets-Liabilities (Equity):    {{stock.calc_value_asset_share}}</ion-col>
-            <ion-col>~ PB: {{stock.price_to_book}}</ion-col>
+        <ion-row class="border">
+          <ion-col>RevG</ion-col>
+          <ion-col>
+          <span class="{{stock.revenue_growth >0 ? 'green': 'red'}}">{{cognitionis.mult100(stock.revenue_growth)}}</span>
+          <span style="font-size:0.7em;">q{{cognitionis.toFixed(stock.revenue_growth_qq_last_year)}}(10%)</span><br />
+          <!--om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />-->
+          {{cognitionis.toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_rev_growth_w)}} / {{stock.calc_type.weight_rev_growth}}</ion-col>
         </ion-row>
-        <ion-row>
-            <ion-col>Guess=({{stock.calc_value_sell_share}}*{{stock.calc_value_mult_factor}})+{{stock.calc_value_asset_share}}={{stock.calc_value}}</ion-col>
+        <ion-row class="border">
+          <ion-col>Prod</ion-col>
+          <ion-col>
+          <span *ngIf="stock.prod>0" style="color:orange">{{cognitionis.mult100_fix2(stock.prod)}}</span><span *ngIf="stock.prod<=0" style="color:red">{{cognitionis.mult100_fix2(stock.prod)}}</span>
+          <span style="color:red;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span><span style="color:green;" *ngIf="stock.eps_hist_trend && (stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span><br />
+          {{cognitionis.toFixed2(stock.calc_epsp)}} * w({{stock.calc_type.weight_epsp}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_epsp_w)}} / {{stock.calc_type.weight_epsp}}</ion-col>
         </ion-row>
-    </ion-grid>
-      
+        <ion-row class="border">
+          <ion-col>LevR</ion-col>
+          <ion-col>
+          <span class="{{stock.leverage_industry_ratio<=1.8 ? 'green' : 'red' ">{{stock.leverage_industry_ratio}}</span>
+          <span style="font-size:0.7em;">{{stock.leverage}}/{{cognitionis.min(stock.leverage_industry,2.5)}}</span><br />
+          {{cognitionis.toFixed2(stock.calc_leverage)}} * w({{stock.calc_type.weight_leverage}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_leverage_w)}} / {{stock.calc_type.weight_leverage}}</ion-col>
+        </ion-row>
+        <ion-row class="border">
+          <ion-col>Neg valG</ion-col>
+          <ion-col>
+          yy_drops:{{stock.val_yy_drops}}%<br />
+          {{cognitionis.toFixed2(stock.calc_val_growth_penalty)}} * w({{stock.calc_type.weight_val_growth_penalty}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_val_growth_penalty_w)}} / -{{stock.calc_type.weight_val_growth_penalty}}</ion-col>
+        </ion-row>
+        <ion-row class="border">
+          <ion-col>Neg revG</ion-col>
+          <ion-col>
+          {{cognitionis.toFixed2(stock.calc_rev_growth_penalty)}} * w({{stock.calc_type.weight_rev_growth_penalty}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_rev_growth_penalty_w)}} / -{{stock.calc_type.weight_rev_growth_penalty}}</ion-col>
+        </ion-row>
+        <ion-row class="border">
+          <ion-col>Negative epsG</ion-col>
+          <ion-col>
+          {{cognitionis.toFixed2(stock.calc_eps_growth_penalty)}} * w({{stock.calc_type.weight_eps_growth_penalty}})</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.calc_eps_growth_penalty_w)}} / -{{stock.calc_type.weight_eps_growth_penalty}}</ion-col>
+        </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
 
+    <ion-row>
+    <ion-col>
+        <ion-grid>
+            <ion-row class="border">
+                <ion-col>y</ion-col>
+                <ion-col>val</ion-col>
+                <ion-col>rev</ion-col>
+                <!--<ion-col>oi</ion-col>-->
+                <ion-col>om</ion-col>
+                <ion-col>oip</ion-col>
+                <!--<ion-col>ni</ion-col>-->
+                <ion-col>eq</ion-col>
+           </ion-row>
+            <ion-row class="border">
+                <ion-col>s</ion-col>
+                <ion-col>{{cognitionis.toFixed(this.stock.value,1)}}<span style="font-size:0.7em;" class="{{this.stock.calc_computable_val_growth_y>0.10 ? 'green' : ''}} {{this.stock.calc_computable_val_growth_y<0 ? 'red' : ''}}">{{cognitionis.mult100(this.stock.calc_computable_val_growth_y)}}</span></ion-col>
+                <ion-col>X<span style="font-size:0.7em;" class="{{this.stock.revenue_growth>0.10 ? 'green' : ''}} {{this.stock.revenue_growth<0 ? 'red' : ''}}">{{cognitionis.mult100(this.stock.revenue_growth)}}</span></ion-col>
+                <!--<ion-col>oi</ion-col>-->
+                <ion-col>{{cognitionis.mult100(this.stock.om_pot)}}</ion-col>
+                <ion-col><span style="color:orange;">{{cognitionis.mult100(this.stock.prod)}}</span></ion-col>
+                <!--<ion-col>{{cognitionis.toFixed2(this.stock.epsp)}}</ion-col>-->
+                <ion-col></ion-col>
+           </ion-row>
+            <ion-row *ngFor="let year of tsv_arr_keys">
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.get_year_2(year)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].value,1)}}
+                <span style="font-size:0.7em;" class="{{tsv_arr[year].value_g>0.10 ? 'green' : ''}} {{tsv_arr[year].value_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].value_g)}}</span>
+                </ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].revenue,1)}}
+                <span style="font-size:0.7em;" class="{{tsv_arr[year].revenue_g>0.10 ? 'green' : ''}} {{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}</span>
+                </ion-col>
+                <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].operating_income}}</ion-col>-->
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.mult100(tsv_arr[year].om)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.mult100(tsv_arr[year].operating_income_psp)}}</ion-col>
+                <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].net_income}}</ion-col>-->
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].equity,1)}}
+                <!--<span style="font-size:0.7em;" class="{{tsv_arr[year].equity_g>0.10 ? 'green' : ''}} {{tsv_arr[year].equity_g<0 ? 'red' : ''}}">{{tsv_arr[year].equity_g}}</span>-->
+                </ion-col>
+           </ion-row>
+        </ion-grid>
+        
+    </ion-col>
+    </ion-row>
+    
+    <ion-row>
+    <ion-col>
+        <ion-grid>
+            <ion-row class="border">
+                <ion-col>eqps</ion-col>
+                <ion-col>prps</ion-col>
+                <ion-col>revg</ion-col>
+                <ion-col>val</ion-col>
+                <ion-col>gx</ion-col>
+                <ion-col>gs5</ion-col>
+                <ion-col>gs10</ion-col>
+           </ion-row>
+            <ion-row>
+                <ion-col>{{cognitionis.toFixed(stock.equity_ps,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.operating_income_ps,1)}}</ion-col>
+                <ion-col>
+                    <span class="{{stock.revenue_growth<0 ? 'red' : ''}}">{{cognitionis.mult100(stock.revenue_growth)}}[{{cognitionis.mult100(stock.revenue_acceleration)}}]</span>
+                </ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.value,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.calc_value,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.guess_5y,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.guess_10y,1)}}</ion-col>
+           </ion-row>
+        </ion-grid>
+        
+    </ion-col>
+    </ion-row>
+
+  <ion-row>
+    <ion-col>
+       <b>Yield avg: <span style="color:green;">{{stock.avgyield}}</span></b>
+       <b>Yield last diff:       
+       <span style="color:green;" *ngIf="(stock.yield_hist_last_diff>=0)">{{stock.yield_hist_last_diff}}%</span>
+       <span style="color:red;"   *ngIf="(stock.yield_hist_last_diff<0)">{{stock.yield_hist_last_diff}}%</span>
+        </b>. 
+       <b>Yield hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let yield_item of stock.yield_hist" >
+             {{yield_item[0]}}: <b>{{yield_item[1]}}</b>
+            </li>
+        </ul>
+       <br /> alternative: dividend.com, DivY/Price History graph, disable Price in legend
     </ion-col>
   </ion-row>
+  <!--<ion-row>
+    <ion-col>
+       <b>EPSP last diff: 
+      <span style="color:red;" *ngIf="(stock.epsp_hist_last_diff>=0)">{{stock.epsp_hist_last_diff}}%</span>
+      <span style="color:green;"   *ngIf="(stock.epsp_hist_last_diff<0)">{{stock.epsp_hist_last_diff}}%</span>
+        </b>. 
+       <b>EPSP hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.epsp_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>-->
+
+<!--  <ion-row>
+    <ion-col>
+       <b>val diff 54w: 
+      <span class="{{stock.value_hist_last_diff > 10 ? 'green': ''}} {{stock.value_hist_last_diff < -10 ? 'red': '' }}">{{stock.value_hist_last_diff}}%</span>
+        </b>. 
+       <b>value hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let valhist of stock.value_hist; let i=index;" >
+             {{cognitionis.get_year_2(valhist[0])}}: {{valhist[1]}} &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.value_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.value_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.value_hist,i)}}%</span>
+            </li>
+        </ul>
+    </ion-col>
+    <ion-col>
+       <b>revenue hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_hist; let i=index;" >
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>  &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.revenue_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.revenue_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.revenue_hist,i)}}%</span>
+
+            </li>
+        </ul>-->
+       <!--<b>revenue growth hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_arr" >
+                <b>{{mult100(revenue_item,0)}}</b>
+            </li>
+        </ul>-->
+<!--       <b>revenue acc avg: <span style="color:orange;">{{stock.revenue_acceleration}}</span></b><br />
+       <b>revenue 5y: <span style="color:orange;">{{stock.avg_revenue_growth_5y}}</span></b><br />
+       <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b><br />
+       <b>revenue qq hist</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
+             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
+
+       <b>op inc hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.operating_income_hist" >
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
+
+
+       <b>net inc hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let revenue_item of stock.net_income_hist" >
+             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
+            </li>
+        </ul>
+       <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
+       <b>OP last diff:       
+       <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
+       <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
+        </b>. 
+       <b>OP hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.operating_margin_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+    <ion-col>
+       <b>EQ hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.equity_hist" >
+             {{cognitionis.get_year_2(item[0])}}: <b>{{item[1]}}</b> 
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+        <b>PS: <span style="color:orange;">{{stock.price_to_sales}}</span></b>
+       <b>PS last diff: 
+      <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
+      <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
+        </b>. 
+       <b>PS hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let item of stock.price_to_sales_hist" >
+             {{item[0]}}: <b>{{item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+
+
+  <ion-row>
+  </ion-row>  -->
+  <ion-row>
+    <ion-col>
+        <!--eq: {{stock.eq}} ass: {{stock.assets}}--> 
+       ap:{{cognitionis.toFixed2(stock.calc_ap)}} - lp:{{cognitionis.toFixed2(stock.calc_lp)}} = eqp:{{cognitionis.toFixed2(stock.calc_eqp)}}<br />
+       <b>leverage  <span style="color:brown;">{{stock.leverage}}</span> industry: {{stock.leverage_industry}} lev-inds-ratio: {{leverage_industry_ratio}} <!--avg: <span style="color:pink;">{{stock.avgleverage}}</span>--></b>
+       <b>leverage hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let lev_item of stock.leverage_hist" >
+             {{lev_item[0]}}: <b>{{lev_item[1]}}</b>
+            </li>
+        </ul>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+        pb: {{stock.price_to_book}} pb_calc: {{cognitionis.toFixed2(stock.calc_pb)}} <br />
+       <b>price to book <span style="color:brown;">{{stock.price_to_book}}</span></b>
+       <b>price_to_book hist:</b>
+       <ul class="list">
+            <li class="item" *ngFor="let price_to_book_item of stock.price_to_book_hist" >
+             {{price_to_book_item[0]}}: <b>{{price_to_book_item[1]}}</b> <span style="color:red" *ngIf="price_to_book_item[1]>10">(!!! it is >10)</span>
+            </li>
+        </ul>
+    <br /> - Volat: {{ cognitionis.addx(stock.range_52week_volatility,1,1) }}x 
+    <br /><br />
+   <b>h_souce hist:</b>
+   <ul class="list">
+        <li class="item" *ngFor="let h_item of stock.h_souce_hist" >
+         {{h_item[0]}}: <b>{{h_item[1]}}</b>
+        </li>
+    </ul>
+
+    <br />
+    </ion-col>
+  </ion-row>
+  
   <ion-row>
       <ion-col width-50><h5>FACTS</h5></ion-col>
       <ion-col width-50><h5><ion-icon name="notifications"></ion-icon> ALERT  </h5></ion-col>
@@ -245,178 +456,38 @@
             </ion-item>
     </ion-col>
   </ion-row>
-  <ion-row>
-    <ion-col>
-       <b>Yield avg: <span style="color:green;">{{stock.avgyield}}</span></b>
-       <b>Yield last diff:       
-       <span style="color:green;" *ngIf="(stock.yield_hist_last_diff>=0)">{{stock.yield_hist_last_diff}}%</span>
-       <span style="color:red;"   *ngIf="(stock.yield_hist_last_diff<0)">{{stock.yield_hist_last_diff}}%</span>
-        </b>. 
-       <b>Yield hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let yield_item of stock.yield_hist" >
-             {{yield_item[0]}}: <b>{{yield_item[1]}}</b>
-            </li>
-        </ul>
-       <br /> alternative: dividend.com, DivY/Price History graph, disable Price in legend
-    </ion-col>
-  </ion-row>
-  <!--<ion-row>
-    <ion-col>
-       <b>EPSP last diff: 
-      <span style="color:red;" *ngIf="(stock.epsp_hist_last_diff>=0)">{{stock.epsp_hist_last_diff}}%</span>
-      <span style="color:green;"   *ngIf="(stock.epsp_hist_last_diff<0)">{{stock.epsp_hist_last_diff}}%</span>
-        </b>. 
-       <b>EPSP hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let item of stock.epsp_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
-  </ion-row>-->
-  <ion-row>
-    <ion-col>
-        hola om_max={{this.stock.om_max}}
-       <ul class="list">
-            <li class="item" *ngFor="let year of tsv_arr_keys" >
-              <span *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">
-             {{year}}: {{tsv_arr[year].value}} {{tsv_arr[year].revenue}} {{tsv_arr[year].operating_income}} om:{{tsv_arr[year].om}} {{tsv_arr[year].net_income}} {{tsv_arr[year].equity}} 
-              </span>
-           </li>
-        </ul>
-        adios
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-       <b>val diff 54w: 
-      <span class="{{stock.value_hist_last_diff > 10 ? 'green': ''}} {{stock.value_hist_last_diff < -10 ? 'red': '' }}">{{stock.value_hist_last_diff}}%</span>
-        </b>. 
-       <b>value hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let valhist of stock.value_hist; let i=index;" >
-             {{cognitionis.get_year_2(valhist[0])}}: {{valhist[1]}} &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.value_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.value_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.value_hist,i)}}%</span>
-            </li>
-        </ul>
-    </ion-col>
-    <ion-col>
-       <b>revenue hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.revenue_hist; let i=index;" >
-             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>  &nbsp; <span *ngIf="i>0" class="{{diff_percentage(stock.revenue_hist,i) > 10 ? 'green': ''}} {{diff_percentage(stock.revenue_hist,i) < -10 ? 'red': '' }}">{{diff_percentage(stock.revenue_hist,i)}}%</span>
-
-            </li>
-        </ul>
-       <!--<b>revenue growth hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_arr" >
-                <b>{{mult100(revenue_item,0)}}</b>
-            </li>
-        </ul>-->
-       <b>revenue acc avg: <span style="color:orange;">{{stock.revenue_acceleration}}</span></b><br />
-       <b>revenue 5y: <span style="color:orange;">{{stock.avg_revenue_growth_5y}}</span></b><br />
-       <b>revenue qq: <span style="color:orange;">{{stock.revenue_growth_qq_last_year}}</span></b><br />
-       <b>revenue qq hist</b>
-       <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.revenue_growth_qq_last_year_hist" >
-             {{revenue_item[0]}}: <b>{{revenue_item[1]}}</b>
-            </li>
-        </ul>
-
-       <b>op inc hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.operating_income_hist" >
-             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
-            </li>
-        </ul>
-
-
-       <b>net inc hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let revenue_item of stock.net_income_hist" >
-             {{cognitionis.get_year_2(revenue_item[0])}}: <b>{{revenue_item[1]}}</b>
-            </li>
-        </ul>
-       <b>OP: <span style="color:orange;">{{stock.operating_margin}}</span></b>
-       <b>OP last diff:       
-       <span style="color:green;" *ngIf="(stock.operating_margin_hist_last_diff>=0)">{{stock.operating_margin_hist_last_diff}}%</span>
-       <span style="color:red;"   *ngIf="(stock.operating_margin_hist_last_diff<0)">{{stock.operating_margin_hist_last_diff}}%</span>
-        </b>. 
-       <b>OP hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let item of stock.operating_margin_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
-    <ion-col>
-       <b>EQ hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let item of stock.equity_hist" >
-             {{cognitionis.get_year_2(item[0])}}: <b>{{item[1]}}</b> 
-            </li>
-        </ul>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-        <b>PS: <span style="color:orange;">{{stock.price_to_sales}}</span></b>
-       <b>PS last diff: 
-      <span style="color:red;" *ngIf="(stock.price_to_sales_hist_last_diff>=0)">{{stock.price_to_sales_hist_last_diff}}%</span>
-      <span style="color:green;"   *ngIf="(stock.price_to_sales_hist_last_diff<0)">{{stock.price_to_sales_hist_last_diff}}%</span>
-        </b>. 
-       <b>PS hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let item of stock.price_to_sales_hist" >
-             {{item[0]}}: <b>{{item[1]}}</b>
-            </li>
-        </ul>
-    </ion-col>
-  </ion-row>
-
-
-  <ion-row>
-  </ion-row>  
-  <ion-row>
-    <ion-col>
-       <b>leverage  <span style="color:brown;">{{stock.leverage}}</span> industry: {{stock.leverage_industry}} lev-inds-ratio: {{leverage_industry_ratio}} <!--avg: <span style="color:pink;">{{stock.avgleverage}}</span>--></b>
-       <b>leverage hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let lev_item of stock.leverage_hist" >
-             {{lev_item[0]}}: <b>{{lev_item[1]}}</b>
-            </li>
-        </ul>
-        eq: {{stock.eq}} ass: {{stock.assets}} eqps: {{stock.calc_eqps}} pb: {{stock.calc_pb}}  eqp: {{stock.calc_eqp}} ap: {{stock.calc_ap}} lp: {{stock.calc_lp}}
-    </ion-col>
-  </ion-row>
-  <ion-row>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-       <b>price to book <span style="color:brown;">{{stock.price_to_book}}</span></b>
-       <b>price_to_book hist:</b>
-       <ul class="list">
-            <li class="item" *ngFor="let price_to_book_item of stock.price_to_book_hist" >
-             {{price_to_book_item[0]}}: <b>{{price_to_book_item[1]}}</b> <span style="color:red" *ngIf="price_to_book_item[1]>10">(!!! it is >10)</span>
-            </li>
-        </ul>
-    <br /> - Volat: {{ cognitionis.addx(stock.range_52week_volatility,1,1) }}x 
-    <br /><br />
-   <b>h_souce hist:</b>
-   <ul class="list">
-        <li class="item" *ngFor="let h_item of stock.h_souce_hist" >
-         {{h_item[0]}}: <b>{{h_item[1]}}</b>
-        </li>
-    </ul>
-
-    <br />
-    </ion-col>
-  </ion-row>
   
-  
-  
-  
+    <ion-row>
+    <ion-col>
+        <ion-grid>
+            <ion-row class="border">
+                <ion-col>y</ion-col>
+                <ion-col>val</ion-col>
+                <ion-col>eqps</ion-col>
+                <ion-col>oips</ion-col>
+                <ion-col>prps</ion-col>
+                <ion-col>revg</ion-col>
+                <ion-col>gx</ion-col>
+                <ion-col>gs5</ion-col>
+                <ion-col>gs10</ion-col>
+           </ion-row>
+            <ion-row *ngFor="let year of tsv_arr_keys">
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.get_year_2(year)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].value,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].equity_ps,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].operating_income_ps,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].prod_ps,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">
+                    <span class="{{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}[{{cognitionis.mult100(tsv_arr[year].revenue_a)}}]</span>
+                </ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess1,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess5,1)}}</ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess10,1)}}</ion-col>
+           </ion-row>
+        </ion-grid>
+        
+    </ion-col>
+    </ion-row>
 
   </ion-grid>
   

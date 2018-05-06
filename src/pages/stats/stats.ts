@@ -7,7 +7,6 @@ import {cognitionis} from '../../lib/cognitionis.ts';
 import firebase from 'firebase'
 
 import { Stock } from '../../models/stock';
-import { CognitionisStocks } from '../../providers/cognitionis-stocks';
 
 @Component({
   selector: 'page-stats',
@@ -17,24 +16,12 @@ import { CognitionisStocks } from '../../providers/cognitionis-stocks';
 export class StatsPage {
   stocks: Stock[];
   all_stocks: Stock[];
+  firestocksref: any;
   encuser: string = null;
   stats: any= {};
   stats_string: string;
   
-  constructor(public navCtrl: NavController, public navParams: NavParams, private cognitionisStocks: CognitionisStocks,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation
-    cognitionisStocks.load().subscribe(result => {
-      console.log('pulling stocks');
-      this.all_stocks=result;
-      this.initializeItems();
-      this.calculations('prod',-1,0.5);
-      this.calculations('revenue_growth',-1,0.99);
-      this.calculations('epsp',-1,0.5);
-      this.calculations('leverage',1,15);
-      this.calculations('price_to_book',0.01,10);
-      this.calculations('oip',-1,0.5);
-      this.stats_string=JSON.stringify(this.stats, null, 3);
-    });
-    // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
+  constructor(public navCtrl: NavController, public navParams: NavParams,public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) { //,public location: PlatformLocation
   }
 
 
@@ -44,6 +31,26 @@ export class StatsPage {
         this.encuser=cognitionis.encodeAFemail(this.myfireauth.user.email);
         console.log(this.encuser);
     }
+    this.firestocksref = firebase.database().ref('stocks_formatted/');
+    this.firestocksref.on('value', snap => {
+		console.log('stocks received');
+		this.all_stocks=[]; // re-init
+		snap.forEach( stock => {
+		  let al=stock.val();
+		  if(al.hasOwnProperty('name')){
+			  this.all_stocks.push(al);
+		  }
+		});
+		this.initializeItems();
+        this.calculations('prod',-1,0.5);
+        this.calculations('revenue_growth',-1,0.99);
+        this.calculations('epsp',-1,0.5);
+        this.calculations('leverage',1,15);
+        this.calculations('price_to_book',0.01,10);
+        this.calculations('oip',-1,0.5);
+        this.stats_string=JSON.stringify(this.stats, null, 3);
+    });
+
   }
   
 
