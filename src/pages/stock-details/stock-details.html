@@ -160,7 +160,22 @@
                 <ion-col>{{cognitionis.toFixed(stock.guess_10y,1)}}</ion-col>
            </ion-row>
         </ion-grid>
-        
+        <ion-grid>
+            <ion-row class="border">
+                <ion-col>eqps</ion-col>
+                <ion-col>revps</ion-col>
+                <ion-col>oi.01</ion-col>
+                <ion-col>oi.03</ion-col>
+                <ion-col>oi.10</ion-col>
+           </ion-row>
+            <ion-row>
+                <ion-col>{{cognitionis.toFixed(stock.equity_ps,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.revenue_ps,1)}}</ion-col>
+                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.01),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
+                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.03),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
+                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.10),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
+           </ion-row>
+        </ion-grid>
     </ion-col>
     </ion-row>
 

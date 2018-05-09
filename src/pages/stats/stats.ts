@@ -48,6 +48,7 @@ export class StatsPage {
         this.calculations('leverage',1,15);
         this.calculations('price_to_book',0.01,10);
         this.calculations('oip',-1,0.5);
+        this.calculations('guessed_percentage',0,20);
         this.stats_string=JSON.stringify(this.stats, null, 3);
     });
 
@@ -55,19 +56,20 @@ export class StatsPage {
   
 
   calculations(variable,min,max){
+	console.log('calculations '+variable);
     if(!this.all_stocks) return;
     this.stats[variable]={'total':0,'avg':0,'min':0,'max':0,'median':0};
     var values=[];
     var values_names={};
     for(var i=0;i<this.all_stocks.length;i++){
-        console.log('calculations'+i);
+        //console.log('calculations'+i);
         if(this.all_stocks[i].market.substring(0,5)=='INDEX'){
             continue;
         }
-        if(this.all_stocks[i][variable]){
+        if(this.all_stocks[i].hasOwnProperty(variable)){
             values.push(parseFloat(this.all_stocks[i][variable]));
             values_names[this.all_stocks[i].name]=parseFloat(this.all_stocks[i][variable]);
-            console.log(''+this.all_stocks[i].name);
+            //console.log(''+this.all_stocks[i].name);
         }
     }
     if(values.length>2){
@@ -89,7 +91,7 @@ export class StatsPage {
         this.stats[variable].avgl=parseFloat(cognitionis.avg_arr_limit(values,min,max).toFixed(2));
         this.stats[variable].sd=cognitionis.sd_arr_limit(values,min,max,this.stats[variable].avgl).toFixed(2);
     }
-    console.log(JSON.stringify(this.stats, null, 4));
+    //console.log(JSON.stringify(this.stats, null, 4));
   }
   
   initializeItems(){

@@ -270,6 +270,9 @@ export class StocksPage {
         this.reverseSort='-';
         this.orderByField = '-computable_val_growth';
     }else if(this.orderByField.split(' ')[0]=='-computable_val_growth'){
+        this.reverseSort='+';
+        this.orderByField = '+guessed_percentage';
+    }else if(this.orderByField.split(' ')[0]=='+guessed_percentage'){
         this.reverseSort='-';
         this.orderByField = '-om_to_ps';
     }else if(this.orderByField.split(' ')[0]=='-om_to_ps'){

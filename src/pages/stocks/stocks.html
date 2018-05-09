@@ -13,15 +13,16 @@
           </button>-->
           <button ion-button small clear (click)="reorder_ypr_hec($event)"> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]=='h_souce' || orderByField.substring(1).split(' ')[0]=='operating_margin' || orderByField.substring(1).split(' ')[0]=='price_to_sales' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avgyield_per_ratio' ? '': 'ordbsel'}}">ypr</span>--> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'value_hist_last_diff' ? '': 'ordbsel'}}">val</span> 
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='computable_val_growth'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'computable_val_growth' ? '': 'ordbsel'}}">av</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap'  || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y'  || orderByField.substring(1).split(' ')[0]=='guessed_percentage'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'h_souce' ? '': 'ordbsel'}}">hs</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='value_hist_last_diff'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'value_hist_last_diff' ? '': 'ordbsel'}}">vldf</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='computable_val_growth'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'computable_val_growth' ? '': 'ordbsel'}}">vlG</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='guessed_percentage'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'guessed_percentage' ? '': 'ordbsel'}}">gesp</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='om_to_ps'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'om_to_ps' ? '': 'ordbsel'}}">om/ps</span> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='price_to_sales'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'price_to_sales' ? '': 'ordbsel'}}">ps</span> -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='leverage_industry_ratio'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'leverage_industry_ratio' ? '': 'ordbsel'}}">lev</span> 
             <span [hidden]="orderByField.substring(1).split(' ')[0]!='mktcap'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'mktcap' ? '': 'ordbsel'}}">mktc</span> 
             <!--<span [hidden]="orderByField.substring(1).split(' ')[0]!='inst_own'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'inst_own' ? '': 'ordbsel'}}">inst</span> -->
-            <span [hidden]="orderByField.substring(1).split(' ')[0]!='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avg_revenue_growth_5y' ? '': 'ordbsel'}}">grw</span> 
+            <span [hidden]="orderByField.substring(1).split(' ')[0]!='avg_revenue_growth_5y'" style="color:purple;font-size:0.8em;" class="{{orderByField.substring(1) != 'avg_revenue_growth_5y' ? '': 'ordbsel'}}">rG</span> 
           </button>
           <button ion-button small clear (click)="reorder_per_eps($event)"> <!-- reorder_asc($event,'per, now epsp') -->
             <span [hidden]="orderByField.substring(1).split(' ')[0]=='prod'" style="color:orange;font-size:0.8em;" class="{{orderByField.substring(1) != 'epsp' ? '': 'ordbsel'}}">epsp</span> 
@@ -79,9 +80,13 @@
                 </span>
                 <br />
                 <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.09 || stock.revenue_growth<-0.03)" class="{{stock.revenue_growth >0.25 ? 'blue': ''}} {{stock.revenue_growth < 0 ? 'red': '' }}">g{{cognitionis.mult100(cognitionis.min(stock.revenue_growth,1,2))}}</span>
+                <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.09 || stock.revenue_growth<-0.03) && stock.revenue_growth_trend && stock.revenue_growth_trend!='--'">
+                            <span style="color:red;" *ngIf="(stock.revenue_growth_trend!='/' && stock.revenue_growth_trend!='/-' && stock.revenue_growth_trend!='_/' && stock.revenue_growth_trend!='--' && stock.revenue_growth_trend!='v')">{{stock.revenue_growth_trend}}</span>
+                            <span style="color:green;" *ngIf="(stock.revenue_growth_trend=='/' || stock.revenue_growth_trend=='/-' || stock.revenue_growth_trend=='_/' || stock.revenue_growth_trend=='--' || stock.revenue_growth_trend=='v') ">{{stock.revenue_growth_trend}}</span>
+                </span>
                 <span style="font-size:0.8em;color:red;" *ngIf="stock.leverage_industry_ratio>=1.8 && !cognitionis.isIndexStock(stock.market)" >l{{cognitionis.max(stock.leverage_industry_ratio,1,1)}}</span>
             </ion-col>
-            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap' || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y' || orderByField.substring(1).split(' ')[0]=='prod' || orderByField.substring(1).split(' ')[0]=='epsp'">
+            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]=='value_hist_last_diff' || orderByField.substring(1).split(' ')[0]=='computable_val_growth' || orderByField.substring(1).split(' ')[0]=='om_to_ps' || orderByField.substring(1).split(' ')[0]=='leverage_industry_ratio' || orderByField.substring(1).split(' ')[0]=='mktcap' || orderByField.substring(1).split(' ')[0]=='inst_own' || orderByField.substring(1).split(' ')[0]=='avg_revenue_growth_5y' || orderByField.substring(1).split(' ')[0]=='prod' || orderByField.substring(1).split(' ')[0]=='epsp' || orderByField.substring(1).split(' ')[0]=='guessed_percentage'">
                     <span style="font-size:0.7em;"><ion-icon name="notifications" *ngIf="alerts[stock.name+':'+stock.market]"></ion-icon></span>
                     <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)>=0" style="color:green;font-size:0.7em;">{{cognitionis.mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
                     <span *ngIf="alerts[stock.name+':'+stock.market] && alerts[stock.name+':'+stock.market].portf && portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value)<0" style="color:red;font-size:0.7em;">{{cognitionis.mult100(portfdiff(alerts[stock.name+':'+stock.market].portf,stock.market,stock.value))}}%</span>
@@ -100,6 +105,11 @@
                     <p style="color:red;font-size:0.7em;"   *ngIf="(val_change_3y)">3y:{{stock.val_change_3y}}%</p>
                     <p style="color:green;font-size:0.7em;" *ngIf="(stock.val_change_5y>=0)">5y:{{stock.val_change_5y}}%</p>
                     <p style="color:red;font-size:0.7em;"   *ngIf="(stock.val_change_5y<0)">5y:{{stock.val_change_5y}}%</p>
+            </ion-col>
+            <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='guessed_percentage'">
+                    <p style="color:green;font-size:0.7em;">{{cognitionis.mult100(stock.guessed_percentage)}}%<br />
+					                                        5y:{{stock.guessed_value_5y}}<br />
+															X:{{stock.guessed_value}}</p>
             </ion-col>
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='om_to_ps'">
                     <p style="color:green;font-size:0.7em;">{{stock.om_to_ps}}<br />om:{{stock.avgoperating_margin}}({{stock.operating_margin_prev}})<br />ps:{{stock.avgprice_to_sales}}</p>

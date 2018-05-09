@@ -236,7 +236,7 @@ export class StockDetailsPage {
                                                 (3*this.tsv_arr[key].operating_income_ps) *
                                                 ((
                                                     Math.max(Math.min(
-                                                    Math.min(parseFloat(this.tsv_arr[key].revenue_g)*100,50)   // max 40
+                                                    Math.min(parseFloat(this.tsv_arr[key].revenue_g)*100,40)   // max 40
                                                     +(Math.min(parseFloat(this.tsv_arr[key].net_income_psp),0.06)*400)           // max 24
                                                     /*+(Math.min(Math.max(parseFloat(this.tsv_arr[key].net_income_psp)*1.1,
                                                                         parseFloat(this.tsv_arr[key].operating_income_psp),
@@ -282,8 +282,10 @@ export class StockDetailsPage {
         //console.log(this.tsv_arr_keys);
         this.stock.guess_5y=Math.min(this.stock.equity_ps,this.stock.value/2) +
                             5*cognitionis.compound_interest_4(this.stock.operating_income_ps,
-                                                              (parseFloat(this.stock.revenue_growth)+
-                                                               Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2)))
+                                                                Math.min(
+                                                              parseFloat(this.stock.revenue_growth)+
+                                                               Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
+                                                               ,0.60)
                                                                ,5);
         this.stock.guess_10y=Math.min(this.stock.equity_ps,this.stock.value/2) +
                              10*cognitionis.compound_interest_4(this.stock.operating_income_ps,

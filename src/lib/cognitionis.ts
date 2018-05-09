@@ -78,6 +78,9 @@ export var cognitionis = {
     toFixed2:function(value) {
         return parseFloat(value).toFixed(2);
     },
+    mult:function(value,times) {
+        return (parseFloat(value)*parseFloat(times)).toFixed(2);
+    },
     mult100:function(value) {
         return (parseFloat(value)*100).toFixed(0);
     },
@@ -286,7 +289,17 @@ export var cognitionis = {
         }
         avgw = avgw / total_elems_weight;
         return parseFloat(this.toFixed(avgw, 2));
-    }
+    },
+	guess_n:function(value,equity_ps,prod_ps,revenue_growth,revenue_acceleration,years){
+		var max_growth=0.60/(years/5);
+		return Math.min(parseFloat(equity_ps),parseFloat(value)/2) +
+                            years*this.compound_interest_4(parseFloat(prod_ps),
+                                                                Math.min(
+                                                              parseFloat(revenue_growth)+
+                                                               Math.max(-0.1,Math.min(0.1,parseFloat(revenue_acceleration)/2))
+                                                               ,max_growth)
+                                                               ,years);
+	}
 };
 
 //export 
