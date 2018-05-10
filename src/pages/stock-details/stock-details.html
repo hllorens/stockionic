@@ -64,10 +64,20 @@
         <ion-row class="border">
           <ion-col>LevR</ion-col>
           <ion-col>
-          <span class="{{stock.leverage_industry_ratio<=1.8 ? 'green' : 'red' ">{{stock.leverage_industry_ratio}}</span>
-          <span style="font-size:0.7em;">{{stock.leverage}}/{{cognitionis.min(stock.leverage_industry,2.5)}}</span><br />
+          <span class="{{stock.leverage_industry_ratio<=1.8 ? 'green' : 'red' }}">{{stock.leverage_industry_ratio}}</span>
+          <span style="font-size:0.7em;">{{stock.leverage}}/{{cognitionis.max(stock.leverage_industry,2.5)}}</span><br />
           {{cognitionis.toFixed2(stock.calc_leverage)}} * w({{stock.calc_type.weight_leverage}})</ion-col>
           <ion-col>{{cognitionis.toFixed2(stock.calc_leverage_w)}} / {{stock.calc_type.weight_leverage}}</ion-col>
+        </ion-row>
+        <ion-row class="border">
+          <ion-col>guessP</ion-col>
+          <ion-col>
+		  {{stock.guessed_value_5y}}
+          <span style="font-size:0.7em;" class="{{stock.guessed_percentage<0.9 ? 'green' : '' }} {{stock.guessed_percentage>1.7 ? 'red' : '' }}">{{stock.guessed_percentage}}</span><br />
+          &lt;0.9=+0.5; &lt;0.7=+0.5;<br />
+          &gt;1.7=-0.5; &gt;2.7=-0.5;		  
+		  </ion-col>
+          <ion-col>[-1,1]</ion-col>
         </ion-row>
         <ion-row class="border">
           <ion-col>Neg valG</ion-col>
@@ -171,9 +181,9 @@
             <ion-row>
                 <ion-col>{{cognitionis.toFixed(stock.equity_ps,1)}}</ion-col>
                 <ion-col>{{cognitionis.toFixed(stock.revenue_ps,1)}}</ion-col>
-                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.01),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
-                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.03),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
-                <ion-col>{{cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.10),stock.revenue_growth,stock.revenue_acceleration,5)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.01),stock.revenue_growth,stock.revenue_acceleration,5),1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.03),stock.revenue_growth,stock.revenue_acceleration,5),1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(cognitionis.guess_n(stock.value,stock.equity_ps,cognitionis.mult(stock.revenue_ps,0.10),stock.revenue_growth,stock.revenue_acceleration,5),1)}}</ion-col>
            </ion-row>
         </ion-grid>
     </ion-col>
