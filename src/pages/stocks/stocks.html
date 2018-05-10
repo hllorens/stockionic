@@ -107,7 +107,7 @@
                     <p style="color:red;font-size:0.7em;"   *ngIf="(stock.val_change_5y<0)">5y:{{stock.val_change_5y}}%</p>
             </ion-col>
             <ion-col width-25 [hidden]="orderByField.substring(1).split(' ')[0]!='guessed_percentage'">
-                    <p style="color:green;font-size:0.7em;">{{cognitionis.mult100(stock.guessed_percentage)}}%<br />
+                    <p style="font-size:0.7em;"><span class="{{stock.guessed_percentage<0.9 ? 'green' : '' }} {{stock.guessed_percentage>1.7 ? 'red' : '' }}">{{cognitionis.mult100(stock.guessed_percentage)}}%</span><br />
 					                                        5y:{{stock.guessed_value_5y}}<br />
 															X:{{stock.guessed_value}}</p>
             </ion-col>

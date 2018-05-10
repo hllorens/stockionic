@@ -256,7 +256,7 @@ export class StocksPage {
   }
 
   reorder_ypr_hec(ev: any){
-    if(this.orderByField!='-value_hist_last_diff' && this.orderByField!='-computable_val_growth' && this.orderByField!='-h_souce +range_52week_heat' && this.orderByField!='-om_to_ps' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
+    if(this.orderByField!='-value_hist_last_diff' && this.orderByField!='-computable_val_growth' && this.orderByField!='-h_souce +range_52week_heat' && this.orderByField!='-om_to_ps' && this.orderByField!='+guessed_percentage' && this.orderByField!='+leverage_industry_ratio' && this.orderByField!='-mktcap' && this.orderByField!='-inst_own' ){
         this.reverseSort='-';
         this.orderByField = '-h_souce +range_52week_heat';
 //      original -avgyield_per_ratio +range_52week_heat
