@@ -127,7 +127,12 @@ export class StockDetailsPage {
     this.stock.calc_epsp_w=this.stock.calc_epsp*this.stock.calc_type.weight_epsp;
     this.stock.calc_leverage_w=this.stock.calc_leverage*this.stock.calc_type.weight_leverage;
 
-
+	this.stock.calc_guessp=0;
+	if(this.stock.guessed_percentage<0.7) this.stock.calc_guessp+=0.5;
+	if(this.stock.guessed_percentage<0.9) this.stock.calc_guessp+=0.5;
+	if(this.stock.guessed_percentage>1.7) this.stock.calc_guessp-=0.5;
+	if(this.stock.guessed_percentage>2.7) this.stock.calc_guessp-=0.5;
+	
     this.stock.calc_val_growth_penalty=0;
     if(this.stock.calc_computable_val_growth<0){
         this.stock.calc_val_growth_penalty=this.stock.calc_computable_val_growth*5;
@@ -169,7 +174,8 @@ export class StockDetailsPage {
 						(this.stock.calc_leverage_w) +
 						(this.stock.calc_eps_growth_penalty_w) +
 						(this.stock.calc_rev_growth_penalty_w) +
-						(this.stock.calc_val_growth_penalty_w);
+						(this.stock.calc_val_growth_penalty_w) +
+						this.stock.calc_guessp;
 
 
     this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
@@ -226,6 +232,7 @@ export class StockDetailsPage {
                                                       parseFloat(this.tsv_arr[key].net_income_ps)*1.1,
                                                       parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
                                                       );
+              this.tsv_arr[key].prod_psp=cognitionis.toFixed(this.tsv_arr[key].prod_ps / parseFloat(this.tsv_arr[key].value),3);
 
               this.stock.revenue_ps=parseFloat(this.tsv_arr[key].revenue_ps);
               this.stock.equity_ps=parseFloat(this.tsv_arr[key].equity_ps);
