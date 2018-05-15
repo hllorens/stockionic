@@ -296,14 +296,14 @@ export class StockDetailsPage {
         }
         //console.log(this.tsv_arr_keys);
         this.stock.guess_5y=Math.min(this.stock.equity_ps,this.stock.value/2) +
-                            5*cognitionis.compound_interest_4(this.stock.operating_income_ps,
+                            5*cognitionis.compound_interest_4(this.stock.prod_ps,
                                                                 Math.min(
                                                               parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
                                                                ,0.60)
                                                                ,5);
         this.stock.guess_10y=Math.min(this.stock.equity_ps,this.stock.value/2) +
-                             10*cognitionis.compound_interest_4(this.stock.operating_income_ps,
+                             10*cognitionis.compound_interest_4(this.stock.prod_ps,
                                                                 Math.min(
                                                                parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
