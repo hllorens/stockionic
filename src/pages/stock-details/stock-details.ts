@@ -209,27 +209,35 @@ export class StockDetailsPage {
         this.tsv_arr=cognitionis.get_anualized_data('net_income',this.stock,this.tsv_arr);
         this.tsv_arr=cognitionis.get_anualized_data('equity',this.stock,this.tsv_arr);
         var num_elems=0;
-        for (var key in this.tsv_arr) {
-           if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
-              //console.log(key);
+		var om=0;
+        for (var year in this.tsv_arr) {
+           if (this.tsv_arr.hasOwnProperty(year) && this.tsv_arr[year].revenue && this.tsv_arr[year].revenue>0) {
+              //console.log(year);
               num_elems++;
-              this.tsv_arr[key].om=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue)));
-              this.stock.om_avg+=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[key].operating_income)/parseFloat(this.tsv_arr[key].revenue)));
-              if(this.tsv_arr[key].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[key].om;
+              this.tsv_arr[year].om=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[year].operating_income)/parseFloat(this.tsv_arr[year].revenue)));
+              this.stock.om_avg+=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[year].operating_income)/parseFloat(this.tsv_arr[year].revenue)));
+              if(this.tsv_arr[year].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[year].om;
+			  om=this.tsv_arr[year].om;
            }
         }
         this.stock.om_avg=parseFloat(cognitionis.toFixed2(this.stock.om_avg/num_elems));
-        this.stock.om_pot=Math.max((this.stock.om_avg+this.stock.om_max)/2,this.stock.operating_margin);
-        
+		this.stock.calc_om_pot=om;
+		if(om>0.01 && om<this.stock.om_avg){
+			this.stock.calc_om_pot=(this.stock.om_avg+om)/2;
+		}
+		if(this.stock.calc_om_pot<0.01 && this.stock.revenue_growth>0.25){
+			this.stock.calc_om_pot=0.01;
+		}
+		
         for (var key in this.tsv_arr) {
            if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
               // get the last stuff
-              this.stock.operating_income_ps=Math.max(parseFloat(this.tsv_arr[key].operating_income_ps),
-                                                      parseFloat(this.tsv_arr[key].net_income_ps)*1.1,
+              /*this.stock.operating_income_ps=Math.max(parseFloat(this.tsv_arr[key].operating_income_ps),
+                                                      parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)),
                                                       parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
-                                                      );
+                                                      );*/
               this.tsv_arr[key].prod_ps=Math.max(     parseFloat(this.tsv_arr[key].operating_income_ps),
-                                                      parseFloat(this.tsv_arr[key].net_income_ps)*1.1,
+                                                      parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)),
                                                       parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
                                                       );
               this.tsv_arr[key].prod_psp=cognitionis.toFixed(this.tsv_arr[key].prod_ps / parseFloat(this.tsv_arr[key].value),3);
@@ -280,10 +288,10 @@ export class StockDetailsPage {
         }
         //console.log('tsv_arr '+JSON.stringify(this.tsv_arr));
         this.tsv_arr_keys=[];
-        for (var key in this.tsv_arr) {
-            if (this.tsv_arr.hasOwnProperty(key) && key[0]=='2') {
-                //console.log(key);
-                this.tsv_arr_keys.push(key);
+        for (var key2 in this.tsv_arr) {
+            if (this.tsv_arr.hasOwnProperty(key2) && key2[0]=='2') {
+                //console.log(key2);
+                this.tsv_arr_keys.push(key2);
             }
         }
         //console.log(this.tsv_arr_keys);

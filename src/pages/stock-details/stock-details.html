@@ -113,7 +113,7 @@
                 <!--<ion-col>eps</ion-col>-->
                 <!--<ion-col>oi</ion-col>-->
                 <!--<ion-col>om</ion-col>-->
-                <ion-col>prdps</ion-col>
+                <ion-col>prps</ion-col>
                 <!--<ion-col>ni</ion-col>-->
                 <!--<ion-col>eqps</ion-col>-->
            </ion-row>
@@ -512,7 +512,8 @@
                 <!--<ion-col>oi</ion-col>-->
                 <!--<ion-col>om</ion-col>-->
                 <ion-col>oips;om</ion-col>
-                <!--<ion-col>ni</ion-col>-->
+                <ion-col>nips</ion-col>
+                <ion-col>prps</ion-col>
                 <!--<ion-col>eqps</ion-col>-->
            </ion-row>
             <ion-row *ngFor="let year of tsv_arr_keys">
@@ -524,13 +525,18 @@
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].net_income_ps,1)}}</ion-col>-->
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].operating_income}}</ion-col>-->
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.mult100(tsv_arr[year].om)}}</ion-col>-->
-                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.mult100(tsv_arr[year].operating_income_ps)}}<span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].om)}}</span></ion-col>
-                <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].net_income}}-->
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].operating_income_ps,1)}}<span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].om)}}</span></ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].net_income_ps}}</ion-col>
                 <!--<span style="font-size:0.7em;" class="{{tsv_arr[year].equity_g>0.10 ? 'green' : ''}} {{tsv_arr[year].equity_g<0 ? 'red' : ''}}">{{tsv_arr[year].equity_g}}</span>-->
-                <!--</ion-col>-->
-           </ion-row>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].prod_ps,1)}}<span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].prod_psp)}}</span></ion-col>
+            </ion-row>
             <ion-row class="border">
                 <ion-col></ion-col>
+                <ion-col></ion-col>
+                <ion-col>
+				         pot<span style="font-size:0.7em;">{{cognitionis.mult100(this.stock.om_pot)}}</span><br />
+				         cal<span style="font-size:0.7em;">{{cognitionis.mult100(this.stock.calc_om_pot)}}</span>
+			    </ion-col>
                 <ion-col></ion-col>
                 <!--<ion-col>g=<span style="font-size:0.7em;" class="{{this.stock.revenue_growth>0.10 ? 'green' : ''}} {{this.stock.revenue_growth<0 ? 'red' : ''}}">{{cognitionis.mult100(this.stock.revenue_growth)}}</span></ion-col>-->
                 <!--<ion-col>oi</ion-col>-->
@@ -538,7 +544,7 @@
                 <!--<ion-col>{{cognitionis.toFixed2(this.stock.epsp)}}</ion-col>-->
                 <!--<ion-col></ion-col>
                 <ion-col></ion-col>-->
-                <ion-col>pot<span style="font-size:0.7em;">{{cognitionis.mult100(this.stock.om_pot)}}</span></ion-col>
+                <ion-col></ion-col>
            </ion-row>
         </ion-grid>
         
@@ -567,11 +573,11 @@
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].operating_income_ps,1)}}</ion-col>-->
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].prod_ps,1)}}</ion-col>
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">
-                    <span class="{{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}[{{cognitionis.mult100(tsv_arr[year].revenue_a)}}]</span>
+                    <span class="{{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}<span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].revenue_a)}}</span></span>
                 </ion-col>
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess1,1)}}</ion-col>
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess5,1)}}</ion-col>
-                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess10,1)}}</ion-col>
+                <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].guess10,1)}}</ion-col>-->
            </ion-row>
         </ion-grid>
         
