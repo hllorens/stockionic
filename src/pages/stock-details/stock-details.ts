@@ -210,6 +210,9 @@ export class StockDetailsPage {
         this.tsv_arr=cognitionis.get_anualized_data('equity',this.stock,this.tsv_arr);
         var num_elems=0;
 		var om=0;
+		var ni=0;
+		this.stock.om_manual_update=false;
+		this.stock.om_manual_update_msg="";
         for (var year in this.tsv_arr) {
            if (this.tsv_arr.hasOwnProperty(year) && this.tsv_arr[year].revenue && this.tsv_arr[year].revenue>0) {
               //console.log(year);
@@ -218,6 +221,7 @@ export class StockDetailsPage {
               this.stock.om_avg+=parseFloat(cognitionis.toFixed2(parseFloat(this.tsv_arr[year].operating_income)/parseFloat(this.tsv_arr[year].revenue)));
               if(this.tsv_arr[year].om>this.stock.om_max) this.stock.om_max=this.tsv_arr[year].om;
 			  om=this.tsv_arr[year].om;
+			  ni=parseFloat(this.tsv_arr[year].net_income);
            }
         }
         this.stock.om_avg=parseFloat(cognitionis.toFixed2(this.stock.om_avg/num_elems));
@@ -227,6 +231,13 @@ export class StockDetailsPage {
 		}
 		if(this.stock.calc_om_pot<0.01 && this.stock.revenue_growth>0.25){
 			this.stock.calc_om_pot=0.01;
+		}
+		
+		if(om==0){
+			this.stock.om_manual_update=true;
+			if(ni!=0){
+				this.stock.om_manual_update_msg="used<br />1.1ni";
+			}
 		}
 		
         for (var key in this.tsv_arr) {
