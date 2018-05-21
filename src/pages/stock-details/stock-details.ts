@@ -67,7 +67,7 @@ export class StockDetailsPage {
     this.stock.calc_type={
         name: "Regular",
         weight_yield: 0,
-        weight_val_growth: 3,
+        weight_val_growth: 2,
         weight_rev_growth: 3,
         weight_epsp: 3,
         weight_leverage: 1,
@@ -97,7 +97,7 @@ export class StockDetailsPage {
     this.stock.calc_epsp=0;
     if(this.stock.prod>=0){
         // DEPRECATED the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
-        this.stock.calc_epsp=(parseFloat(this.stock.prod))*8;
+        this.stock.calc_epsp=(parseFloat(this.stock.prod))*7;
         if(this.stock.calc_computable_yield>(parseFloat(this.stock.calc_epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
         if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.05; 
         if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.08; 
@@ -114,6 +114,7 @@ export class StockDetailsPage {
     this.stock.calc_eqps= (this.stock.eq/parseFloat(this.stock.shares));
     this.stock.calc_eqp= this.stock.calc_eqps/parseFloat(this.stock.value);
     this.stock.calc_pb= parseFloat(this.stock.value)/this.stock.calc_eqps;
+	this.stock.calc_pb_inv=cognitionis.toFixed2(1/Math.max(0.0001,parseFloat(this.stock.price_to_book)));
     this.stock.assets=parseFloat(this.stock.leverage)*this.stock.eq;
     this.stock.calc_ap= (this.stock.assets/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
     this.stock.calc_lp= ((this.stock.assets-this.stock.eq)/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
@@ -168,10 +169,24 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-0.5;
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
 	
+	this.stock.score_eqp=1;
+	// buffet pb=1.5 -> 0.66, avg pb=4 --> 0.20
+	if(this.stock.eqp<=0.66){this.stock.score_eqp=0.9;}  // buffet acceptance
+	if(this.stock.eqp<=0.5){this.stock.score_eqp=0.8;}
+	if(this.stock.eqp<=0.4){this.stock.score_eqp=0.7;}
+	if(this.stock.eqp<=0.3){this.stock.score_eqp=0.6;}
+	if(this.stock.eqp<=0.2){this.stock.score_eqp=0.5;}  // average
+	if(this.stock.eqp<=0.15){this.stock.score_eqp=0.3;}
+	if(this.stock.eqp<=0.10){this.stock.score_eqp=0;}
+
+	
+	
+	
 	this.stock.calc_h_souce= (this.stock.calc_val_growth_w) +
 						(this.stock.calc_rev_growth_w) +
 						(this.stock.calc_epsp_w) +
 						(this.stock.calc_leverage_w) +
+						(this.stock.score_eqp) +
 						(this.stock.calc_eps_growth_penalty_w) +
 						(this.stock.calc_rev_growth_penalty_w) +
 						(this.stock.calc_val_growth_penalty_w) +
@@ -225,9 +240,10 @@ export class StockDetailsPage {
            }
         }
         this.stock.om_avg=parseFloat(cognitionis.toFixed2(this.stock.om_avg/num_elems));
+        this.stock.om_avg_no_max=parseFloat(cognitionis.toFixed2((this.stock.om_avg-this.stock.om_max)/(num_elems-1)));
 		this.stock.calc_om_pot=om;
-		if(om>0.01 && om<this.stock.om_avg){
-			this.stock.calc_om_pot=(this.stock.om_avg+om)/2;
+		if(om>0.01 && om<this.stock.om_avg_no_max){
+			this.stock.calc_om_pot=(this.stock.om_avg_no_max+om)/2;
 		}
 		if(this.stock.calc_om_pot<0.01 && this.stock.revenue_growth>0.25){
 			this.stock.calc_om_pot=0.01;
@@ -248,9 +264,16 @@ export class StockDetailsPage {
                                                       parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
                                                       );*/
               this.tsv_arr[key].prod_ps=Math.max(     parseFloat(this.tsv_arr[key].operating_income_ps),
-                                                      parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)),
-                                                      parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
+                                                      parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps))
+													  //,
+                                                      //parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
                                                       );
+			  this.tsv_arr[key].prod_source='R';
+			  if(this.tsv_arr[key].prod_ps==parseFloat(this.tsv_arr[key].operating_income_ps)) this.tsv_arr[key].prod_source='O';
+			  if(this.tsv_arr[key].prod_ps==(parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)))){
+				  this.tsv_arr[key].prod_source='N';
+			  }
+			  
               this.tsv_arr[key].prod_psp=cognitionis.toFixed(this.tsv_arr[key].prod_ps / parseFloat(this.tsv_arr[key].value),3);
 
               this.stock.revenue_ps=parseFloat(this.tsv_arr[key].revenue_ps);

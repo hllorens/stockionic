@@ -48,6 +48,7 @@ export class StatsPage {
         this.calculations('leverage',1,15);
         this.calculations('price_to_book',0.01,10);
         this.calculations('oip',-1,0.5);
+        this.calculations('operating_margin',-1,4);
         this.calculations('guessed_percentage',0,5);
         this.stats_string=JSON.stringify(this.stats, null, 3);
     });

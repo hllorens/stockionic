@@ -70,6 +70,14 @@
           <ion-col>{{cognitionis.toFixed2(stock.calc_leverage_w)}} / {{stock.calc_type.weight_leverage}}</ion-col>
         </ion-row>
         <ion-row class="border">
+          <ion-col>eqp</ion-col>
+          <ion-col>
+          <span class="{{stock.eqp<0.15 ? 'red' : '' }}">{{cognitionis.mult100(stock.eqp)}}% pb:{{cognitionis.mult100(stock.calc_pb_inv)}}%</span>
+			<br />
+          {{cognitionis.toFixed2(stock.score_eqp)}} * w(1)</ion-col>
+          <ion-col>{{cognitionis.toFixed2(stock.score_eqp)}} / 1</ion-col>
+        </ion-row>
+        <ion-row class="border">
           <ion-col>guessP</ion-col>
           <ion-col>
 		  {{stock.value}}/{{stock.guessed_value_5y}}<br />
@@ -528,7 +536,7 @@
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0"><span class="{{tsv_arr[year].operating_income==0 ? 'red' : ''}}">{{cognitionis.toFixed(tsv_arr[year].operating_income_ps,1)}}</span><span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].om)}}</span></ion-col>
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].net_income_ps,1)}}</ion-col>
                 <!--<span style="font-size:0.7em;" class="{{tsv_arr[year].equity_g>0.10 ? 'green' : ''}} {{tsv_arr[year].equity_g<0 ? 'red' : ''}}">{{tsv_arr[year].equity_g}}</span>-->
-                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].prod_ps,1)}}<span style="font-size:0.7em;">{{cognitionis.mult100(tsv_arr[year].prod_psp)}}</span></ion-col>
+                <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].prod_ps,1)}}<span style="font-size:0.7em;">{{tsv_arr[year].prod_source}} {{cognitionis.mult100(tsv_arr[year].prod_psp)}}</span></ion-col>
             </ion-row>
             <ion-row class="border">
                 <ion-col></ion-col>
