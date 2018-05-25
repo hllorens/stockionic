@@ -46,7 +46,11 @@ export class StocksPage {
       this.check_alerts();
     });*/
 	
-    // does not work location.onPopState(() => {  console.log('pressed back detecting changes!');   this.check_alerts();this.cd.detectChanges(); });
+    // does not work 
+	//location.onPopState(() => {  console.log('pressed back detecting changes!');   
+	//this.check_alerts();
+	//this.cd.detectChanges(); 
+	//});
   }
 
 

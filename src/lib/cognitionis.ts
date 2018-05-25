@@ -138,8 +138,7 @@ export var cognitionis = {
     },
     get_anualized_data:function (param, stock_data, tsv_arr) {
         if (stock_data.hasOwnProperty(param + "_hist")) {
-            var i;
-            i = 0;
+            var i = 0;
             var val_g;
             val_g = this.hist_growth_array(param + "_hist", stock_data);
             var val_a;

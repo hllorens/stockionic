@@ -74,13 +74,13 @@
                 <span style="color:orange;font-size:0.8em;font-weight:bold;" *ngIf="stock.prod>=0 && stock.prod>=0.05">{{cognitionis.mult100_fix2(stock.prod)}}</span>
                 <span style="color:orange;font-size:0.8em;" *ngIf="stock.prod>=0 && stock.prod<0.05 && !cognitionis.isIndexStock(stock.market)">{{cognitionis.mult100_fix2(stock.prod)}}</span>
                 <span style="color:red;font-size:0.8em;" *ngIf="stock.prod<0">{{cognitionis.mult100_fix2(stock.prod)}}</span>
-                <span style="font-size:0.8em;" *ngIf="stock.eps_hist_trend && stock.eps_hist_trend!='--'">
-                            <span style="color:red;" *ngIf="(stock.eps_hist_trend!='/' && stock.eps_hist_trend!='/-' && stock.eps_hist_trend!='_/' && stock.eps_hist_trend!='--' && stock.eps_hist_trend!='v')">{{stock.eps_hist_trend}}</span>
-                            <span style="color:green;" *ngIf="(stock.eps_hist_trend=='/' || stock.eps_hist_trend=='/-' || stock.eps_hist_trend=='_/' || stock.eps_hist_trend=='--' || stock.eps_hist_trend=='v') ">{{stock.eps_hist_trend}}</span>
+                <span style="font-size:0.8em;" *ngIf="stock.prod_ps_trend"> 
+                            <span style="color:red;" *ngIf="(stock.prod_ps_trend!='/' && stock.prod_ps_trend!='/-' && stock.prod_ps_trend!='_/' && stock.prod_ps_trend!='--' && stock.prod_ps_trend!='v')">{{stock.prod_ps_trend}}</span>
+                            <span style="color:green;" *ngIf="(stock.prod_ps_trend=='/' || stock.prod_ps_trend=='/-' || stock.prod_ps_trend=='_/' || stock.prod_ps_trend=='--' || stock.prod_ps_trend=='v') ">{{stock.prod_ps_trend}}</span>
                 </span>
                 <br />
-                <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.09 || stock.revenue_growth<-0.03)" class="{{stock.revenue_growth >0.25 ? 'blue': ''}} {{stock.revenue_growth < 0 ? 'red': '' }}">g{{cognitionis.mult100(cognitionis.min(stock.revenue_growth,1,2))}}</span>
-                <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.09 || stock.revenue_growth<-0.03) && stock.revenue_growth_trend && stock.revenue_growth_trend!='--'">
+                <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.05 || stock.revenue_growth<-0.01)" class="{{stock.revenue_growth >0.25 ? 'blue': ''}} {{stock.revenue_growth < 0 ? 'red': '' }}">g{{cognitionis.mult100(cognitionis.min(stock.revenue_growth,1,2))}}</span>
+                <span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.05 || stock.revenue_growth<-0.01) && stock.revenue_growth_trend && stock.revenue_growth_trend!='--'">
                             <span style="color:red;" *ngIf="(stock.revenue_growth_trend!='/' && stock.revenue_growth_trend!='/-' && stock.revenue_growth_trend!='_/' && stock.revenue_growth_trend!='--' && stock.revenue_growth_trend!='v')">{{stock.revenue_growth_trend}}</span>
                             <span style="color:green;" *ngIf="(stock.revenue_growth_trend=='/' || stock.revenue_growth_trend=='/-' || stock.revenue_growth_trend=='_/' || stock.revenue_growth_trend=='--' || stock.revenue_growth_trend=='v') ">{{stock.revenue_growth_trend}}</span>
                 </span>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { AngularFire } from 'angularfire2'; //FirebaseListObservable, FirebaseObjectObservable
 //import firebase from 'firebase'
 
@@ -22,7 +22,7 @@ export class StockDetailsPage {
   cognitionis:any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public af: AngularFire, public myfireauth: MyFireAuth) {
+    public af: AngularFire, public myfireauth: MyFireAuth, public cd: ChangeDetectorRef) {
     this.cognitionis=cognitionis;
     // If we navigated to this page, we will have an item available as a nav param
     this.stock = navParams.get('stock');
@@ -80,7 +80,7 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.revenue_growth)>0){
         this.stock.calc_rev_growth=parseFloat(this.stock.revenue_growth)*2; // *3 to make it reach max 1
 		if(parseFloat(this.stock.revenue_growth)>0.01) this.stock.calc_rev_growth+=0.1;
-		if(parseFloat(this.stock.revenue_growth)>0.04) this.stock.calc_rev_growth+=0.1;
+		if(parseFloat(this.stock.revenue_growth)>0.03) this.stock.calc_rev_growth+=0.1;
 		if(parseFloat(this.stock.revenue_growth)>0.05) this.stock.calc_rev_growth+=0.1;
 		if(parseFloat(this.stock.revenue_growth)>0.06) this.stock.calc_rev_growth+=0.1;
 		if(parseFloat(this.stock.revenue_growth)>0.10) this.stock.calc_rev_growth+=0.1;
@@ -99,9 +99,9 @@ export class StockDetailsPage {
         // DEPRECATED the distribution of positive cases goes from 0 to 10% (avg 4.5, 6.67==per15, and good enough for 100% score)
         this.stock.calc_epsp=(parseFloat(this.stock.prod))*7;
         if(this.stock.calc_computable_yield>(parseFloat(this.stock.calc_epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.calc_epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
-        if(this.stock.eps_hist_trend=='/-') this.stock.calc_epsp+=0.05; 
-        if(this.stock.eps_hist_trend=='_/') this.stock.calc_epsp+=0.08; 
-        if(this.stock.eps_hist_trend=='/') this.stock.calc_epsp+=0.10;
+        if(this.stock.prod_ps_trend=='v') this.stock.calc_epsp+=0.05; 
+        if(this.stock.prod_ps_trend=='_/') this.stock.calc_epsp+=0.08; 
+        if(this.stock.prod_ps_trend=='/') this.stock.calc_epsp+=0.10;
         this.stock.calc_epsp=Math.max(Math.min(this.stock.calc_epsp,1),0);  // min 0 max 1
     }
 
@@ -144,28 +144,23 @@ export class StockDetailsPage {
     this.stock.calc_val_growth_penalty_w=this.stock.calc_val_growth_penalty*this.stock.calc_type.weight_val_growth_penalty; 
 
     this.stock.calc_rev_growth_penalty=0.0;
-    if(parseFloat(this.stock.avg_revenue_growth_5y)<0 && parseFloat(this.stock.epsp)<0.03){
-        // max -0.15 to be a bad growing company
-        this.stock.calc_rev_growth_penalty=-0.25+Math.max(parseFloat(this.stock.avg_revenue_growth_5y),-50)/100;
-        if(parseFloat(this.stock.revenue_growth_qq_last_year)< 0){
-            //subtratct the average with max of -0.1
-            this.stock.calc_rev_growth_penalty+=Math.max(parseFloat(this.stock.revenue_growth_qq_last_year)+parseFloat(this.stock.avg_revenue_growth_5y),-20)/200;
-        }
-    }
-    if(parseFloat(this.stock.revenue_growth_qq_last_year)< -0.15 && parseFloat(this.stock.epsp)<0.03){
-        this.stock.calc_rev_growth_penalty+=Math.min(Math.max(parseFloat(this.stock.revenue_growth_qq_last_year)+parseFloat(this.stock.avg_revenue_growth_5y),-50),0)/200;
+	if(parseFloat(this.stock.revenue_growth_qq_last_year)< 0){
+		this.stock.calc_rev_growth_penalty+=Math.max(-0.1,parseFloat(this.stock.revenue_growth_qq_last_year)/100);
+	}
+    if(parseFloat(this.stock.avg_revenue_growth)<0){
+        this.stock.calc_rev_growth_penalty+=parseFloat(this.stock.revenue_growth)*3;
     }
     this.stock.calc_rev_growth_penalty=Math.max(Math.min(this.stock.calc_rev_growth_penalty,0),-1);  // min 0 max 1
     this.stock.calc_rev_growth_penalty_w=this.stock.calc_rev_growth_penalty*this.stock.calc_type.weight_rev_growth_penalty; 
 
     
     this.stock.calc_eps_growth_penalty=0.0;
-    if(parseFloat(this.stock.epsp)<0.03){
-        if(this.stock.eps_hist_trend=='\\') this.stock.calc_eps_growth_penalty=-0.5;
-        if(this.stock.eps_hist_trend=='-\\') this.stock.calc_eps_growth_penalty=-0.25;
-        if(this.stock.eps_hist_trend=='\_') this.stock.calc_eps_growth_penalty=-0.15;
-        if(this.stock.eps_hist_trend=='^') this.stock.calc_eps_growth_penalty=-0.25;
-    }
+    //if(parseFloat(this.stock.epsp)<0.03){
+        if(this.stock.prod_ps_trend=='\\') this.stock.calc_eps_growth_penalty=-0.5;
+        if(this.stock.prod_ps_trend=='-\\') this.stock.calc_eps_growth_penalty=-0.25;
+        if(this.stock.prod_ps_trend=='\_') this.stock.calc_eps_growth_penalty=-0.15;
+        if(this.stock.prod_ps_trend=='^') this.stock.calc_eps_growth_penalty=-0.25;
+    //}
     if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-0.5;
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
 	
@@ -256,6 +251,7 @@ export class StockDetailsPage {
 			}
 		}
 		
+        var prev_prod_ps = 0;
         for (var key in this.tsv_arr) {
            if (this.tsv_arr.hasOwnProperty(key) && this.tsv_arr[key].revenue && this.tsv_arr[key].revenue>0) {
               // get the last stuff
@@ -268,11 +264,17 @@ export class StockDetailsPage {
 													  //,
                                                       //parseFloat(this.tsv_arr[key].revenue_ps)*this.stock.om_pot
                                                       );
-			  this.tsv_arr[key].prod_source='R';
-			  if(this.tsv_arr[key].prod_ps==parseFloat(this.tsv_arr[key].operating_income_ps)) this.tsv_arr[key].prod_source='O';
-			  if(this.tsv_arr[key].prod_ps==(parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)))){
-				  this.tsv_arr[key].prod_source='N';
-			  }
+			    this.tsv_arr[key].prod_source='R';
+			    if(this.tsv_arr[key].prod_ps==parseFloat(this.tsv_arr[key].operating_income_ps)) this.tsv_arr[key].prod_source='O';
+			    if(this.tsv_arr[key].prod_ps==(parseFloat(this.tsv_arr[key].net_income_ps)+0.1*Math.abs(parseFloat(this.tsv_arr[key].net_income_ps)))){
+				    this.tsv_arr[key].prod_source='N';
+			    }
+				
+				this.tsv_arr[key].prod_ps_g = 0;
+				if (prev_prod_ps != 0) {
+					this.tsv_arr[key].prod_ps_g = cognitionis.compound_average_growth(prev_prod_ps,this.tsv_arr[key].prod_ps);
+				}
+				prev_prod_ps=this.tsv_arr[key].prod_ps;
 			  
               this.tsv_arr[key].prod_psp=cognitionis.toFixed(this.tsv_arr[key].prod_ps / parseFloat(this.tsv_arr[key].value),3);
 
@@ -539,7 +541,15 @@ export class StockDetailsPage {
         delete this.alert_status.portf;
     }
     // no high
-
+	
+	 console.log(JSON.stringify(this.alert_status));
+	// force refresh
+	  let activeView = this.navCtrl.getActive();
+	  if (activeView.component == StockDetailsPage) {   //if(this.navCtrl.getActive().name === 'StocksPage')
+		console.log('detecting changes details');
+		this.cd.detectChanges(); // this fixes the issue, triggers change detection
+		// seems to not work in Android??? perhaps add some badge... to see
+	  }
   }
   
 }
