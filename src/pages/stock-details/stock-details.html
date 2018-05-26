@@ -133,7 +133,7 @@
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].equity_ps,1)}}</ion-col>-->
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].revenue,1)}}</ion-col>-->
                 <ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].revenue_ps,1)}}
-                <span style="font-size:0.7em;" class="{{tsv_arr[year].revenue_g>0.10 ? 'green' : ''}} {{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}</span>
+                <span style="font-size:0.7em;" class="{{tsv_arr[year].revenue_g>0.10 ? 'blue' : ''}} {{tsv_arr[year].revenue_g<0 ? 'red' : ''}}">{{cognitionis.mult100(tsv_arr[year].revenue_g)}}</span>
                 </ion-col>
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{cognitionis.toFixed(tsv_arr[year].net_income_ps,1)}}</ion-col>-->
                 <!--<ion-col *ngIf="tsv_arr[year].revenue && tsv_arr[year].revenue>0">{{tsv_arr[year].operating_income}}</ion-col>-->
@@ -148,8 +148,8 @@
                 <ion-col>{{cognitionis.toFixed(stock.value,1)}}<span style="font-size:0.7em;" class="{{stock.calc_computable_val_growth_y>0.10 ? 'green' : ''}} {{stock.calc_computable_val_growth_y<0 ? 'red' : ''}}">{{cognitionis.mult100(stock.calc_computable_val_growth_y)}}</span></ion-col>
                 <!--<ion-col>{{stock.revenue}}</ion-col>-->
                 <ion-col>{{cognitionis.toFixed(stock.revps,1)}}
-					<span style="font-size:0.7em"><span class="{{stock.revenue_growth>0.10 ? 'green' : ''}} {{stock.revenue_growth<0 ? 'red' : ''}}">{{cognitionis.mult100(stock.revenue_growth)}}</span>
-					<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a{{cognitionis.mult100(stock.revenue_acceleration)}}
+					<span style="font-size:0.7em"><span class="{{stock.revenue_growth>0.10 ? 'blue' : ''}} {{stock.revenue_growth<0 ? 'red' : ''}}">{{cognitionis.mult100(stock.revenue_growth)}}</span>
+					<br/><span class="{{stock.revenue_acceleration>0.10 ? 'green' : ''}} {{stock.revenue_acceleration<-0.05 ? 'red' : ''}}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;a{{cognitionis.mult100(stock.revenue_acceleration)}}</span>
 					</span>
 				</ion-col>
                 <!--<ion-col>oi</ion-col>-->
@@ -159,7 +159,7 @@
                 <ion-col></ion-col>-->
                 <ion-col>{{cognitionis.toFixed(stock.prod_ps,1)}}
 				         <span style="color:orange;font-size:0.7em;">{{cognitionis.mult100(stock.prod)}}</span>
-						 <br/><span style="font-size:0.7em;" class="{{stock.last_prod_ps_g>=0 ? 'green' : 'red'}}">&nbsp;&nbsp;&nbsp;g{{cognitionis.toFixed2(stock.last_prod_ps_g)}}</span>
+						 <br/><span style="font-size:0.7em;" class="{{stock.last_prod_ps_g>=0 ? 'green' : 'red'}}">&nbsp;&nbsp;&nbsp;g{{cognitionis.toFixed2(stock.last_prod_ps_g)}}</span>             
 			    </ion-col>
            </ion-row>
         </ion-grid>

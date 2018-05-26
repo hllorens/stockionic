@@ -90,8 +90,13 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.revenue_growth_qq_last_year)>0){ // && this.stock.calc_om_ps>0.2
         this.stock.calc_rev_growth+=Math.min(parseFloat(this.stock.revenue_growth_qq_last_year),10)/100;
     }
+	if(this.stock.revenue_growth_trend=="/"){ // the good healthy revenue growth pattern
+		this.stock.calc_rev_growth+=0.1;
+		if(this.stock.revenue_acceleration>0){
+			this.stock.calc_rev_growth+=0.1; // expansive bonus
+		}
+	}
     this.stock.calc_rev_growth=Math.max(Math.min(this.stock.calc_rev_growth,1),0);  // min 0 max 1
-    // IMPLEMENT IT TO SHOW... AND RELAX MAN... STOCKS ARE STOCKS U ARE NOT GOING TO PREDICT IT... YOUR PORTFOLIO IS ALREADY TOO BIG
     
     
     this.stock.calc_epsp=0;
@@ -128,6 +133,17 @@ export class StockDetailsPage {
     this.stock.calc_epsp_w=this.stock.calc_epsp*this.stock.calc_type.weight_epsp;
     this.stock.calc_leverage_w=this.stock.calc_leverage*this.stock.calc_type.weight_leverage;
 
+	this.stock.score_eqp=1;
+	// buffet pb=1.5 -> 0.66, avg pb=4 --> 0.20
+	if(this.stock.eqp<=0.66){this.stock.score_eqp=0.9;}  // buffet acceptance
+	if(this.stock.eqp<=0.5){this.stock.score_eqp=0.8;}
+	if(this.stock.eqp<=0.4){this.stock.score_eqp=0.7;}
+	if(this.stock.eqp<=0.3){this.stock.score_eqp=0.6;}
+	if(this.stock.eqp<=0.2){this.stock.score_eqp=0.5;}  // average
+	if(this.stock.eqp<=0.15){this.stock.score_eqp=0.3;}
+	if(this.stock.eqp<=0.10){this.stock.score_eqp=0;}
+
+
 	this.stock.calc_guessp=0;
 	if(this.stock.guessed_percentage<0.7) this.stock.calc_guessp+=0.5;
 	if(this.stock.guessed_percentage<0.9) this.stock.calc_guessp+=0.5;
@@ -150,6 +166,13 @@ export class StockDetailsPage {
     if(parseFloat(this.stock.avg_revenue_growth)<0){
         this.stock.calc_rev_growth_penalty+=parseFloat(this.stock.revenue_growth)*3;
     }
+	if(this.stock.revenue_growth_trend!="/" && this.stock.revenue_growth_trend!="_/" && this.stock.revenue_growth_trend!="v" ){
+		this.stock.calc_rev_growth_penalty+=-0.1;
+	}
+	if(this.stock.revenue_growth_trend=="\\" || this.stock.revenue_growth_trend=="-\\"){
+		this.stock.calc_rev_growth_penalty+=-0.1;
+	}
+
     this.stock.calc_rev_growth_penalty=Math.max(Math.min(this.stock.calc_rev_growth_penalty,0),-1);  // min 0 max 1
     this.stock.calc_rev_growth_penalty_w=this.stock.calc_rev_growth_penalty*this.stock.calc_type.weight_rev_growth_penalty; 
 
@@ -161,18 +184,9 @@ export class StockDetailsPage {
         if(this.stock.prod_ps_trend=='\_') this.stock.calc_eps_growth_penalty=-0.15;
         if(this.stock.prod_ps_trend=='^') this.stock.calc_eps_growth_penalty=-0.25;
     //}
-    if(parseFloat(this.stock.epsp)<-0.015) this.stock.calc_eps_growth_penalty=-0.5;
+    if(parseFloat(this.stock.epsp)<-0.015 || parseFloat(this.stock.operating_margin)<-0.015) this.stock.calc_eps_growth_penalty=-0.5;
     this.stock.calc_eps_growth_penalty_w=this.stock.calc_eps_growth_penalty*this.stock.calc_type.weight_eps_growth_penalty; 
 	
-	this.stock.score_eqp=1;
-	// buffet pb=1.5 -> 0.66, avg pb=4 --> 0.20
-	if(this.stock.eqp<=0.66){this.stock.score_eqp=0.9;}  // buffet acceptance
-	if(this.stock.eqp<=0.5){this.stock.score_eqp=0.8;}
-	if(this.stock.eqp<=0.4){this.stock.score_eqp=0.7;}
-	if(this.stock.eqp<=0.3){this.stock.score_eqp=0.6;}
-	if(this.stock.eqp<=0.2){this.stock.score_eqp=0.5;}  // average
-	if(this.stock.eqp<=0.15){this.stock.score_eqp=0.3;}
-	if(this.stock.eqp<=0.10){this.stock.score_eqp=0;}
 
 	
 	
