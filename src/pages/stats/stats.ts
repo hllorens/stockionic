@@ -46,6 +46,7 @@ export class StatsPage {
         this.calculations('revenue_growth',-1,0.99);
         this.calculations('epsp',-1,0.5);
         this.calculations('leverage',1,15);
+        this.calculations('current_ratio',1,15);
         this.calculations('price_to_book',0.01,10);
         this.calculations('oip',-1,0.5);
         this.calculations('operating_margin',-1,4);

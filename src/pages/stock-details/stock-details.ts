@@ -121,8 +121,10 @@ export class StockDetailsPage {
     this.stock.calc_pb= parseFloat(this.stock.value)/this.stock.calc_eqps;
 	this.stock.calc_pb_inv=cognitionis.toFixed2(1/Math.max(0.0001,parseFloat(this.stock.price_to_book)));
     this.stock.assets=parseFloat(this.stock.leverage)*this.stock.eq;
-    this.stock.calc_ap= (this.stock.assets/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
-    this.stock.calc_lp= ((this.stock.assets-this.stock.eq)/parseFloat(this.stock.shares))/parseFloat(this.stock.value);
+    this.stock.calc_aps= (this.stock.assets/parseFloat(this.stock.shares));
+    this.stock.calc_ap= this.stock.calc_aps/parseFloat(this.stock.value);
+    this.stock.calc_lps= ((this.stock.assets-this.stock.eq)/parseFloat(this.stock.shares));
+    this.stock.calc_lp= this.stock.calc_lps/parseFloat(this.stock.value);
     
     
     this.stock.calc_yield_w=this.stock.calc_yield*this.stock.calc_type.weight_yield;
@@ -190,7 +192,6 @@ export class StockDetailsPage {
 
 	
 	
-	
 	this.stock.calc_h_souce= (this.stock.calc_val_growth_w) +
 						(this.stock.calc_rev_growth_w) +
 						(this.stock.calc_epsp_w) +
@@ -200,7 +201,9 @@ export class StockDetailsPage {
 						(this.stock.calc_rev_growth_penalty_w) +
 						(this.stock.calc_val_growth_penalty_w) +
 						this.stock.calc_guessp;
-
+	if(parseFloat(this.stock.current_ratio)<1){
+		this.stock.calc_h_souce-=(1-parseFloat(this.stock.current_ratio));
+	}
 
     this.stock.calc_value_sell_share_raw=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))).toFixed(1);
     this.stock.calc_value_sell_share=((parseFloat(this.stock.revenue)/Math.max(0.0001,parseFloat(this.stock.shares)))*Math.min((parseFloat(this.stock.operating_margin)*100)/33,1)).toFixed(1);
@@ -293,6 +296,7 @@ export class StockDetailsPage {
               this.tsv_arr[key].prod_psp=cognitionis.toFixed(this.tsv_arr[key].prod_ps / parseFloat(this.tsv_arr[key].value),3);
 
               this.stock.revenue_ps=parseFloat(this.tsv_arr[key].revenue_ps);
+              this.stock.revenue_psp=parseFloat(this.tsv_arr[key].revenue_psp);
               this.stock.equity_ps=parseFloat(this.tsv_arr[key].equity_ps);
               this.stock.last_value=parseFloat(this.tsv_arr[key].value);
               // guess value for every year
@@ -351,7 +355,8 @@ export class StockDetailsPage {
                                                               parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
                                                                ,0.60)
-                                                               ,5);
+                                                               ,5)
+							- (this.stock.calc_lps/4); // subtract what we would pay in debt in 5y assuming payup current in 20y
         this.stock.guess_10y=Math.min(this.stock.equity_ps,this.stock.value/2) +
                              10*cognitionis.compound_interest_4(this.stock.prod_ps,
                                                                 Math.min(
