@@ -68,8 +68,8 @@ export class StockDetailsPage {
         name: "Regular",
         weight_yield: 0,
         weight_val_growth: 2,
-        weight_rev_growth: 3,
-        weight_epsp: 3,
+        weight_rev_growth: 2,
+        weight_epsp: 2,
         weight_leverage: 1,
         weight_val_growth_penalty: 2,
         weight_rev_growth_penalty: 2,
@@ -78,7 +78,7 @@ export class StockDetailsPage {
     
     this.stock.calc_rev_growth=0;
     if(parseFloat(this.stock.revenue_growth)>0){
-        this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.revenue_growth),0.34)*2; // *3 to make it reach max 1
+        this.stock.calc_rev_growth=Math.min(parseFloat(this.stock.revenue_growth),0.34); // used to be *2 *3 to make it reach max 1
 		if(parseFloat(this.stock.revenue_growth)>0.01) this.stock.calc_rev_growth+=0.1;
 		if(parseFloat(this.stock.revenue_growth)>0.03) this.stock.calc_rev_growth+=0.1;
 		if(parseFloat(this.stock.revenue_growth)>0.05) this.stock.calc_rev_growth+=0.1;
@@ -105,8 +105,8 @@ export class StockDetailsPage {
         this.stock.calc_epsp=(parseFloat(this.stock.prod))*7;
         if(this.stock.calc_computable_yield>(parseFloat(this.stock.epsp)+0.006)) this.stock.calc_epsp-=(parseFloat(this.stock.epsp)-this.stock.calc_computable_yield)*15; // penalized if yield > $epsp
         if(this.stock.prod_ps_trend=='v') this.stock.calc_epsp+=0.05; 
-        if(this.stock.prod_ps_trend=='_/') this.stock.calc_epsp+=0.08; 
-        if(this.stock.prod_ps_trend=='/') this.stock.calc_epsp+=0.10;
+        if(this.stock.prod_ps_trend=='_/') this.stock.calc_epsp+=0.10; 
+        if(this.stock.prod_ps_trend=='/') this.stock.calc_epsp+=0.20;
         this.stock.calc_epsp=Math.max(Math.min(this.stock.calc_epsp,1),0);  // min 0 max 1
     }
 
@@ -120,7 +120,8 @@ export class StockDetailsPage {
     this.stock.calc_eqp= this.stock.calc_eqps/parseFloat(this.stock.value);
     this.stock.calc_pb= parseFloat(this.stock.value)/this.stock.calc_eqps;
 	this.stock.calc_pb_inv=cognitionis.toFixed2(1/Math.max(0.0001,parseFloat(this.stock.price_to_book)));
-	this.stock.calc_pb_inv_ps=cognitionis.toFixed2(parseFloat(this.stock.value)/parseFloat(this.stock.calc_pb_inv));
+	//this.stock.calc_pb_inv_ps=cognitionis.toFixed2(parseFloat(this.stock.value)/parseFloat(this.stock.calc_pb_inv));
+	this.stock.calc_pb_inv_ps=cognitionis.toFixed2(parseFloat(this.stock.value)/parseFloat(this.stock.price_to_book));
     this.stock.assets=parseFloat(this.stock.leverage)*this.stock.eq;
     this.stock.calc_aps= (this.stock.assets/parseFloat(this.stock.shares));
     this.stock.calc_ap= this.stock.calc_aps/parseFloat(this.stock.value);
@@ -149,9 +150,11 @@ export class StockDetailsPage {
 
 	this.stock.calc_guessp=0;
 	if(this.stock.guessed_percentage<0.7) this.stock.calc_guessp+=0.5;
+	if(this.stock.guessed_percentage<0.8) this.stock.calc_guessp+=0.5;
 	if(this.stock.guessed_percentage<0.9) this.stock.calc_guessp+=0.5;
 	if(this.stock.guessed_percentage>1.7) this.stock.calc_guessp-=0.5;
 	if(this.stock.guessed_percentage>2.7) this.stock.calc_guessp-=0.5;
+	if(this.stock.guessed_percentage>3.7) this.stock.calc_guessp-=0.5;
 	
     this.stock.calc_val_growth_penalty=0;
     if(this.stock.calc_computable_val_growth<0){
@@ -267,7 +270,7 @@ export class StockDetailsPage {
 		if(om==0){
 			this.stock.om_manual_update=true;
 			if(ni!=0){
-				this.stock.om_manual_update_msg="used<br />1.1ni";
+				this.stock.om_manual_update_msg="ni";
 			}
 		}
 		
@@ -358,14 +361,24 @@ export class StockDetailsPage {
 			debt_ralenization_ratio=40; // like only pay 5% of debt in 5y
 			console.log("bank, 40");
 		}
-        this.stock.guess_5y=Math.min(this.stock.calc_pb_inv_ps,this.stock.value/2) +    // used to use equity_ps but in php we use pb_inv_ps
+		var prod_ps_guess=this.stock.prod_ps;
+		if(this.stock.calc_om_pot<0.01 && this.stock.revenue_growth>=0.25){
+			prod_ps_guess=Math.max(parseFloat(this.stock.revps)*0.01,parseFloat(this.stock.oips),parseFloat(this.stock.eps)*1.1);
+		}
+		if(prod_ps_guess<0) prod_ps_guess=0.00001;
+		var tmp_base=Math.min(this.stock.calc_pb_inv_ps,this.stock.value/2) +    // used to use equity_ps but in php we use pb_inv_ps
                             (5*cognitionis.compound_interest_4(this.stock.prod_ps,
                                                                 Math.min(
                                                               parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
                                                                ,0.60)
-                                                               ,5))
-							- (this.stock.calc_lps/debt_ralenization_ratio); // subtract what we would pay in debt in 5y assuming payup current in 20y
+                                                               ,5));
+		console.log("tmp_base:"+tmp_base);
+        this.stock.guess_5y=Math.max(this.stock.value/100
+							,
+							tmp_base
+							- Math.min(this.stock.calc_lps/debt_ralenization_ratio,tmp_base/2)
+							); // subtract what we would pay in debt in 5y assuming payup current in 20y
 							
 							
 							

@@ -48,7 +48,7 @@
           <ion-col>RevG</ion-col>
           <ion-col>
           <!--<span class="{{stock.revenue_growth >0 ? 'green': 'red'}}">{{cognitionis.mult100(stock.revenue_growth)}}</span>-->
-          <span style="font-size:0.9em;" *ngIf="(stock.revenue_growth>0.05 || stock.revenue_growth<-0.01)" class="{{stock.revenue_growth >0.25 ? 'blue': ''}} {{stock.revenue_growth < 0 ? 'red': '' }}">{{cognitionis.mult100(cognitionis.min(stock.revenue_growth,1,2))}}</span><span style="font-size:0.8em;" *ngIf="(stock.revenue_growth>0.05 || stock.revenue_growth<-0.01) && stock.revenue_growth_trend && stock.revenue_growth_trend!='--'"><span style="color:red;" *ngIf="(stock.revenue_growth_trend!='/' && stock.revenue_growth_trend!='/-' && stock.revenue_growth_trend!='_/' && stock.revenue_growth_trend!='--' && stock.revenue_growth_trend!='v')">{{stock.revenue_growth_trend}}</span><span style="color:green;" *ngIf="(stock.revenue_growth_trend=='/' || stock.revenue_growth_trend=='/-' || stock.revenue_growth_trend=='_/' || stock.revenue_growth_trend=='--' || stock.revenue_growth_trend=='v') ">{{stock.revenue_growth_trend}}</span><span style="color:green;font-size=0.6em;" *ngIf="(stock.revenue_growth_trend=='/' && stock.revenue_acceleration>0)">a</span></span>
+          <span style="font-size:0.9em;" class="{{stock.revenue_growth >0.25 ? 'blue': ''}} {{stock.revenue_growth < 0 ? 'red': '' }}">{{cognitionis.mult100(cognitionis.min(stock.revenue_growth,1,2))}}</span><span style="font-size:0.8em;" ><span style="color:red;" *ngIf="(stock.revenue_growth_trend!='/' && stock.revenue_growth_trend!='/-' && stock.revenue_growth_trend!='_/' && stock.revenue_growth_trend!='--' && stock.revenue_growth_trend!='v')">{{stock.revenue_growth_trend}}</span><span style="color:green;" *ngIf="(stock.revenue_growth_trend=='/' || stock.revenue_growth_trend=='/-' || stock.revenue_growth_trend=='_/' || stock.revenue_growth_trend=='--' || stock.revenue_growth_trend=='v') ">{{stock.revenue_growth_trend}}</span><span style="color:green;font-size=0.6em;" *ngIf="(stock.revenue_growth_trend=='/' && stock.revenue_acceleration>0)">a</span></span>
           <span style="font-size:0.7em;">q{{cognitionis.toFixed(stock.revenue_growth_qq_last_year)}}(10%)</span><br />
           <!--om/ps={{stock.operating_margin}}/{{stock.price_to_sales}}={{stock.calc_om_ps}} (max 0.3)<br />-->
           {{cognitionis.toFixed2(stock.calc_rev_growth)}} * w({{stock.calc_type.weight_rev_growth}})</ion-col>
@@ -110,8 +110,9 @@
         <ion-row class="border">
           <ion-col>Risk</ion-col>
           <ion-col>
-			lev:{{cognitionis.toFixed2(stock.leverage)}}
-			curR:{{cognitionis.toFixed2(stock.current_ratio)}}
+			lev:<span class="{{stock.leverage_industry_ratio>1.9 ? 'red' : '' }}">{{cognitionis.toFixed2(stock.leverage)}}</span><br />
+			curR:<span class="{{stock.current_ratio<0.9 ? 'red' : '' }}">{{cognitionis.toFixed2(stock.current_ratio)}}</span><br />
+			pb:<span class="{{stock.price_to_book>6 ? 'red' : '' }}">{{cognitionis.toFixed2(stock.price_to_book)}}</span>
 		  </ion-col>
           <ion-col>{{cognitionis.toFixed2(stock.calc_curr_rat_penalty)}}</ion-col>
         </ion-row>
