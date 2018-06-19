@@ -30,6 +30,7 @@ export class StockDetailsPage {
     this.stock.revenue = 0;
     this.stock.last_financials_year = "0000";
     this.stock.last_financials_outdated = true;
+	var bank_array=['SAN','BBVA','ING','BKIA','BKT','SAB','CABK','MAP','ZURVY','HSBC','R4'];
     if(this.stock.hasOwnProperty('revenue_hist') && this.stock.revenue_hist.length>0){
         this.stock.revenue = parseFloat(this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][1]);
         this.stock.last_financials_year = (this.stock.revenue_hist[(this.stock.revenue_hist.length -1 )][0]).substr(0,4);
@@ -151,7 +152,8 @@ export class StockDetailsPage {
 	this.stock.calc_guessp=0;
 	if(this.stock.guessed_percentage<0.7) this.stock.calc_guessp+=0.5;
 	if(this.stock.guessed_percentage<0.8) this.stock.calc_guessp+=0.5;
-	if(this.stock.guessed_percentage<0.9) this.stock.calc_guessp+=0.5;
+	if(this.stock.guessed_percentage<0.9) this.stock.calc_guessp+=0.25;
+	if(this.stock.guessed_percentage<1.1) this.stock.calc_guessp+=0.25;
 	if(this.stock.guessed_percentage>1.7) this.stock.calc_guessp-=0.5;
 	if(this.stock.guessed_percentage>2.7) this.stock.calc_guessp-=0.5;
 	if(this.stock.guessed_percentage>3.7) this.stock.calc_guessp-=0.5;
@@ -206,7 +208,7 @@ export class StockDetailsPage {
 						(this.stock.calc_val_growth_penalty_w) +
 						this.stock.calc_guessp;
 	this.stock.calc_curr_rat_penalty=0;
-	if(parseFloat(this.stock.current_ratio)<1){
+	if(bank_array.indexOf(this.stock.name)==-1 && parseFloat(this.stock.current_ratio)<1){
 		this.stock.calc_curr_rat_penalty=-(1-parseFloat(this.stock.current_ratio));
 		this.stock.calc_h_souce+=this.stock.calc_curr_rat_penalty;
 	}
@@ -356,7 +358,6 @@ export class StockDetailsPage {
         }
         //console.log(this.tsv_arr_keys);
 		var debt_ralenization_ratio=4;
-		var bank_array=['SAN','BBVA','ING','BKIA','BKT','SAB','CABK','MAP','ZURVY','HSBC','R4'];
 		if(bank_array.indexOf(this.stock.name)!=-1){ 
 			debt_ralenization_ratio=40; // like only pay 5% of debt in 5y
 			console.log("bank, 40");
@@ -366,13 +367,14 @@ export class StockDetailsPage {
 			prod_ps_guess=Math.max(parseFloat(this.stock.revps)*0.01,parseFloat(this.stock.oips),parseFloat(this.stock.eps)*1.1);
 		}
 		if(prod_ps_guess<0) prod_ps_guess=0.00001;
-		var tmp_base=Math.min(this.stock.calc_pb_inv_ps,this.stock.value/2) +    // used to use equity_ps but in php we use pb_inv_ps
-                            (5*cognitionis.compound_interest_4(this.stock.prod_ps,
+		this.stock.prod_pot=cognitionis.compound_interest_4(this.stock.prod_ps,
                                                                 Math.min(
                                                               parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
                                                                ,0.60)
-                                                               ,5));
+                                                               ,5);
+		var tmp_base=Math.min(this.stock.calc_pb_inv_ps,this.stock.value/2) +    // used to use equity_ps but in php we use pb_inv_ps
+                            (5*this.stock.prod_pot);
 		console.log("tmp_base:"+tmp_base);
         this.stock.guess_5y=Math.max(this.stock.value/100
 							,

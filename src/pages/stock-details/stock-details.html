@@ -208,7 +208,7 @@
                 <!--<ion-col>{{cognitionis.toFixed(stock.value,1)}}</ion-col>-->
                 <ion-col></ion-col>
                 <ion-col>{{cognitionis.toFixed(stock.calc_value,1)}}</ion-col>
-                <ion-col>{{cognitionis.toFixed(stock.guess_5y,1)}}</ion-col>
+                <ion-col>{{cognitionis.toFixed(stock.guess_5y,1)}}<br /><span style="font-size:0.7em">5*{{stock.prod_pot}}</span></ion-col>
                 <ion-col>{{cognitionis.toFixed(stock.guess_10y,1)}}</ion-col>
            </ion-row>
             <ion-row class="border" *ngIf="stock.prod<0.01">
