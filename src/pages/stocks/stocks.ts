@@ -232,11 +232,11 @@ export class StocksPage {
   }
   
   public cheap(market, guess){
-      if(parseFloat(market)<parseFloat(guess)*0.80) return true;
+      if(parseFloat(market)<parseFloat(guess)*0.90) return true;
       return false;
   }
   public expensive(market, guess){
-      if(parseFloat(market)>parseFloat(guess)*2) return true;
+      if(parseFloat(market)>parseFloat(guess)*1.8) return true;
       return false;
   }
   public mkt_guess_ratio(market,guess){
