@@ -247,20 +247,25 @@
        <!--<br /> alternative: dividend.com, DivY/Price History graph, disable Price in legend-->
     </ion-col>
   </ion-row>
-  <!--<ion-row>
+  <ion-row>
     <ion-col>
-       <b>EPSP last diff: 
+       <!--<b>EPSP last diff: 
       <span style="color:red;" *ngIf="(stock.epsp_hist_last_diff>=0)">{{stock.epsp_hist_last_diff}}%</span>
       <span style="color:green;"   *ngIf="(stock.epsp_hist_last_diff<0)">{{stock.epsp_hist_last_diff}}%</span>
-        </b>. 
-       <b>EPSP hist:</b>
+        </b>.--> 
+       <b>EPSP: </b>{{stock.epsp}}<br />
+       0.20 = PER 5<br />
+       0.10 = PER 10<br />
+       0.05 = PER 20<br />
+       0.02 = PER 50<br />
+       <!--<b>EPS hist:</b>
        <ul class="list">
-            <li class="item" *ngFor="let item of stock.epsp_hist" >
+            <li class="item" *ngFor="let item of stock.eps_hist" >
              {{item[0]}}: <b>{{item[1]}}</b>
             </li>
-        </ul>
+        </ul>-->
     </ion-col>
-  </ion-row>-->
+  </ion-row>
 
 <!--  <ion-row>
     <ion-col>
