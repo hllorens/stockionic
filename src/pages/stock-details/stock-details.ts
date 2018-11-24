@@ -332,7 +332,7 @@ export class StockDetailsPage {
                                                                                     ,
                                                                                   Math.min(parseFloat(this.tsv_arr[key].revenue_g)+
                                                                                            Math.max(-0.1,Math.min(0.1,parseFloat(this.tsv_arr[key].revenue_a)/2))
-                                                                                           ,0.50) // %50 sustained growth in 5 years is a reasonable max (more might be impossible)
+                                                                                           ,0.30) // %30 sustained growth in 5 years is a reasonable max (more than 40% might be impossible)
                                                                                    ,5) // in 5 y we don't limit the revenue_g
                                             )
                                           ).toFixed(1);
@@ -342,7 +342,7 @@ export class StockDetailsPage {
                                                10*cognitionis.compound_interest_4(this.tsv_arr[key].prod_ps,
                                                                                   Math.min(parseFloat(this.tsv_arr[key].revenue_g)+
                                                                                            Math.max(-0.1,Math.min(0.1,parseFloat(this.tsv_arr[key].revenue_a)/2))
-                                                                                           ,0.30) // %30 sustained growth in 10 years is a reasonable max (although some might beat it)
+                                                                                           ,0.25) // %25 sustained growth in 10 years is a reasonable max (although some might beat it)
                                                                                            ,10)
                                             )
                                           ).toFixed(1);
@@ -371,7 +371,7 @@ export class StockDetailsPage {
                                                                 Math.min(
                                                               parseFloat(this.stock.revenue_growth)+
                                                                Math.max(-0.1,Math.min(0.1,parseFloat(this.stock.revenue_acceleration)/2))
-                                                               ,0.60)
+                                                               ,0.30)
                                                                ,5);
 		var tmp_base=Math.min(this.stock.calc_pb_inv_ps,this.stock.value/2) +    // used to use equity_ps but in php we use pb_inv_ps
                             (5*this.stock.prod_pot);
