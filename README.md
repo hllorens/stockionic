@@ -17,3 +17,13 @@ stocks analysis and alerts
 -- for android auth add: cordova plugin add cordova-plugin-googleplus (if it is not added automatically from config.xml)
 
 - Need the server side of it (see hllorens/cult github repo)
+
+# Tech doc
+src/pages/stocks/stocks.ts is the main page and there you can se how firebase is now configured as provider instead of the old "cult" php model
+main files are:
+app/  xxx and modules
+pages/
+lib/
+providers/
+...
+
